@@ -29,7 +29,7 @@ records to Vercel using the values shown in Vercel's domain setup screen.
 ## Contact Form
 
 The contact form posts to `/api/contact` and routes messages to
-`jmaxforster@gmail.com`.
+`jforster@graystontechnologies.com`.
 
 Required Vercel environment variable for email delivery:
 
@@ -40,7 +40,7 @@ RESEND_API_KEY=<resend-api-key>
 Optional environment variables:
 
 ```bash
-CONTACT_TO_EMAIL=jmaxforster@gmail.com
+CONTACT_TO_EMAIL=jforster@graystontechnologies.com
 CONTACT_FROM_EMAIL="Grayston Technologies <hello@graystontechnologies.com>"
 ```
 

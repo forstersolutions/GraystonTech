@@ -137,21 +137,16 @@ body:not([data-page="home"]) .site-header {
 
 .brand-mark {
   display: grid;
-  width: 44px;
-  height: 44px;
+  width: 54px;
+  height: 54px;
   place-items: center;
-  overflow: hidden;
-  background:
-    linear-gradient(135deg, rgba(88, 220, 255, 0.14), rgba(255, 178, 77, 0.14)),
-    rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  box-shadow: 0 0 26px rgba(88, 220, 255, 0.12);
+  filter: drop-shadow(0 0 22px rgba(88, 220, 255, 0.22));
 }
 
-.gp-mark {
-  width: 84%;
-  height: 84%;
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .mark-g,
@@ -251,8 +246,30 @@ body:not([data-page="home"]) .site-header {
   min-height: 88svh;
   overflow: hidden;
   color: var(--paper);
-  background: var(--night);
+  background:
+    radial-gradient(circle at 72% 34%, rgba(88, 220, 255, 0.12), transparent 25rem),
+    radial-gradient(circle at 82% 68%, rgba(255, 178, 77, 0.1), transparent 19rem),
+    linear-gradient(120deg, #050606, #0b0d0d 54%, #11130f);
   isolation: isolate;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 0 41%, rgba(88, 220, 255, 0.14) 41.1%, transparent 41.7%),
+    linear-gradient(72deg, transparent 0 62%, rgba(255, 178, 77, 0.12) 62.1%, transparent 62.7%),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size:
+    auto,
+    auto,
+    64px 64px,
+    64px 64px;
+  opacity: 0.62;
 }
 
 .hero-media,
@@ -270,14 +287,16 @@ body:not([data-page="home"]) .site-header {
   object-position: center;
   opacity: 0;
   transform: scale(1.03);
+  filter: saturate(0.55) contrast(0.82) brightness(0.74);
   animation: heroImageIn 1300ms ease 260ms forwards;
 }
 
 .hero-shade {
   z-index: -3;
   background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.72) 42%, rgba(0, 0, 0, 0.1)),
-    linear-gradient(0deg, rgba(9, 10, 10, 0.78), rgba(9, 10, 10, 0.14) 52%, rgba(9, 10, 10, 0.42));
+    radial-gradient(circle at 67% 45%, rgba(88, 220, 255, 0.1), transparent 24rem),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.97), rgba(0, 0, 0, 0.87) 46%, rgba(0, 0, 0, 0.7)),
+    linear-gradient(0deg, rgba(9, 10, 10, 0.88), rgba(9, 10, 10, 0.3) 52%, rgba(9, 10, 10, 0.72));
 }
 
 .launch-field {
@@ -340,17 +359,18 @@ body:not([data-page="home"]) .site-header {
 }
 
 .hero-monogram {
-  width: 76px;
-  height: 76px;
+  width: 96px;
+  height: 96px;
   margin-bottom: 1.1rem;
   opacity: 0;
   transform: translateY(18px) scale(0.92);
   animation: contentIn 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 780ms forwards;
 }
 
-.hero-monogram .gp-mark {
+.hero-monogram img {
   width: 100%;
   height: 100%;
+  object-fit: contain;
   filter: drop-shadow(0 0 28px rgba(88, 220, 255, 0.28));
 }
 
@@ -767,9 +787,27 @@ h3 {
   display: grid;
   gap: 1rem;
   min-height: 310px;
-  padding: 1.6rem;
+  padding: 0;
+  overflow: hidden;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.product-card-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.product-card-image-map {
+  object-position: center bottom;
+}
+
+.product-card-body {
+  display: grid;
+  gap: 1rem;
+  padding: 1.35rem;
 }
 
 .product-label {
@@ -792,10 +830,36 @@ h3 {
   border-bottom: 2px solid currentColor;
 }
 
+.section:not(.dark-section) .text-link,
+.quiet-section .text-link {
+  color: var(--ink);
+}
+
 .text-link:hover,
 .text-link:focus-visible {
   color: var(--cyan);
   outline: 0;
+}
+
+.inline-link {
+  color: inherit;
+  font-weight: 900;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+
+.inline-link:hover,
+.inline-link:focus-visible {
+  color: var(--cyan);
+  outline: 0;
+}
+
+.link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: center;
 }
 
 .process-section {
@@ -834,9 +898,12 @@ h3 {
 .page-hero-bg {
   z-index: -1;
   background:
-    linear-gradient(90deg, rgba(9, 10, 10, 0.96), rgba(9, 10, 10, 0.68), rgba(9, 10, 10, 0.88)),
+    linear-gradient(90deg, rgba(9, 10, 10, 0.98), rgba(9, 10, 10, 0.9) 46%, rgba(9, 10, 10, 0.82)),
+    radial-gradient(circle at 78% 42%, rgba(88, 220, 255, 0.11), transparent 24rem),
+    radial-gradient(circle at 63% 72%, rgba(255, 178, 77, 0.08), transparent 18rem),
     url("assets/grayston-hero.png") center / cover no-repeat;
-  opacity: 0.9;
+  background-blend-mode: normal, screen, screen, luminosity;
+  opacity: 1;
 }
 
 .page-hero h1 {
@@ -887,7 +954,8 @@ h3 {
   color: inherit;
 }
 
-.interface-preview {
+.interface-preview,
+.product-screen {
   display: grid;
   min-height: 430px;
   padding: 1rem;
@@ -896,6 +964,36 @@ h3 {
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 8px;
   box-shadow: var(--shadow);
+}
+
+.product-screen {
+  padding: 0;
+  align-content: stretch;
+}
+
+.product-screen img {
+  width: 100%;
+  height: 100%;
+  min-height: 430px;
+  object-fit: cover;
+}
+
+.product-screen-map img {
+  object-position: center bottom;
+}
+
+.product-screen figcaption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+figure.product-screen {
+  margin: 0;
+  position: relative;
 }
 
 .poker-preview {
@@ -1093,6 +1191,54 @@ h3 {
   background: var(--paper);
 }
 
+.services-command-section {
+  background: var(--mist);
+}
+
+.service-track-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.service-track {
+  display: grid;
+  gap: 1.2rem;
+  padding: 1.25rem;
+  background: var(--paper);
+  border: 1px solid var(--line-dark);
+  border-radius: 8px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.05);
+}
+
+.track-head {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.track-head p,
+.track-columns p {
+  color: rgba(23, 24, 23, 0.68);
+}
+
+.track-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line-dark);
+}
+
+.track-columns strong {
+  display: block;
+  margin-bottom: 0.65rem;
+  font-size: 0.84rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  color: var(--steel);
+}
+
 .contact-layout {
   grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
 }
@@ -1240,7 +1386,7 @@ textarea:focus {
 
 @keyframes heroImageIn {
   to {
-    opacity: 1;
+    opacity: 0.42;
     transform: scale(1);
   }
 }
@@ -1346,8 +1492,8 @@ textarea:focus {
   }
 
   .brand-mark {
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
   }
 
   .brand-text strong {
@@ -1389,8 +1535,9 @@ textarea:focus {
 
   .hero-shade {
     background:
-      linear-gradient(90deg, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.6)),
-      linear-gradient(0deg, rgba(9, 10, 10, 0.76), rgba(9, 10, 10, 0.2) 52%, rgba(9, 10, 10, 0.54));
+      radial-gradient(circle at 66% 34%, rgba(88, 220, 255, 0.11), transparent 16rem),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.96), rgba(0, 0, 0, 0.83)),
+      linear-gradient(0deg, rgba(9, 10, 10, 0.88), rgba(9, 10, 10, 0.34) 52%, rgba(9, 10, 10, 0.72));
   }
 
   .hero-inner {
@@ -1399,8 +1546,8 @@ textarea:focus {
   }
 
   .hero-monogram {
-    width: 60px;
-    height: 60px;
+    width: 76px;
+    height: 76px;
   }
 
   h1 {
@@ -1449,7 +1596,8 @@ textarea:focus {
   .process-grid,
   .proof-grid,
   .product-preview-grid,
-  .form-grid {
+  .form-grid,
+  .track-columns {
     grid-template-columns: 1fr;
   }
 

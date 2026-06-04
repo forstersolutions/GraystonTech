@@ -2,6 +2,19 @@
   "cleanUrls": true,
   "outputDirectory": ".",
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "graystontechnologies.com"
+        }
+      ],
+      "destination": "https://www.graystontechnologies.com/:path*",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",

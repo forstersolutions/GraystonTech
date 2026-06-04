@@ -7,13 +7,13 @@
     <meta name="description" content="SaaS development, AI workflow automation, secure portals, dashboards, cloud deployment, and API integrations from Grayston Technologies." />
     <meta name="theme-color" content="#090a0a" />
     <link rel="icon" href="assets/grayston-mark.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260603b" />
   </head>
   <body data-page="services">
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header" data-header>
       <a class="brand" href="/" aria-label="Grayston Technologies home">
-        <span class="brand-mark" aria-hidden="true"><svg class="gp-mark" viewBox="0 0 96 96" focusable="false"><path class="mark-g" d="M60 23a27 27 0 1 0 1 40h-17" /><path class="mark-p" d="M43 71V24h16c12 0 20 7 20 18s-8 18-20 18H43" /><path class="mark-join" d="M43 49h23" /></svg></span>
+        <span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-mark.svg" alt="" /></span>
         <span class="brand-text"><strong>Grayston</strong><small>Technologies</small></span>
       </a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Menu</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
@@ -42,72 +42,151 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section services-command-section">
         <div class="section-shell">
           <div class="section-heading reveal">
-            <p class="section-kicker">Core capabilities</p>
-            <h2>Choose one lane or combine the full stack.</h2>
+            <p class="section-kicker">Service tracks</p>
+            <h2>Built around outcomes, not vague technical buckets.</h2>
+            <p>Each track produces usable software, implementation artifacts, and operational clarity. Grayston can run one track independently or combine them into a full product build.</p>
           </div>
-          <div class="service-grid">
-            <article class="service-card reveal">
-              <span class="service-number">01</span>
-              <h3>SaaS and Web Platforms</h3>
-              <p>Full-stack applications with user roles, authenticated routes, dashboards, admin panels, workflow status, billing hooks, and deployment discipline.</p>
-              <ul class="check-list">
-                <li>React, Next.js, TypeScript, Node, Python</li>
-                <li>Postgres data models and API contracts</li>
-                <li>Production launch and support workflow</li>
-              </ul>
+          <div class="service-track-grid">
+            <article class="service-track reveal">
+              <div class="track-head">
+                <span class="service-number">01</span>
+                <div>
+                  <h3>Product Build Sprint</h3>
+                  <p>For founders or teams that need to turn a rough idea into a working SaaS or portal.</p>
+                </div>
+              </div>
+              <div class="track-columns">
+                <div>
+                  <strong>What gets built</strong>
+                  <ul class="check-list">
+                    <li>Clickable product flow and responsive UI</li>
+                    <li>Auth, roles, dashboards, and admin surfaces</li>
+                    <li>API contracts, data model, and deployment path</li>
+                  </ul>
+                </div>
+                <div>
+                  <strong>Best for</strong>
+                  <p>MVPs, customer demos, founder prototypes, internal products, and productized service workflows.</p>
+                </div>
+              </div>
             </article>
-            <article class="service-card reveal">
-              <span class="service-number">02</span>
-              <h3>AI Workflow Automation</h3>
-              <p>AI assistants, prompt pipelines, summarizers, form-fill support, document generators, and internal tools that speed up high-friction work.</p>
-              <ul class="check-list">
-                <li>OpenAI API and agent-assisted workflows</li>
-                <li>Human review and verification gates</li>
-                <li>Reusable runbooks and task runners</li>
-              </ul>
+            <article class="service-track reveal">
+              <div class="track-head">
+                <span class="service-number">02</span>
+                <div>
+                  <h3>AI Operations Automation</h3>
+                  <p>For teams buried in repetitive research, routing, reporting, document, and coordination work.</p>
+                </div>
+              </div>
+              <div class="track-columns">
+                <div>
+                  <strong>What gets built</strong>
+                  <ul class="check-list">
+                    <li>Prompt pipelines and internal assistants</li>
+                    <li>Document generators, summaries, and review queues</li>
+                    <li>Human-in-the-loop verification and audit trails</li>
+                  </ul>
+                </div>
+                <div>
+                  <strong>Best for</strong>
+                  <p>Compliance support, sales/admin ops, knowledge-base workflows, intake triage, and process acceleration.</p>
+                </div>
+              </div>
             </article>
-            <article class="service-card reveal">
-              <span class="service-number">03</span>
-              <h3>Secure Portals</h3>
-              <p>Protected collaboration spaces, file workflows, RBAC, MFA/passkey patterns, audit logs, validation, recovery flows, and evidence exports.</p>
-              <ul class="check-list">
-                <li>Role and permission strategy</li>
-                <li>Audit-ready activity trails</li>
-                <li>Session and device controls</li>
-              </ul>
+            <article class="service-track reveal">
+              <div class="track-head">
+                <span class="service-number">03</span>
+                <div>
+                  <h3>Secure Client Portals</h3>
+                  <p>For businesses moving files, approvals, records, requests, or sensitive collaboration through email and spreadsheets.</p>
+                </div>
+              </div>
+              <div class="track-columns">
+                <div>
+                  <strong>What gets built</strong>
+                  <ul class="check-list">
+                    <li>Role-based workspaces and protected routes</li>
+                    <li>File/request workflows with validation and logs</li>
+                    <li>Audit exports, evidence views, and access controls</li>
+                  </ul>
+                </div>
+                <div>
+                  <strong>Best for</strong>
+                  <p>Professional services, regulated teams, diligence workflows, vendor portals, and file movement systems.</p>
+                </div>
+              </div>
             </article>
-            <article class="service-card reveal">
-              <span class="service-number">04</span>
-              <h3>Dashboards and Analytics</h3>
-              <p>KPI surfaces, operations views, exports, SQL reporting, data cleanup, exception tracking, and decision dashboards for real teams.</p>
-              <ul class="check-list">
-                <li>Postgres, SQL, ETL/ELT, reporting exports</li>
-                <li>Data model design from day one</li>
-                <li>Operational visibility and alert paths</li>
-              </ul>
+            <article class="service-track reveal">
+              <div class="track-head">
+                <span class="service-number">04</span>
+                <div>
+                  <h3>Dashboards and Decision Systems</h3>
+                  <p>For teams that need their data to show exceptions, bottlenecks, status, and performance without manual cleanup.</p>
+                </div>
+              </div>
+              <div class="track-columns">
+                <div>
+                  <strong>What gets built</strong>
+                  <ul class="check-list">
+                    <li>SQL/Postgres reporting models and KPI views</li>
+                    <li>Exports, filters, exception states, and trend surfaces</li>
+                    <li>Data cleanup and repeatable refresh workflows</li>
+                  </ul>
+                </div>
+                <div>
+                  <strong>Best for</strong>
+                  <p>Operations dashboards, compliance reporting, finance visibility, and continuous-improvement metrics.</p>
+                </div>
+              </div>
             </article>
-            <article class="service-card reveal">
-              <span class="service-number">05</span>
-              <h3>Cloud and DevOps</h3>
-              <p>AWS, Azure, Vercel, CI/CD, preview deployments, environment separation, release gates, logs, uptime checks, and incident triage.</p>
-              <ul class="check-list">
-                <li>GitHub Actions and Vercel deployment</li>
-                <li>Migration and release discipline</li>
-                <li>Observability and support readiness</li>
-              </ul>
+            <article class="service-track reveal">
+              <div class="track-head">
+                <span class="service-number">05</span>
+                <div>
+                  <h3>Cloud Launch and Reliability</h3>
+                  <p>For apps that need production deployment, preview environments, logs, release discipline, and less deployment guesswork.</p>
+                </div>
+              </div>
+              <div class="track-columns">
+                <div>
+                  <strong>What gets built</strong>
+                  <ul class="check-list">
+                    <li>Vercel, AWS, Azure, GitHub Actions, and release gates</li>
+                    <li>Environment separation, migrations, and rollback paths</li>
+                    <li>Structured logs, uptime checks, and triage runbooks</li>
+                  </ul>
+                </div>
+                <div>
+                  <strong>Best for</strong>
+                  <p>New launches, production hardening, rescue work, cloud migration, and GitHub-to-Vercel delivery pipelines.</p>
+                </div>
+              </div>
             </article>
-            <article class="service-card reveal">
-              <span class="service-number">06</span>
-              <h3>Integrations and APIs</h3>
-              <p>REST APIs, webhooks, Stripe, Twilio, Smartsheet, Power Automate, Python runners, PowerShell automations, and cross-system workflows.</p>
-              <ul class="check-list">
-                <li>Idempotent webhook handling</li>
-                <li>API validation and error handling</li>
-                <li>Data sync and export workflows</li>
-              </ul>
+            <article class="service-track reveal">
+              <div class="track-head">
+                <span class="service-number">06</span>
+                <div>
+                  <h3>Integrations and Automation Bridges</h3>
+                  <p>For businesses stuck between disconnected systems that need to pass data, trigger work, and create reliable outputs.</p>
+                </div>
+              </div>
+              <div class="track-columns">
+                <div>
+                  <strong>What gets built</strong>
+                  <ul class="check-list">
+                    <li>REST APIs, webhooks, Stripe, Twilio, Smartsheet, and task runners</li>
+                    <li>Idempotent event handling, validation, and error recovery</li>
+                    <li>Exports, sync jobs, notifications, and workflow triggers</li>
+                  </ul>
+                </div>
+                <div>
+                  <strong>Best for</strong>
+                  <p>Back-office automation, payment workflows, operations handoffs, reporting pipelines, and custom API surfaces.</p>
+                </div>
+              </div>
             </article>
           </div>
         </div>
@@ -159,8 +238,8 @@
 
     <footer class="site-footer">
       <div class="section-shell footer-grid">
-        <a class="brand footer-brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><svg class="gp-mark" viewBox="0 0 96 96" focusable="false"><path class="mark-g" d="M60 23a27 27 0 1 0 1 40h-17" /><path class="mark-p" d="M43 71V24h16c12 0 20 7 20 18s-8 18-20 18H43" /><path class="mark-join" d="M43 49h23" /></svg></span><span class="brand-text"><strong>Grayston</strong><small>Technologies</small></span></a>
-        <p>Veteran-owned AI software studio. Formerly Forster Solutions.</p>
+        <a class="brand footer-brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-mark.svg" alt="" /></span><span class="brand-text"><strong>Grayston</strong><small>Technologies</small></span></a>
+        <p>Veteran-owned AI software studio.</p>
         <p>&copy; <span data-year></span> Grayston Technologies.</p>
       </div>
     </footer>

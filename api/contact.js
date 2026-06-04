@@ -1,4 +1,4 @@
-const CONTACT_TO = process.env.CONTACT_TO_EMAIL || "jmaxforster@gmail.com";
+const CONTACT_TO = process.env.CONTACT_TO_EMAIL || "jforster@graystontechnologies.com";
 const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || "Grayston Technologies <onboarding@resend.dev>";
 const MAX_MESSAGE_LENGTH = 5000;
 

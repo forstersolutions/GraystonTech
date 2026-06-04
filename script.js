@@ -91,9 +91,9 @@ if (contactForm) {
       }
 
       form.reset();
-      setStatus(form, "Sent. Grayston will follow up from jmaxforster@gmail.com.", "success");
+      setStatus(form, "Sent. Grayston will follow up from jforster@graystontechnologies.com.", "success");
     } catch (error) {
-      const fallback = "Email jmaxforster@gmail.com directly if this keeps failing.";
+      const fallback = "Email jforster@graystontechnologies.com directly if this keeps failing.";
       setStatus(form, `${error.message} ${fallback}`, "error");
     } finally {
       if (submitButton) {
