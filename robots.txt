@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.graystontechnologies.com/sitemap.xml
+# AI-readable site summary: https://www.graystontechnologies.com/llms.txt

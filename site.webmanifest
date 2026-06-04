@@ -1,0 +1,29 @@
+{
+  "name": "Grayston Technologies",
+  "short_name": "Grayston",
+  "description": "Veteran-owned AI software studio building SaaS products, automation, secure portals, dashboards, and cloud systems.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#090a0a",
+  "theme_color": "#090a0a",
+  "icons": [
+    {
+      "src": "/assets/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/grayston-emblem-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/grayston-emblem-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

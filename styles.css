@@ -568,6 +568,7 @@ h3 {
   color: var(--cyan);
   font-size: 1.7rem;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .metric-row span {
@@ -816,11 +817,26 @@ h3 {
   border: 1px solid rgba(255, 255, 255, 0.13);
 }
 
+.product-preview-featured {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+  gap: 0;
+  align-items: stretch;
+}
+
 .product-card-image {
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.product-preview-featured .product-card-image {
+  height: 100%;
+  min-height: 390px;
+  aspect-ratio: auto;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 0;
 }
 
 .product-card-image-map {
@@ -839,6 +855,10 @@ h3 {
 
 .green-label {
   color: var(--green);
+}
+
+.amber-label {
+  color: var(--amber);
 }
 
 .product-preview h3,
@@ -986,6 +1006,27 @@ h3 {
   color: inherit;
 }
 
+.platform-callout {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem;
+  color: rgba(255, 255, 255, 0.78);
+  background:
+    linear-gradient(135deg, rgba(88, 220, 255, 0.13), rgba(255, 184, 77, 0.1)),
+    rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+}
+
+.platform-callout strong {
+  color: var(--paper);
+}
+
+.platform-callout p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
 .interface-preview,
 .product-screen {
   display: grid;
@@ -1008,6 +1049,18 @@ h3 {
   height: 100%;
   min-height: 430px;
   object-fit: cover;
+}
+
+.product-screen-contain {
+  align-content: center;
+  background: #070a09;
+}
+
+.product-screen-contain img {
+  height: auto;
+  min-height: 0;
+  object-fit: contain;
+  align-self: center;
 }
 
 .product-screen-map img {
@@ -1800,7 +1853,7 @@ textarea:focus {
   }
 
   .metric-row {
-    grid-template-columns: 70px 1fr;
+    grid-template-columns: 86px minmax(0, 1fr);
   }
 
   .ticker-section {
@@ -1832,6 +1885,18 @@ textarea:focus {
   .process-step,
   .product-preview {
     min-height: auto;
+  }
+
+  .product-preview-featured {
+    grid-template-columns: 1fr;
+  }
+
+  .product-preview-featured .product-card-image {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .feature-row {

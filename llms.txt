@@ -1,0 +1,34 @@
+# Grayston Technologies
+
+Grayston Technologies is a veteran-owned AI software studio building SaaS products, workflow automation, secure portals, dashboards, cloud systems, and integration-heavy operational software.
+
+## Primary URLs
+
+- Home: https://www.graystontechnologies.com/
+- Services: https://www.graystontechnologies.com/services
+- Products: https://www.graystontechnologies.com/products
+- About: https://www.graystontechnologies.com/about
+- Contact: https://www.graystontechnologies.com/contact
+- Security: https://www.graystontechnologies.com/security
+- Privacy: https://www.graystontechnologies.com/privacy
+- Terms: https://www.graystontechnologies.com/terms
+
+## Featured Products
+
+- MyPokerMaps: https://www.mypokermaps.com
+- QrystalDrop: https://qrystaldrop.vercel.app
+- VerityForge: autonomous development command center for coding agents, proof contracts, isolated worktrees, verification checks, evidence, and owner-gated release decisions.
+
+## Services
+
+- SaaS product build sprints
+- AI operations automation
+- Secure client portals
+- Dashboards and decision systems
+- Cloud launch and reliability
+- API integrations and automation bridges
+- Agent governance platforms and OpenClaw-powered supervised runtime lanes
+
+## Contact
+
+Project inquiries: jforster@graystontechnologies.com
