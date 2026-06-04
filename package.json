@@ -4,6 +4,7 @@
   "private": true,
   "description": "Grayston Technologies static website.",
   "scripts": {
+    "build": "node --check script.js",
     "check": "node --check script.js",
     "serve": "python3 -m http.server 4173"
   }
