@@ -62,6 +62,36 @@ const setStatus = (form, message, tone = "neutral") => {
   status.dataset.tone = tone;
 };
 
+const buildMailtoUrl = (payload) => {
+  const projectType = String(payload.projectType || "Project inquiry").trim();
+  const subject = `Grayston project inquiry: ${projectType}`;
+  const body = [
+    `Name: ${payload.name || ""}`,
+    `Email: ${payload.email || ""}`,
+    `Company: ${payload.company || "Not provided"}`,
+    `Project type: ${payload.projectType || "Not provided"}`,
+    `Timeline: ${payload.timeline || "Not provided"}`,
+    `Budget: ${payload.budget || "Not provided"}`,
+    "",
+    String(payload.message || "")
+  ].join("\n");
+
+  return `mailto:jforster@graystontechnologies.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+};
+
+const setEmailFallbackStatus = (form, message, payload) => {
+  const status = form.querySelector("[data-form-status]");
+  if (!status) return;
+
+  const link = document.createElement("a");
+  link.href = buildMailtoUrl(payload);
+  link.textContent = "Open a prefilled email instead.";
+
+  status.textContent = `${message} `;
+  status.append(link);
+  status.dataset.tone = "error";
+};
+
 if (contactForm) {
   contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -92,8 +122,7 @@ if (contactForm) {
       form.reset();
       setStatus(form, "Sent. Grayston will follow up from jforster@graystontechnologies.com.", "success");
     } catch (error) {
-      const fallback = "Email jforster@graystontechnologies.com directly if this keeps failing.";
-      setStatus(form, `${error.message} ${fallback}`, "error");
+      setEmailFallbackStatus(form, error.message || "The form could not send right now.", payload);
     } finally {
       if (submitButton) {
         submitButton.disabled = false;

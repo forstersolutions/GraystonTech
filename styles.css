@@ -1433,6 +1433,14 @@ textarea:focus {
   font-weight: 850;
 }
 
+.form-status a {
+  color: var(--night);
+  text-decoration: underline;
+  text-decoration-color: rgba(88, 220, 255, 0.85);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+
 .site-footer {
   padding: 3rem 0 1.25rem;
   color: rgba(255, 255, 255, 0.7);
