@@ -5,10 +5,13 @@ Static frontend for `graystontechnologies.com`.
 ## Files
 
 - `index.html` - homepage markup and SEO metadata
+- `privacy.html`, `terms.html`, `security.html` - trust and legal pages
 - `styles.css` - responsive styling, animations, product visuals, and layout
 - `script.js` - mobile navigation, sticky header state, and reveal animations
 - `assets/grayston-hero.png` - generated hero image
-- `assets/grayston-mark.svg` - favicon/brand mark
+- `assets/grayston-emblem-512.png` - supplied GP emblem, prepared for web use
+- `assets/grayston-logo-full.png` - supplied full lockup with safe canvas padding
+- `assets/grayston-og.png` - social preview image
 
 ## Preview
 
@@ -23,8 +26,8 @@ npm run serve
 This repository is intended for Vercel Git integration. Pushes to the production
 branch should deploy the static site directly from the repo root.
 
-After the Vercel project is connected, point the Square-purchased domain DNS
-records to Vercel using the values shown in Vercel's domain setup screen.
+The domain should resolve to Vercel using the Vercel-provided DNS target values.
+The apex domain redirects to `https://www.graystontechnologies.com`.
 
 ## Contact Form
 

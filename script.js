@@ -1,12 +1,11 @@
 const header = document.querySelector("[data-header]");
 const navToggle = document.querySelector(".nav-toggle");
 const nav = document.querySelector("#site-nav");
-const year = document.querySelector("[data-year]");
 const contactForm = document.querySelector("[data-contact-form]");
 
-if (year) {
+document.querySelectorAll("[data-year]").forEach((year) => {
   year.textContent = new Date().getFullYear();
-}
+});
 
 const updateHeader = () => {
   if (!header) return;
