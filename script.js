@@ -2,6 +2,7 @@ const header = document.querySelector("[data-header]");
 const navToggle = document.querySelector(".nav-toggle");
 const nav = document.querySelector("#site-nav");
 const year = document.querySelector("[data-year]");
+const contactForm = document.querySelector("[data-contact-form]");
 
 if (year) {
   year.textContent = new Date().getFullYear();
@@ -11,6 +12,11 @@ const updateHeader = () => {
   if (!header) return;
   header.classList.toggle("is-scrolled", window.scrollY > 12);
 };
+
+document.documentElement.classList.add("js-ready");
+window.addEventListener("load", () => {
+  document.body.classList.add("is-loaded");
+});
 
 updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
@@ -42,10 +48,57 @@ if ("IntersectionObserver" in window) {
         }
       });
     },
-    { threshold: 0.12 }
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
   );
 
   revealItems.forEach((item) => observer.observe(item));
 } else {
   revealItems.forEach((item) => item.classList.add("is-visible"));
+}
+
+const setStatus = (form, message, tone = "neutral") => {
+  const status = form.querySelector("[data-form-status]");
+  if (!status) return;
+  status.textContent = message;
+  status.dataset.tone = tone;
+};
+
+if (contactForm) {
+  contactForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const submitButton = form.querySelector("button[type='submit']");
+    const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
+
+    setStatus(form, "Sending project details...", "neutral");
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.dataset.originalText = submitButton.textContent.trim();
+    }
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.message || "The form could not send right now.");
+      }
+
+      form.reset();
+      setStatus(form, "Sent. Grayston will follow up from jmaxforster@gmail.com.", "success");
+    } catch (error) {
+      const fallback = "Email jmaxforster@gmail.com directly if this keeps failing.";
+      setStatus(form, `${error.message} ${fallback}`, "error");
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+      }
+    }
+  });
 }
