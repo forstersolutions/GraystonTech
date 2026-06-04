@@ -4,14 +4,14 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [
         {
           "type": "host",
           "value": "graystontechnologies.com"
         }
       ],
-      "destination": "https://www.graystontechnologies.com/:path*",
+      "destination": "https://www.graystontechnologies.com/$1",
       "permanent": true
     }
   ],
