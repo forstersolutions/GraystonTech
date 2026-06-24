@@ -1058,6 +1058,16 @@ h3 {
   align-items: center;
 }
 
+.visual-left-grid {
+  grid-template-columns: minmax(0, 1.14fr) minmax(0, 0.86fr);
+  gap: 3rem;
+}
+
+.visual-right-grid {
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  gap: 3rem;
+}
+
 .reverse-grid .interface-preview {
   order: 1;
 }
@@ -2252,6 +2262,8 @@ textarea:focus {
   .split-grid,
   .page-hero-grid,
   .product-detail-grid,
+  .visual-left-grid,
+  .visual-right-grid,
   .contact-layout,
   .cta-grid {
     grid-template-columns: 1fr;
@@ -2282,7 +2294,6 @@ textarea:focus {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .console-workspace,
   .task-board {
     grid-template-columns: 1fr;
   }
@@ -2453,37 +2464,94 @@ textarea:focus {
     min-height: auto;
   }
 
-  .console-chrome,
-  .console-title-row,
-  .panel-title {
-    align-items: start;
-  }
-
-  .console-chrome,
-  .console-title-row {
+  .console-chrome {
     display: grid;
+    padding: 0.8rem;
   }
 
   .console-shell {
-    grid-template-columns: 1fr;
+    display: block;
   }
 
   .console-nav {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    border-right: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: none;
   }
 
-  .console-nav span {
-    padding: 0.5rem 0.35rem;
-    text-align: center;
+  .console-workspace {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .console-main {
+    gap: 0.7rem;
+    padding: 0.72rem;
+  }
+
+  .console-title-row {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .console-title-row > span {
+    width: fit-content;
+  }
+
+  .console-tab-strip {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .console-tab-strip span {
+    flex: 0 1 auto;
   }
 
   .console-kpis,
-  .table-grid,
-  .task-board,
-  .console-workspace {
-    grid-template-columns: 1fr;
+  .table-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .task-board {
+    gap: 0.45rem;
+  }
+
+  .console-panel {
+    gap: 0.55rem;
+    padding: 0.68rem;
+  }
+
+  .console-panel:not(.wide-panel) .panel-title {
+    display: grid;
+    gap: 0.18rem;
+  }
+
+  .panel-title strong {
+    white-space: normal;
+  }
+
+  .console-kpis div,
+  .table-tile,
+  .task-board div {
+    padding: 0.58rem;
+  }
+
+  .console-kpis strong {
+    font-size: 1.15rem;
+  }
+
+  .console-kpis small,
+  .console-list,
+  .status-stack,
+  .task-board small,
+  .task-board span,
+  .table-tile small,
+  .table-tile span {
+    font-size: 0.68rem;
+  }
+
+  .console-brand span,
+  .console-title-row span,
+  .panel-title span,
+  .console-kpis span {
+    letter-spacing: 0.1em;
   }
 
   .system-topline {
