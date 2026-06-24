@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">CUOPeration Command Grid logo</title>
+  <desc id="desc">A dark rounded square with a segmented C-shaped command grid and orange confirmation mark.</desc>
+  <defs>
+    <linearGradient id="bg" x1="72" y1="40" x2="442" y2="474" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#262626"/>
+      <stop offset="0.48" stop-color="#0b0b0d"/>
+      <stop offset="1" stop-color="#1a120c"/>
+    </linearGradient>
+    <linearGradient id="tile" x1="154" y1="134" x2="374" y2="358" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f4f4f5"/>
+      <stop offset="1" stop-color="#6b7280"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="135" y1="134" x2="398" y2="379" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff9f1a"/>
+      <stop offset="1" stop-color="#f25c05"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="108" fill="#070707"/>
+  <rect x="34" y="34" width="444" height="444" rx="86" fill="url(#bg)" stroke="#3f3f46" stroke-width="10"/>
+  <g transform="translate(0 2)">
+    <rect x="138" y="126" width="42" height="42" rx="8" fill="url(#orange)"/>
+    <rect x="190" y="126" width="42" height="42" rx="8" fill="url(#tile)"/>
+    <rect x="242" y="126" width="42" height="42" rx="8" fill="url(#tile)" opacity="0.9"/>
+    <rect x="294" y="126" width="42" height="42" rx="8" fill="url(#tile)" opacity="0.75"/>
+    <rect x="138" y="178" width="42" height="42" rx="8" fill="url(#tile)" opacity="0.88"/>
+    <rect x="190" y="178" width="42" height="42" rx="8" fill="url(#tile)" opacity="0.72"/>
+    <rect x="294" y="178" width="42" height="42" rx="8" fill="url(#tile)" opacity="0.6"/>
+    <rect x="138" y="230" width="42" height="42" rx="8" fill="url(#tile)" opacity="0.72"/>
+    <rect x="138" y="282" width="42" height="42" rx="8" fill="url(#tile)" opacity="0.62"/>
+    <rect x="138" y="334" width="42" height="42" rx="8" fill="url(#orange)"/>
+    <rect x="190" y="334" width="42" height="42" rx="8" fill="url(#tile)" opacity="0.68"/>
+    <rect x="242" y="334" width="42" height="42" rx="8" fill="url(#tile)" opacity="0.78"/>
+    <rect x="294" y="334" width="42" height="42" rx="8" fill="url(#tile)" opacity="0.86"/>
+  </g>
+  <path d="M276 292l40 40 90-102" fill="none" stroke="url(#orange)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M276 292l40 40 90-102" fill="none" stroke="#fff7ed" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.28"/>
+</svg>

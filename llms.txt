@@ -1,6 +1,6 @@
 # Grayston Technologies
 
-Grayston Technologies is a veteran-owned AI software studio building SaaS products, workflow automation, secure portals, dashboards, cloud systems, and integration-heavy operational software.
+Grayston Technologies is a veteran-owned AI software studio building SaaS products, AI agent systems, workflow automation, secure portals, operational platforms, cloud systems, and integration-heavy software.
 
 ## Primary URLs
 
@@ -16,6 +16,8 @@ Grayston Technologies is a veteran-owned AI software studio building SaaS produc
 ## Featured Products
 
 - MyPokerMaps: https://www.mypokermaps.com
+- FeltOS: signed-in club portal inside the MyPokerMaps ecosystem for floor operations, tables, waitlists, tournaments, members, staff, cash cage, tablets, displays, wallet policy, and public-web controls.
+- CUOPeration: secure personnel operations platform for intake, approvals, hierarchy, tasking, private files, notifications, drill notes, role controls, export, and audit.
 - QrystalDrop: https://qrystaldrop.vercel.app
 - VerityForge: autonomous development command center for coding agents, proof contracts, isolated worktrees, verification checks, evidence, and owner-gated release decisions.
 
@@ -24,7 +26,7 @@ Grayston Technologies is a veteran-owned AI software studio building SaaS produc
 - SaaS product build sprints
 - AI operations automation
 - Secure client portals
-- Dashboards and decision systems
+- Operational intelligence and decision systems
 - Cloud launch and reliability
 - API integrations and automation bridges
 - Agent governance platforms and OpenClaw-powered supervised runtime lanes
