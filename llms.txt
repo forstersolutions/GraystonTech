@@ -18,7 +18,7 @@ Grayston Technologies is a veteran-owned AI software studio building SaaS produc
 - MyPokerMaps: https://www.mypokermaps.com
 - FeltOS: signed-in club portal inside the MyPokerMaps ecosystem for floor operations, tables, waitlists, tournaments, members, staff, cash cage, tablets, displays, wallet policy, and public-web controls.
 - CUOPeration: secure personnel operations platform for intake, approvals, hierarchy, tasking, private files, notifications, drill notes, role controls, export, and audit.
-- QrystalDrop: https://qrystaldrop.vercel.app
+- QrystalDrop: workspace-controlled PQC secure rooms for sensitive file custody, participant-bound wrapping, strict and recovery-enabled trust modes, identity controls, recovery review, SIEM delivery, and proof-batch audit exports. Live at https://qrystaldrop.vercel.app
 - VerityForge: autonomous development command center for coding agents, proof contracts, isolated worktrees, verification checks, evidence, and owner-gated release decisions.
 
 ## Services

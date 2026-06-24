@@ -28,7 +28,15 @@
     </image:image>
     <image:image>
       <image:loc>https://www.graystontechnologies.com/assets/product-qrystaldrop.png</image:loc>
-      <image:caption>QrystalDrop secure rooms product visual</image:caption>
+      <image:caption>QrystalDrop enterprise secure-room dashboard</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.graystontechnologies.com/assets/product-feltos.png</image:loc>
+      <image:caption>FeltOS MyPokerMaps club portal dashboard with mocked room operations data</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.graystontechnologies.com/assets/product-cuoperation.png</image:loc>
+      <image:caption>CUOPeration signed-in personnel operations dashboard with sanitized mock data</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://www.graystontechnologies.com/assets/product-verityforge.png</image:loc>
