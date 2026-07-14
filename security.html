@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Security | Grayston Technologies</title>
-    <meta name="description" content="Security, reliability, responsible disclosure, data handling, and delivery practices for Grayston Technologies software, websites, portals, and automation projects." />
+    <title>Security Engineering | Grayston Technologies</title>
+    <meta name="description" content="Grayston Technologies security engineering: threat modeling, adversarial review, attack-path analysis, secure delivery controls, finding validation, remediation, and responsible disclosure." />
     <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
     <meta name="author" content="Grayston Technologies" />
     <meta name="application-name" content="Grayston Technologies" />
     <meta name="theme-color" content="#090a0a" />
     <meta name="color-scheme" content="dark light" />
-    <meta property="og:title" content="Security | Grayston Technologies" />
-    <meta property="og:description" content="Security, reliability, responsible disclosure, and delivery practices for Grayston Technologies software projects." />
+    <meta property="og:title" content="Security Engineering | Grayston Technologies" />
+    <meta property="og:description" content="Threat modeling, adversarial review, attack-path analysis, secure delivery controls, finding validation, remediation, and responsible disclosure." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.graystontechnologies.com/security" />
     <meta property="og:site_name" content="Grayston Technologies" />
@@ -22,15 +22,15 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Grayston Technologies GP emblem and studio wordmark" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Security | Grayston Technologies" />
-    <meta name="twitter:description" content="Security, reliability, responsible disclosure, and delivery practices for Grayston Technologies software projects." />
+    <meta name="twitter:title" content="Security Engineering | Grayston Technologies" />
+    <meta name="twitter:description" content="Threat modeling, adversarial review, secure delivery controls, finding validation, remediation, and responsible disclosure." />
     <meta name="twitter:image" content="https://www.graystontechnologies.com/assets/grayston-og.png" />
     <meta name="twitter:image:alt" content="Grayston Technologies GP emblem and studio wordmark" />
     <link rel="canonical" href="https://www.graystontechnologies.com/security" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="icon" href="/assets/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/assets/grayston-emblem-192.png" sizes="192x192" />
-    <link rel="stylesheet" href="/styles.css?v=20260624e" />
+    <link rel="stylesheet" href="/styles.css?v=20260714a" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -39,11 +39,11 @@
             "@type": "WebPage",
             "@id": "https://www.graystontechnologies.com/security#webpage",
             "url": "https://www.graystontechnologies.com/security",
-            "name": "Security | Grayston Technologies",
-            "description": "Security, reliability, responsible disclosure, data handling, and delivery practices for Grayston Technologies software, websites, portals, and automation projects.",
+            "name": "Security Engineering | Grayston Technologies",
+            "description": "Threat modeling, adversarial review, attack-path analysis, secure delivery controls, finding validation, remediation, and responsible disclosure for Grayston Technologies software projects.",
             "isPartOf": { "@id": "https://www.graystontechnologies.com/#website" },
             "about": { "@id": "https://www.graystontechnologies.com/#organization" },
-            "dateModified": "2026-06-24",
+            "dateModified": "2026-07-14",
             "inLanguage": "en-US"
           },
           {
@@ -72,8 +72,8 @@
         <div class="section-shell page-hero-grid">
           <div class="reveal">
             <p class="eyebrow">Security and reliability</p>
-            <h1>Security is designed into the workflow, not added after launch.</h1>
-            <p>Grayston builds with authentication, authorization, validation, logs, deployment discipline, and operational handoff in mind from the first architecture pass.</p>
+            <h1>Every release should survive hostile questions.</h1>
+            <p>Grayston combines secure architecture, adversarial review, validated findings, remediation, and controlled delivery so security is exercised throughout the build, not stapled on before launch.</p>
           </div>
           <div class="page-hero-panel reveal">
             <span class="panel-label">Report an issue</span>
@@ -86,8 +86,8 @@
         <div class="section-shell">
           <div class="section-heading reveal">
             <p class="section-kicker">Delivery controls</p>
-            <h2>Practical controls for production software.</h2>
-            <p>Controls are tailored to each engagement. The baseline is a clear auth model, minimal secrets exposure, deployment separation, validated data movement, and evidence that operators can use.</p>
+            <h2>Controls that hold up in production.</h2>
+            <p>Controls are tailored to the threat model. The baseline is explicit identity and authorization, minimal secrets exposure, isolated environments, validated data movement, observable behavior, and evidence operators can use.</p>
           </div>
           <div class="security-grid">
             <article class="security-card reveal">
@@ -116,10 +116,41 @@
               <p>Structured logs, uptime checks, release notes, runbooks, and practical incident triage so launch does not become the end of accountability.</p>
             </article>
             <article class="security-card reveal">
-              <span>AI</span>
-              <h3>Human-reviewed AI use</h3>
-              <p>AI accelerates implementation, documentation, refactoring, and testing, but production changes still go through human review and verification.</p>
+              <span>Review</span>
+              <h3>Adversarial change review</h3>
+              <p>Architecture, repositories, dependencies, and high-risk changes are examined for abuse paths, trust failures, reachable impact, and regression risk.</p>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section cyber-operations-section">
+        <div class="section-shell">
+          <div class="section-heading reveal">
+            <p class="section-kicker">Adversarial security</p>
+            <h2>A continuous red-team loop, not a one-time scan.</h2>
+            <p>Grayston treats security as an operating cycle: understand what matters, look for reachable attack paths, validate actual risk, close the weakness, and prove the fix stays closed.</p>
+          </div>
+          <div class="cyber-operations-grid">
+            <div class="attack-sequence" aria-label="Adversarial security engineering sequence">
+              <article class="attack-stage reveal"><span>01</span><strong>Threat model</strong><p>Assets, identities, trust boundaries, attacker goals, and business impact.</p></article>
+              <article class="attack-stage reveal"><span>02</span><strong>Find weakness</strong><p>Architecture, code, dependencies, configuration, secrets, and change review.</p></article>
+              <article class="attack-stage reveal"><span>03</span><strong>Trace the path</strong><p>Connect weaknesses across identity, APIs, cloud, data, agents, and vendors.</p></article>
+              <article class="attack-stage reveal"><span>04</span><strong>Validate impact</strong><p>Confirm reachable risk, reject noise, and document evidence and severity.</p></article>
+              <article class="attack-stage reveal"><span>05</span><strong>Remediate</strong><p>Fix the root cause, retest, add regression protection, and gate release.</p></article>
+            </div>
+            <aside class="cyber-brief reveal">
+              <span class="panel-label">Depth where it matters</span>
+              <h3>Attack the system, not just the checklist.</h3>
+              <p>Review spans architecture, source code, identity, data movement, infrastructure, dependencies, integrations, and autonomous behavior. Findings are ranked by reachable impact and exploit chain, not scanner volume.</p>
+              <ul class="check-list light-list">
+                <li>Application and API attack-surface analysis</li>
+                <li>Identity, authorization, tenant-isolation, and session review</li>
+                <li>Cloud, dependency, configuration, and secret-path review</li>
+                <li>Evidence-backed findings with remediation and retest</li>
+              </ul>
+              <a class="button button-primary" href="/contact">Scope a Security Review</a>
+            </aside>
           </div>
         </div>
       </section>
@@ -144,7 +175,7 @@
         <div class="footer-grid">
           <div class="footer-brand-block">
             <a class="brand footer-brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.png" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
-            <p>Veteran-owned AI software studio building SaaS products, automation, secure portals, operational platforms, and cloud systems.</p>
+            <p>Veteran-owned software and security studio building AI-native products, autonomous agents, secure platforms, and production cloud systems.</p>
           </div>
           <nav class="footer-column" aria-label="Company"><strong>Company</strong><a href="/services">Services</a><a href="/products">Products</a><a href="/about">About</a><a href="/contact">Contact</a></nav>
           <nav class="footer-column" aria-label="Products"><strong>Products</strong><a href="/products#verityforge">VerityForge</a><a href="/products#mypokermaps">MyPokerMaps</a><a href="/products#feltos">FeltOS</a><a href="/products#cuoperation">CUOPeration</a><a href="/products#qrystaldrop">QrystalDrop</a><a href="https://www.mypokermaps.com" target="_blank" rel="noreferrer">Visit MyPokerMaps</a><a href="https://qrystaldrop.vercel.app" target="_blank" rel="noreferrer">Visit QrystalDrop</a></nav>
