@@ -221,11 +221,16 @@ function initializeProductStage() {
   const tag = stage.querySelector("[data-stage-tag]");
   const description = stage.querySelector("[data-stage-description]");
   const link = stage.querySelector("[data-stage-link]");
+  const view = stage.querySelector(".product-stage-view");
+  let requestId = 0;
 
   const select = (button) => {
+    const nextSource = button.dataset.productImage;
+    const selectionId = ++requestId;
     buttons.forEach((item) => item.setAttribute("aria-selected", String(item === button)));
+
     const update = () => {
-      image.src = button.dataset.productImage;
+      image.src = nextSource;
       image.alt = button.dataset.productAlt;
       name.textContent = button.dataset.productName;
       tag.textContent = button.dataset.productTag;
@@ -234,20 +239,47 @@ function initializeProductStage() {
       link.textContent = button.dataset.productLink;
     };
 
-    if (reduceMotion) {
-      update();
+    if (image.getAttribute("src") === nextSource) {
+      view.removeAttribute("aria-busy");
       return;
     }
 
-    image.classList.add("is-switching");
-    window.setTimeout(() => {
-      update();
-      image.addEventListener("load", () => image.classList.remove("is-switching"), { once: true });
-      window.setTimeout(() => image.classList.remove("is-switching"), 320);
-    }, 120);
+    view.setAttribute("aria-busy", "true");
+    const preload = new Image();
+    preload.decoding = "async";
+    preload.onload = () => {
+      if (selectionId !== requestId) return;
+      if (reduceMotion) {
+        update();
+        view.removeAttribute("aria-busy");
+        return;
+      }
+
+      image.classList.add("is-switching");
+      window.setTimeout(() => {
+        if (selectionId !== requestId) return;
+        update();
+        window.requestAnimationFrame(() => {
+          image.classList.remove("is-switching");
+          view.removeAttribute("aria-busy");
+        });
+      }, 120);
+    };
+    preload.onerror = () => {
+      if (selectionId === requestId) view.removeAttribute("aria-busy");
+    };
+    preload.src = nextSource;
   };
 
-  buttons.forEach((button) => button.addEventListener("click", () => select(button)));
+  buttons.forEach((button) => {
+    const warm = () => {
+      const preload = new Image();
+      preload.src = button.dataset.productImage;
+    };
+    button.addEventListener("pointerenter", warm, { once: true });
+    button.addEventListener("focus", warm, { once: true });
+    button.addEventListener("click", () => select(button));
+  });
 }
 
 function initializeReviewPacket() {
