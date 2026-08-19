@@ -4,229 +4,142 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Security Engineering | Grayston Technologies</title>
-    <meta name="description" content="Grayston Technologies security engineering: threat modeling, adversarial review, attack-path analysis, secure delivery controls, finding validation, remediation, and responsible disclosure." />
-    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+    <meta name="description" content="Threat modeling, attack-path analysis, application and cloud review, finding validation, remediation, retest, and production security release gates." />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1" />
     <meta name="author" content="Grayston Technologies" />
-    <meta name="application-name" content="Grayston Technologies" />
-    <meta name="theme-color" content="#090a0a" />
+    <meta name="theme-color" content="#050707" />
     <meta name="color-scheme" content="dark light" />
     <meta property="og:title" content="Security Engineering | Grayston Technologies" />
-    <meta property="og:description" content="Threat modeling, adversarial review, attack-path analysis, secure delivery controls, finding validation, remediation, and responsible disclosure." />
+    <meta property="og:description" content="Evidence-led adversarial security engineering from threat model through remediation, retest, and release decision." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.graystontechnologies.com/security" />
     <meta property="og:site_name" content="Grayston Technologies" />
-    <meta property="og:locale" content="en_US" />
     <meta property="og:image" content="https://www.graystontechnologies.com/assets/grayston-og.png" />
-    <meta property="og:image:secure_url" content="https://www.graystontechnologies.com/assets/grayston-og.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Grayston Technologies GP emblem and studio wordmark" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Security Engineering | Grayston Technologies" />
-    <meta name="twitter:description" content="Threat modeling, adversarial review, secure delivery controls, finding validation, remediation, and responsible disclosure." />
+    <meta name="twitter:description" content="Threat modeling, attack paths, validated findings, remediation, retest, and controlled release." />
     <meta name="twitter:image" content="https://www.graystontechnologies.com/assets/grayston-og.png" />
-    <meta name="twitter:image:alt" content="Grayston Technologies GP emblem and studio wordmark" />
     <link rel="canonical" href="https://www.graystontechnologies.com/security" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="icon" href="/assets/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/assets/grayston-emblem-192.png" sizes="192x192" />
-    <link rel="stylesheet" href="/styles.css?v=20260819a" />
+    <link rel="stylesheet" href="/styles.css?v=20260819c" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@graph": [
-          {
-            "@type": "WebPage",
-            "@id": "https://www.graystontechnologies.com/security#webpage",
-            "url": "https://www.graystontechnologies.com/security",
-            "name": "Security Engineering | Grayston Technologies",
-            "description": "Threat modeling, adversarial review, attack-path analysis, secure delivery controls, finding validation, remediation, and responsible disclosure for Grayston Technologies software projects.",
-            "isPartOf": { "@id": "https://www.graystontechnologies.com/#website" },
-            "about": { "@id": "https://www.graystontechnologies.com/#organization" },
-            "dateModified": "2026-08-19",
-            "inLanguage": "en-US"
-          },
-          {
-            "@type": "BreadcrumbList",
-            "@id": "https://www.graystontechnologies.com/security#breadcrumbs",
-            "itemListElement": [
-              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.graystontechnologies.com/" },
-              { "@type": "ListItem", "position": 2, "name": "Security", "item": "https://www.graystontechnologies.com/security" }
-            ]
-          }
+          { "@type": "WebPage", "@id": "https://www.graystontechnologies.com/security#webpage", "url": "https://www.graystontechnologies.com/security", "name": "Security Engineering | Grayston Technologies", "isPartOf": { "@id": "https://www.graystontechnologies.com/#website" }, "about": { "@id": "https://www.graystontechnologies.com/#organization" }, "dateModified": "2026-08-19", "inLanguage": "en-US" },
+          { "@type": "Service", "name": "Adversarial security engineering", "provider": { "@id": "https://www.graystontechnologies.com/#organization" }, "areaServed": "US", "serviceType": ["Threat modeling", "Attack path analysis", "Application security review", "Cloud security review", "Finding validation", "Security remediation", "Security retesting"] },
+          { "@type": "BreadcrumbList", "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.graystontechnologies.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Security", "item": "https://www.graystontechnologies.com/security" }
+          ] }
         ]
       }
     </script>
   </head>
   <body data-page="security">
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">Skip to content</a><span class="scroll-progress" data-scroll-progress aria-hidden="true"></span>
     <header class="site-header" data-header>
-      <a class="brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.webp" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Menu</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
-      <nav class="site-nav" id="site-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/services">Services</a><a href="/products">Products</a><a href="/security" aria-current="page">Security</a><a href="/about">About</a><a href="/contact">Contact</a></nav>
+      <a class="brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-192.webp" alt="" width="192" height="192" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Menu</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/services">Services</a><a href="/products">Products</a><a href="/security" aria-current="page">Security</a><a href="/about">About</a><a href="/contact">Get a Build Plan</a></nav>
     </header>
 
     <main id="main">
-      <section class="page-hero">
-        <div class="page-hero-bg" aria-hidden="true"></div>
-        <div class="section-shell page-hero-grid">
-          <div class="reveal">
-            <p class="eyebrow">Security and reliability</p>
-            <h1>Every release should survive hostile questions.</h1>
-            <p>Grayston combines secure architecture, adversarial review, validated findings, remediation, and controlled delivery so security is exercised throughout the build, not stapled on before launch.</p>
-          </div>
-          <div class="page-hero-panel reveal">
-            <span class="panel-label">Report an issue</span>
-            <p>Security concerns for this website can be sent to <a class="inline-link" href="mailto:jforster@graystontechnologies.com">jforster@graystontechnologies.com</a>. Do not include passwords, tokens, or sensitive third-party data.</p>
-          </div>
-        </div>
+      <section class="page-stage" aria-labelledby="page-title">
+        <canvas class="hero-canvas" data-hero-canvas aria-hidden="true"></canvas><div class="hero-scrim" aria-hidden="true"></div>
+        <div class="section-shell page-stage-grid"><div class="page-stage-copy"><p class="eyebrow">Adversarial security engineering</p><h1 id="page-title">Do not count alerts. Prove the attack path.</h1><p>Grayston models what matters, traces reachable weakness, validates real impact, fixes the root cause, and leaves evidence for the release decision.</p></div></div>
+        <aside class="page-stage-aside" aria-label="Security reporting"><strong>Report a concern</strong><p>Email <a href="mailto:jforster@graystontechnologies.com">jforster@graystontechnologies.com</a>. Never send passwords, tokens, private keys, or sensitive third-party data.</p></aside>
       </section>
 
-      <section class="section defense-section" data-defense-console>
+      <section class="section section-dark">
         <div class="section-shell">
-          <div class="section-heading reveal">
-            <p class="section-kicker">Defense telemetry</p>
-            <h2>Follow the attack path all the way to closure.</h2>
-            <p>Every stage produces a decision, evidence, and a stronger release boundary. Select a stage to inspect the operating standard.</p>
-          </div>
-          <div class="defense-console reveal">
-            <div class="defense-tabs" role="tablist" aria-label="Security operating stages">
-              <button type="button" role="tab" aria-selected="true" data-defense-stage="model" data-defense-code="STAGE 01 / MODEL" data-defense-title="Map what an attacker would value." data-defense-copy="Identify assets, identities, data, trust boundaries, dependencies, attacker goals, and business impact before searching for isolated defects." data-defense-evidence="Threat model + abuse-case map"><span>01</span><strong>Model</strong><small>Assets and boundaries</small></button>
-              <button type="button" role="tab" aria-selected="false" data-defense-stage="discover" data-defense-code="STAGE 02 / DISCOVER" data-defense-title="Search across the whole reachable surface." data-defense-copy="Interrogate architecture, source, dependencies, configuration, secrets posture, integrations, autonomous behavior, and high-risk changes." data-defense-evidence="Evidence-backed candidate findings"><span>02</span><strong>Discover</strong><small>Weakness and exposure</small></button>
-              <button type="button" role="tab" aria-selected="false" data-defense-stage="trace" data-defense-code="STAGE 03 / TRACE" data-defense-title="Connect weaknesses into real attack paths." data-defense-copy="Trace how identity, APIs, cloud permissions, data movement, agents, and vendors can combine into reachable business impact." data-defense-evidence="Attack-path graph + impact chain"><span>03</span><strong>Trace</strong><small>Reachability and impact</small></button>
-              <button type="button" role="tab" aria-selected="false" data-defense-stage="validate" data-defense-code="STAGE 04 / VALIDATE" data-defense-title="Separate exploitable risk from scanner noise." data-defense-copy="Confirm the preconditions, reachable behavior, affected assets, severity, and evidence without destructive testing or inflated claims." data-defense-evidence="Validated finding + severity rationale"><span>04</span><strong>Validate</strong><small>Proof and severity</small></button>
-              <button type="button" role="tab" aria-selected="false" data-defense-stage="close" data-defense-code="STAGE 05 / CLOSE" data-defense-title="Fix the cause and lock the path closed." data-defense-copy="Remediate the underlying control failure, retest the path, add regression coverage, and preserve the evidence required for release." data-defense-evidence="Remediation + regression gate"><span>05</span><strong>Close</strong><small>Fix and prevent</small></button>
+          <div class="section-heading reveal"><p class="section-kicker">What a review produces</p><h2>A working security packet, not a screenshot of scanner volume.</h2><p>Explore an illustrative engagement view. It shows the decisions, evidence, ownership, and release controls a Grayston review is structured to deliver. The sample does not describe a real client or production finding.</p></div>
+
+          <div class="review-packet reveal" data-review-packet>
+            <div class="review-packet-header"><div class="review-packet-title"><span>Grayston security review</span><strong>Sample multi-tenant operations platform</strong></div><span class="sample-flag">Illustrative sample data</span></div>
+            <div class="review-tabs" role="tablist" aria-label="Security review packet sections">
+              <button type="button" role="tab" aria-selected="true" data-review-tab="executive">Executive</button>
+              <button type="button" role="tab" aria-selected="false" tabindex="-1" data-review-tab="paths">Attack paths</button>
+              <button type="button" role="tab" aria-selected="false" tabindex="-1" data-review-tab="findings">Findings</button>
+              <button type="button" role="tab" aria-selected="false" tabindex="-1" data-review-tab="remediation">Remediation</button>
+              <button type="button" role="tab" aria-selected="false" tabindex="-1" data-review-tab="gate">Release gate</button>
             </div>
 
-            <div class="defense-display" data-tilt>
-              <div class="defense-display-head">
-                <span data-defense-code>STAGE 01 / MODEL</span>
-                <span class="system-status"><i aria-hidden="true"></i> Controlled review</span>
+            <section class="review-panel" role="tabpanel" data-review-panel="executive">
+              <div class="review-panel-head"><div><h2>Release confidence begins with scope and reachable impact.</h2><p>Sample scope includes public application, authenticated operations portal, administrative APIs, tenant data boundaries, cloud configuration, dependencies, and agent-enabled workflows.</p></div><div class="release-state"><span>Sample recommendation</span><strong>Conditional release</strong></div></div>
+              <div class="review-summary-grid"><div><span>Attack surface</span><strong>7 trust boundaries</strong><p>Public web, identity, API, tenant data, files, background jobs, and privileged administration.</p></div><div><span>Validated risk</span><strong>3 material paths</strong><p>Only evidence-backed, reachable chains advance into the release decision.</p></div><div><span>Closure standard</span><strong>Fix + retest</strong><p>Root cause corrected, exploit path rerun, regression protection added, and evidence captured.</p></div></div>
+            </section>
+
+            <section class="review-panel" role="tabpanel" data-review-panel="paths" hidden>
+              <div class="review-panel-head"><div><h2>Trace the chain from entry point to business impact.</h2><p>This sample path demonstrates how a weakness is treated as a connected system problem instead of an isolated code smell.</p></div><div class="release-state"><span>Path status</span><strong>Closed + retested</strong></div></div>
+              <ol class="attack-chain">
+                <li class="attack-step"><span>01 / Entry</span><strong>Authenticated user</strong><p>Low-privilege tenant account with valid session.</p></li>
+                <li class="attack-step"><span>02 / Weakness</span><strong>Object reference</strong><p>Export identifier accepted without complete tenant predicate.</p></li>
+                <li class="attack-step"><span>03 / Reach</span><strong>Async worker</strong><p>Background job trusts caller-supplied record context.</p></li>
+                <li class="attack-step"><span>04 / Impact</span><strong>Cross-tenant file</strong><p>Potential access to an export outside the initiating tenant.</p></li>
+                <li class="attack-step"><span>05 / Closure</span><strong>Server authorization</strong><p>Tenant derived from session, worker contract hardened, regression case added.</p></li>
+              </ol>
+            </section>
+
+            <section class="review-panel" role="tabpanel" data-review-panel="findings" hidden>
+              <div class="review-panel-head"><div><h2>Every finding must survive validation.</h2><p>Severity follows reachable business impact, not tool output. These rows are illustrative examples of the evidence format.</p></div><div class="release-state"><span>Noise policy</span><strong>Validate before rank</strong></div></div>
+              <div class="finding-table">
+                <div class="finding-row"><span class="severity high">High</span><strong>AUTH-01 / Cross-tenant export reference</strong><p>Reproduced through authenticated API and worker chain.</p><span class="status-tag closed">Closed</span></div>
+                <div class="finding-row"><span class="severity medium">Medium</span><strong>SESS-02 / Revocation delay on privileged session</strong><p>Validated within the administrative session lifecycle.</p><span class="status-tag closed">Closed</span></div>
+                <div class="finding-row"><span class="severity medium">Medium</span><strong>API-03 / Webhook replay window</strong><p>Confirmed missing event uniqueness at consumer boundary.</p><span class="status-tag ready">Retested</span></div>
+                <div class="finding-row"><span class="severity low">Low</span><strong>CFG-04 / Excess diagnostic response detail</strong><p>Reachable only in a constrained error branch.</p><span class="status-tag closed">Closed</span></div>
               </div>
-              <div class="defense-map" aria-hidden="true">
-                <span class="defense-boundary boundary-external">External</span>
-                <span class="defense-boundary boundary-identity">Identity</span>
-                <span class="defense-boundary boundary-service">Services</span>
-                <span class="defense-boundary boundary-data">Data</span>
-                <span class="defense-trace trace-a"></span>
-                <span class="defense-trace trace-b"></span>
-                <span class="defense-trace trace-c"></span>
-                <span class="defense-target"><img src="/assets/grayston-emblem-192.webp" alt="" /></span>
+            </section>
+
+            <section class="review-panel" role="tabpanel" data-review-panel="remediation" hidden>
+              <div class="review-panel-head"><div><h2>Closure means root cause, retest, and regression protection.</h2><p>A patch without a rerun of the original attack path is not treated as closed.</p></div><div class="release-state"><span>Sample closure</span><strong>4 of 4 verified</strong></div></div>
+              <div class="remediation-table">
+                <div class="remediation-row"><span class="status-tag closed">AUTH-01</span><strong>Authorization boundary</strong><p>Derive tenant context server-side; require explicit tenant predicate in API and worker query contracts.</p><span class="status-tag closed">Retested</span></div>
+                <div class="remediation-row"><span class="status-tag closed">SESS-02</span><strong>Session lifecycle</strong><p>Revoke privileged sessions provider-first and reject stale role state at protected endpoints.</p><span class="status-tag closed">Retested</span></div>
+                <div class="remediation-row"><span class="status-tag closed">API-03</span><strong>Replay protection</strong><p>Persist provider event IDs, make processing idempotent, and cover duplicate delivery in tests.</p><span class="status-tag closed">Retested</span></div>
+                <div class="remediation-row"><span class="status-tag closed">CFG-04</span><strong>Error contract</strong><p>Replace internal detail with structured public errors and preserve diagnostics in restricted logs.</p><span class="status-tag closed">Retested</span></div>
               </div>
-              <div class="defense-readout">
-                <div>
-                  <h3 data-defense-title>Map what an attacker would value.</h3>
-                  <p data-defense-copy>Identify assets, identities, data, trust boundaries, dependencies, attacker goals, and business impact before searching for isolated defects.</p>
-                </div>
-                <div class="defense-evidence"><span>Evidence output</span><strong data-defense-evidence>Threat model + abuse-case map</strong></div>
+            </section>
+
+            <section class="review-panel" role="tabpanel" data-review-panel="gate" hidden>
+              <div class="review-panel-head"><div><h2>The release decision is explicit, owned, and reversible.</h2><p>Security evidence joins functional tests, deployment evidence, observability, and rollback readiness.</p></div><div class="release-state"><span>Sample gate</span><strong>Approved with controls</strong></div></div>
+              <div class="gate-list">
+                <div class="gate-row"><span class="gate-check">✓</span><strong>Material attack paths retested against the release candidate</strong><span class="status-tag ready">Evidence linked</span></div>
+                <div class="gate-row"><span class="gate-check">✓</span><strong>Authorization and tenant-isolation regression suite passing</strong><span class="status-tag ready">Passing</span></div>
+                <div class="gate-row"><span class="gate-check">✓</span><strong>Production secrets, environment boundaries, and privileged access reviewed</strong><span class="status-tag ready">Reviewed</span></div>
+                <div class="gate-row"><span class="gate-check">✓</span><strong>Logging, alert path, rollback procedure, and incident owner confirmed</strong><span class="status-tag ready">Ready</span></div>
               </div>
-            </div>
+            </section>
           </div>
         </div>
       </section>
 
-      <section class="section quiet-section">
+      <section class="section section-light">
         <div class="section-shell">
-          <div class="section-heading reveal">
-            <p class="section-kicker">Delivery controls</p>
-            <h2>Controls that hold up in production.</h2>
-            <p>Controls are tailored to the threat model. The baseline is explicit identity and authorization, minimal secrets exposure, isolated environments, validated data movement, observable behavior, and evidence operators can use.</p>
-          </div>
-          <div class="security-grid">
-            <article class="security-card reveal">
-              <span>Access</span>
-              <h3>Auth and RBAC</h3>
-              <p>Protected routes, role classes, session strategy, least-privilege defaults, and admin surfaces that separate operator, staff, and read-only actions.</p>
-            </article>
-            <article class="security-card reveal">
-              <span>Data</span>
-              <h3>Validation and auditability</h3>
-              <p>Input validation, workflow state checks, event logs, export-ready records, and evidence views for systems that need defensible operational history.</p>
-            </article>
-            <article class="security-card reveal">
-              <span>Cloud</span>
-              <h3>Environment discipline</h3>
-              <p>Separate environments, secret hygiene, preview deployments, release gates, rollback paths, and configuration that keeps production changes intentional.</p>
-            </article>
-            <article class="security-card reveal">
-              <span>APIs</span>
-              <h3>Reliable integrations</h3>
-              <p>Idempotent webhooks, rate limiting where appropriate, structured errors, retry posture, replay protection, and integration contracts that can be operated.</p>
-            </article>
-            <article class="security-card reveal">
-              <span>Ops</span>
-              <h3>Logs and triage</h3>
-              <p>Structured logs, uptime checks, release notes, runbooks, and practical incident triage so launch does not become the end of accountability.</p>
-            </article>
-            <article class="security-card reveal">
-              <span>Review</span>
-              <h3>Adversarial change review</h3>
-              <p>Architecture, repositories, dependencies, and high-risk changes are examined for abuse paths, trust failures, reachable impact, and regression risk.</p>
-            </article>
+          <div class="section-heading reveal"><p class="section-kicker">Evidence outputs</p><h2>Every stage leaves something the next decision can use.</h2><p>The review packet is designed for engineers, operators, and owners who need to know what is reachable, what changed, and whether the system should ship.</p></div>
+          <div class="security-output-list">
+            <article class="security-output reveal"><span>01 / Model</span><h3>Threat model + abuse cases</h3><p>Assets, identities, trust boundaries, data movement, attacker goals, business impact, and the scenarios most worth attacking.</p></article>
+            <article class="security-output reveal"><span>02 / Discover</span><h3>Attack-surface register</h3><p>Architecture, source, cloud, agents, dependencies, configuration, secrets, integrations, and the exposed paths between them.</p></article>
+            <article class="security-output reveal"><span>03 / Validate</span><h3>Evidence-backed findings</h3><p>Reproduction, preconditions, exploit chain, reachable impact, severity rationale, affected contracts, and practical remediation.</p></article>
+            <article class="security-output reveal"><span>04 / Close</span><h3>Remediation + retest packet</h3><p>Root-cause fix, code or configuration evidence, original-path rerun, regression protection, residual risk, and closure state.</p></article>
+            <article class="security-output reveal"><span>05 / Decide</span><h3>Release recommendation</h3><p>An explicit go, conditional go, or no-go decision tied to the evidence, owner, compensating controls, telemetry, and rollback path.</p></article>
           </div>
         </div>
       </section>
 
-      <section class="section cyber-operations-section">
-        <div class="section-shell">
-          <div class="section-heading reveal">
-            <p class="section-kicker">Adversarial security</p>
-            <h2>A continuous red-team loop, not a one-time scan.</h2>
-            <p>Grayston treats security as an operating cycle: understand what matters, look for reachable attack paths, validate actual risk, close the weakness, and prove the fix stays closed.</p>
-          </div>
-          <div class="cyber-operations-grid">
-            <div class="attack-sequence" role="list" aria-label="Adversarial security engineering sequence">
-              <article class="attack-stage reveal" role="listitem"><span>01</span><strong>Threat model</strong><p>Assets, identities, trust boundaries, attacker goals, and business impact.</p></article>
-              <article class="attack-stage reveal" role="listitem"><span>02</span><strong>Find weakness</strong><p>Architecture, code, dependencies, configuration, secrets, and change review.</p></article>
-              <article class="attack-stage reveal" role="listitem"><span>03</span><strong>Trace the path</strong><p>Connect weaknesses across identity, APIs, cloud, data, agents, and vendors.</p></article>
-              <article class="attack-stage reveal" role="listitem"><span>04</span><strong>Validate impact</strong><p>Confirm reachable risk, reject noise, and document evidence and severity.</p></article>
-              <article class="attack-stage reveal" role="listitem"><span>05</span><strong>Remediate</strong><p>Fix the root cause, retest, add regression protection, and gate release.</p></article>
-            </div>
-            <aside class="cyber-brief reveal">
-              <span class="panel-label">Depth where it matters</span>
-              <h3>Attack the system, not just the checklist.</h3>
-              <p>Review spans architecture, source code, identity, data movement, infrastructure, dependencies, integrations, and autonomous behavior. Findings are ranked by reachable impact and exploit chain, not scanner volume.</p>
-              <ul class="check-list light-list">
-                <li>Application and API attack-surface analysis</li>
-                <li>Identity, authorization, tenant-isolation, and session review</li>
-                <li>Cloud, dependency, configuration, and secret-path review</li>
-                <li>Evidence-backed findings with remediation and retest</li>
-              </ul>
-              <a class="button button-primary" href="/contact">Scope a Security Review</a>
-            </aside>
-          </div>
+      <section class="section section-ink">
+        <div class="section-shell disclosure-band reveal">
+          <div><p class="section-kicker">Responsible disclosure</p><h2>Report security issues clearly and non-destructively.</h2><p>Include the affected URL, reproduction steps, browser or device context, screenshots if useful, and potential impact. Do not access, change, delete, download, or exfiltrate data that is not yours. Do not run denial-of-service, social engineering, credential, or destructive tests. Grayston does not currently operate a paid bug bounty program.</p></div>
+          <a class="button button-secondary" href="mailto:jforster@graystontechnologies.com">Report a security concern</a>
         </div>
       </section>
 
-      <section class="section dark-section">
-        <div class="section-shell split-grid">
-          <div class="section-heading reveal">
-            <p class="section-kicker">Responsible disclosure</p>
-            <h2>Security reports should be useful, controlled, and non-destructive.</h2>
-          </div>
-          <div class="rich-copy reveal">
-            <p>If you believe you found a vulnerability in this website or a Grayston-operated product, email a concise report with the affected URL, reproduction steps, browser/device context, screenshots if helpful, and potential impact.</p>
-            <p>Do not access, change, delete, download, or exfiltrate data that is not yours. Do not run destructive tests, denial-of-service tests, social engineering, or credential attacks. Grayston does not currently operate a paid bug bounty program.</p>
-            <a class="button button-primary" href="mailto:jforster@graystontechnologies.com">Report Security Concern</a>
-          </div>
-        </div>
-      </section>
+      <section class="cta-band"><div class="section-shell cta-layout"><div class="reveal"><p class="section-kicker">Pressure-test the release</p><h2>Get the first attack-surface decision within 48 hours.</h2><p>Share the architecture, release pressure, known concerns, and the assets that matter most. Grayston will define the first evidence path.</p></div><a class="button button-accent reveal" href="/contact?focus=security#intake">Scope a security review <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a></div></section>
     </main>
 
-    <footer class="site-footer">
-      <div class="section-shell">
-        <div class="footer-grid">
-          <div class="footer-brand-block">
-            <a class="brand footer-brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.webp" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
-            <p>Veteran-owned software and security studio building AI-native products, autonomous agents, secure platforms, and production cloud systems.</p>
-          </div>
-          <nav class="footer-column" aria-label="Company"><strong>Company</strong><a href="/services">Services</a><a href="/products">Products</a><a href="/about">About</a><a href="/contact">Contact</a></nav>
-          <nav class="footer-column" aria-label="Products"><strong>Products</strong><a href="/products#verityforge">VerityForge</a><a href="/products#mypokermaps">MyPokerMaps</a><a href="/products#feltos">FeltOS</a><a href="/products#cuoperation">CUOPeration</a><a href="/products#qrystaldrop">QrystalDrop</a><a href="https://www.mypokermaps.com" target="_blank" rel="noreferrer">Visit MyPokerMaps</a><a href="https://qrystaldrop.vercel.app" target="_blank" rel="noreferrer">Visit QrystalDrop</a></nav>
-          <nav class="footer-column" aria-label="Trust and legal"><strong>Trust</strong><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="mailto:jforster@graystontechnologies.com">Email Grayston</a></nav>
-        </div>
-        <div class="footer-bottom"><span>&copy; <span data-year></span> Grayston Technologies. All rights reserved.</span><a href="https://www.graystontechnologies.com">www.graystontechnologies.com</a></div>
-      </div>
-    </footer>
-    <script src="/script.js?v=20260819a"></script>
+    <footer class="site-footer"><div class="section-shell"><div class="footer-grid"><div class="footer-brand-block"><a class="brand footer-brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-192.webp" alt="" width="192" height="192" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a><p>Veteran-owned engineering studio shipping AI products, autonomous agents, secure platforms, cloud systems, and adversarial security.</p></div><nav class="footer-column" aria-label="Company"><strong>Company</strong><a href="/services">Services</a><a href="/products">Products</a><a href="/security">Security</a><a href="/about">About</a><a href="/contact">Contact</a></nav><nav class="footer-column" aria-label="Products"><strong>Products</strong><a href="/products#verityforge">VerityForge</a><a href="/products#mypokermaps">MyPokerMaps</a><a href="/products#feltos">FeltOS</a><a href="/products#cuoperation">CUOPeration</a><a href="/products#qrystaldrop">QrystalDrop</a></nav><nav class="footer-column" aria-label="Trust and legal"><strong>Trust</strong><a href="/security">Security</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="mailto:jforster@graystontechnologies.com">jforster@graystontechnologies.com</a></nav></div><div class="footer-bottom"><span>&copy; <span data-year></span> Grayston Technologies. All rights reserved.</span><a href="https://www.graystontechnologies.com">graystontechnologies.com</a></div></div></footer>
+    <script src="/script.js?v=20260819c" defer></script><script type="module" src="/hero-loader.js?v=20260819c"></script>
   </body>
 </html>

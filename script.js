@@ -1,92 +1,26 @@
-document.documentElement.classList.add("js-ready");
+const root = document.documentElement;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const body = document.body;
-const header = document.querySelector("[data-header]");
-const navToggle = document.querySelector(".nav-toggle");
-const nav = document.querySelector("#site-nav");
-const contactForm = document.querySelector("[data-contact-form]");
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+root.classList.add("js");
 
-const createGlobalChrome = () => {
-  const progress = document.createElement("div");
-  progress.className = "scroll-progress";
-  progress.setAttribute("aria-hidden", "true");
-  progress.innerHTML = "<span></span>";
-  body.append(progress);
+function initializeHeader() {
+  const header = document.querySelector("[data-header]");
+  const toggle = document.querySelector(".nav-toggle");
+  const navigation = document.querySelector("#site-nav");
+  if (!header || !toggle || !navigation) return;
 
-  const transition = document.createElement("div");
-  transition.className = "page-transition";
-  transition.setAttribute("aria-hidden", "true");
-  transition.innerHTML = '<img src="/assets/grayston-emblem-192.webp" alt="" />';
-  body.append(transition);
-
-  if (body.dataset.page === "home" && !reducedMotion.matches) {
-    const intro = document.createElement("div");
-    intro.className = "brand-intro";
-    intro.setAttribute("aria-hidden", "true");
-    intro.innerHTML = `
-      <div class="brand-intro-lockup">
-        <img src="/assets/grayston-logo-full.webp" alt="" />
-        <span>Systems online / Production standard engaged</span>
-      </div>
-    `;
-    body.append(intro);
-
-    window.setTimeout(() => intro.classList.add("is-complete"), 2140);
-    window.setTimeout(() => intro.remove(), 2780);
-  }
-};
-
-createGlobalChrome();
-
-document.querySelectorAll("[data-year]").forEach((year) => {
-  year.textContent = new Date().getFullYear();
-});
-
-const updateViewportState = () => {
-  const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-  const progress = Math.min(100, Math.max(0, (window.scrollY / maxScroll) * 100));
-  body.style.setProperty("--scroll-progress", progress.toFixed(3));
-
-  if (header) {
-    header.classList.toggle("is-scrolled", window.scrollY > 18);
-  }
-};
-
-let scrollFrame = 0;
-const requestViewportUpdate = () => {
-  if (scrollFrame) return;
-  scrollFrame = window.requestAnimationFrame(() => {
-    updateViewportState();
-    scrollFrame = 0;
-  });
-};
-
-updateViewportState();
-window.addEventListener("scroll", requestViewportUpdate, { passive: true });
-window.addEventListener("resize", requestViewportUpdate, { passive: true });
-
-const finishLoading = () => body.classList.add("is-loaded");
-if (document.readyState === "complete") {
-  finishLoading();
-} else {
-  window.addEventListener("load", finishLoading, { once: true });
-}
-
-if (navToggle && header && nav) {
   const closeNavigation = () => {
-    navToggle.setAttribute("aria-expanded", "false");
-    header.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+    header.classList.remove("nav-open");
   };
 
-  navToggle.addEventListener("click", () => {
-    const isOpen = navToggle.getAttribute("aria-expanded") === "true";
-    navToggle.setAttribute("aria-expanded", String(!isOpen));
-    header.classList.toggle("is-open", !isOpen);
+  toggle.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    header.classList.toggle("nav-open", !open);
   });
 
-  nav.addEventListener("click", (event) => {
+  navigation.addEventListener("click", (event) => {
     if (event.target instanceof HTMLAnchorElement) closeNavigation();
   });
 
@@ -94,511 +28,372 @@ if (navToggle && header && nav) {
     if (event.key === "Escape") closeNavigation();
   });
 
-  document.addEventListener("click", (event) => {
-    if (!header.classList.contains("is-open") || header.contains(event.target)) return;
-    closeNavigation();
-  });
+  const updateHeader = () => header.classList.toggle("is-scrolled", window.scrollY > 18);
+  updateHeader();
+  window.addEventListener("scroll", updateHeader, { passive: true });
 }
 
-const revealItems = [...document.querySelectorAll(".reveal")];
-revealItems.forEach((item, index) => {
-  item.style.setProperty("--reveal-delay", `${(index % 5) * 55}ms`);
-});
+function initializeProgress() {
+  const progress = document.querySelector("[data-scroll-progress]");
+  if (!progress) return;
 
-if ("IntersectionObserver" in window && !reducedMotion.matches) {
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        revealObserver.unobserve(entry.target);
-      });
-    },
-    { rootMargin: "0px 0px -7% 0px", threshold: 0.1 }
-  );
+  const update = () => {
+    const distance = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = distance > 0 ? Math.min(window.scrollY / distance, 1) : 0;
+    progress.style.transform = `scaleX(${ratio})`;
+  };
 
-  revealItems.forEach((item) => revealObserver.observe(item));
-} else {
-  revealItems.forEach((item) => item.classList.add("is-visible"));
+  update();
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update, { passive: true });
 }
 
-const hero = document.querySelector(".home-hero");
-if (hero && finePointer.matches && !reducedMotion.matches) {
-  hero.addEventListener("pointermove", (event) => {
-    const bounds = hero.getBoundingClientRect();
-    const x = ((event.clientX - bounds.left) / bounds.width) * 100;
-    const y = ((event.clientY - bounds.top) / bounds.height) * 100;
-    body.style.setProperty("--hero-shift-x", `${((x - 50) * -0.18).toFixed(2)}px`);
-    body.style.setProperty("--hero-shift-y", `${((y - 50) * -0.12).toFixed(2)}px`);
-  });
+function initializeReveals() {
+  const elements = [...document.querySelectorAll(".reveal")];
+  if (!elements.length) return;
 
-  hero.addEventListener("pointerleave", () => {
-    body.style.setProperty("--hero-shift-x", "0px");
-    body.style.setProperty("--hero-shift-y", "0px");
-  });
-}
-
-if (finePointer.matches && !reducedMotion.matches) {
-  document.querySelectorAll("[data-tilt]").forEach((element) => {
-    element.addEventListener("pointermove", (event) => {
-      const bounds = element.getBoundingClientRect();
-      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-      element.style.setProperty("--tilt-x", `${(x * 3.2).toFixed(2)}deg`);
-      element.style.setProperty("--tilt-y", `${(y * -3.2).toFixed(2)}deg`);
-    });
-
-    element.addEventListener("pointerleave", () => {
-      element.style.setProperty("--tilt-x", "0deg");
-      element.style.setProperty("--tilt-y", "0deg");
-    });
-  });
-}
-
-const setupMissionConsole = () => {
-  const consoleElement = document.querySelector("[data-mission-console]");
-  if (!consoleElement) return;
-
-  const buttons = [...consoleElement.querySelectorAll("[data-mission-mode]")];
-  const title = consoleElement.querySelector("[data-mission-title]");
-  const core = consoleElement.querySelector("[data-mission-core]");
-  const coreState = consoleElement.querySelector("[data-mission-core-state]");
-  const code = consoleElement.querySelector("[data-mission-code]");
-  const copy = consoleElement.querySelector("[data-mission-copy]");
-  const modes = {
-    build: {
-      title: "Production system",
-      core: "Architecture",
-      coreState: "Mapped",
-      code: "BUILD / 01",
-      copy: "Product experience, identity, APIs, data, cloud, and release engineering move as one system."
-    },
-    automate: {
-      title: "Governed operations",
-      core: "Agent crew",
-      coreState: "Supervised",
-      code: "AUTOMATE / 02",
-      copy: "Tool-using agents execute bounded workflows through memory, evaluation, approvals, recovery, and evidence."
-    },
-    defend: {
-      title: "Defended release",
-      core: "Attack path",
-      coreState: "Validated",
-      code: "DEFEND / 03",
-      copy: "Threat models, reachable attack paths, remediation, regression checks, and release proof close the loop."
-    }
-  };
-
-  let activeIndex = 0;
-  let paused = false;
-
-  const activate = (button, manual = false) => {
-    const mode = button.dataset.missionMode;
-    const data = modes[mode];
-    if (!data) return;
-
-    activeIndex = buttons.indexOf(button);
-    consoleElement.dataset.activeMode = mode;
-    buttons.forEach((item) => item.setAttribute("aria-selected", String(item === button)));
-    title.textContent = data.title;
-    core.textContent = data.core;
-    coreState.textContent = data.coreState;
-    code.textContent = data.code;
-    copy.textContent = data.copy;
-
-    if (manual) paused = true;
-  };
-
-  buttons.forEach((button) => button.addEventListener("click", () => activate(button, true)));
-  consoleElement.addEventListener("pointerenter", () => {
-    paused = true;
-  });
-  consoleElement.addEventListener("pointerleave", () => {
-    paused = false;
-  });
-  consoleElement.addEventListener("focusin", () => {
-    paused = true;
-  });
-  consoleElement.addEventListener("focusout", () => {
-    paused = false;
-  });
-
-  if (!reducedMotion.matches) {
-    window.setInterval(() => {
-      if (paused || document.hidden) return;
-      activate(buttons[(activeIndex + 1) % buttons.length]);
-    }, 5200);
-  }
-};
-
-setupMissionConsole();
-
-const setupProductStage = () => {
-  const stage = document.querySelector("[data-product-stage]");
-  if (!stage) return;
-
-  const buttons = [...stage.querySelectorAll("[data-product-name]")];
-  const view = stage.querySelector(".product-stage-view");
-  const image = stage.querySelector("[data-stage-image]");
-  const tag = stage.querySelector("[data-stage-tag]");
-  const name = stage.querySelector("[data-stage-name]");
-  const description = stage.querySelector("[data-stage-description]");
-  const link = stage.querySelector("[data-stage-link]");
-  let activeIndex = 0;
-  let paused = false;
-
-  const activate = (button, manual = false) => {
-    activeIndex = buttons.indexOf(button);
-    buttons.forEach((item) => item.setAttribute("aria-selected", String(item === button)));
-    view.classList.add("is-switching");
-
-    window.setTimeout(() => {
-      image.src = button.dataset.productImage;
-      image.alt = button.dataset.productAlt;
-      tag.textContent = button.dataset.productTag;
-      name.textContent = button.dataset.productName;
-      description.textContent = button.dataset.productDescription;
-      link.href = button.dataset.productHref;
-      link.textContent = button.dataset.productLink;
-      view.classList.remove("is-switching");
-    }, reducedMotion.matches ? 0 : 150);
-
-    if (manual) paused = true;
-  };
-
-  buttons.forEach((button) => button.addEventListener("click", () => activate(button, true)));
-  stage.addEventListener("pointerenter", () => {
-    paused = true;
-  });
-  stage.addEventListener("pointerleave", () => {
-    paused = false;
-  });
-  stage.addEventListener("focusin", () => {
-    paused = true;
-  });
-  stage.addEventListener("focusout", () => {
-    paused = false;
-  });
-
-  if (!reducedMotion.matches) {
-    window.setInterval(() => {
-      if (paused || document.hidden) return;
-      activate(buttons[(activeIndex + 1) % buttons.length]);
-    }, 5600);
-  }
-};
-
-setupProductStage();
-
-const setupBlueprint = () => {
-  const blueprint = document.querySelector("[data-blueprint]");
-  if (!blueprint) return;
-
-  const buttons = [...blueprint.querySelectorAll("[data-blueprint-mode]")];
-  const title = blueprint.querySelector("[data-blueprint-title]:not(button)");
-  const copy = blueprint.querySelector(".blueprint-readout [data-blueprint-copy]");
-  const result = blueprint.querySelector("[data-blueprint-result]:not(button)");
-  const nodeOne = blueprint.querySelector("[data-blueprint-node-one]");
-  const nodeTwo = blueprint.querySelector("[data-blueprint-node-two]");
-  const nodeThree = blueprint.querySelector("[data-blueprint-node-three]");
-  const nodeFour = blueprint.querySelector("[data-blueprint-node-four]");
-  const nodeContent = {
-    product: ["Responsive product UX", "Workflow + decision logic", "Identity + evidence", "Cloud + release gates"],
-    agents: ["Mission control UX", "Tools + memory + evaluation", "Approvals + audit", "Workers + recovery"],
-    security: ["Abuse-aware experience", "Attack-path analysis", "Controls + validation", "Regression + release proof"]
-  };
-
-  const activate = (button) => {
-    const mode = button.dataset.blueprintMode;
-    const nodes = nodeContent[mode];
-    if (!nodes) return;
-
-    blueprint.dataset.activeMode = mode;
-    buttons.forEach((item) => item.setAttribute("aria-selected", String(item === button)));
-    title.textContent = button.dataset.blueprintTitle;
-    copy.textContent = button.dataset.blueprintCopy;
-    result.textContent = button.dataset.blueprintResult;
-    [nodeOne, nodeTwo, nodeThree, nodeFour].forEach((node, index) => {
-      node.textContent = nodes[index];
-    });
-  };
-
-  buttons.forEach((button) => button.addEventListener("click", () => activate(button)));
-};
-
-setupBlueprint();
-
-const setupDefenseConsole = () => {
-  const defense = document.querySelector("[data-defense-console]");
-  if (!defense) return;
-
-  const buttons = [...defense.querySelectorAll("[data-defense-stage]")];
-  const code = defense.querySelector(".defense-display [data-defense-code]");
-  const title = defense.querySelector(".defense-display [data-defense-title]");
-  const copy = defense.querySelector(".defense-display [data-defense-copy]");
-  const evidence = defense.querySelector(".defense-display [data-defense-evidence]");
-  let activeIndex = 0;
-  let paused = false;
-
-  const activate = (button, manual = false) => {
-    activeIndex = buttons.indexOf(button);
-    defense.dataset.activeStage = button.dataset.defenseStage;
-    buttons.forEach((item) => item.setAttribute("aria-selected", String(item === button)));
-    code.textContent = button.dataset.defenseCode;
-    title.textContent = button.dataset.defenseTitle;
-    copy.textContent = button.dataset.defenseCopy;
-    evidence.textContent = button.dataset.defenseEvidence;
-    if (manual) paused = true;
-  };
-
-  buttons.forEach((button) => button.addEventListener("click", () => activate(button, true)));
-  defense.addEventListener("pointerenter", () => {
-    paused = true;
-  });
-  defense.addEventListener("pointerleave", () => {
-    paused = false;
-  });
-
-  if (!reducedMotion.matches) {
-    window.setInterval(() => {
-      if (paused || document.hidden) return;
-      activate(buttons[(activeIndex + 1) % buttons.length]);
-    }, 5000);
-  }
-};
-
-setupDefenseConsole();
-
-document.querySelectorAll("[role='tablist']").forEach((tablist, tablistIndex) => {
-  const tabs = [...tablist.querySelectorAll("[role='tab']")];
-  if (tabs.length === 0) return;
-
-  const root = tablist.closest("[data-mission-console], [data-product-stage], [data-blueprint], .defense-console");
-  const panel = root?.querySelector(".mission-viewport, .product-stage-view, .blueprint-console, .defense-display");
-  tablist.id ||= `interactive-tabs-${tablistIndex + 1}`;
-  if (panel) {
-    panel.id ||= `${tablist.id}-panel`;
-    panel.setAttribute("role", "tabpanel");
-    tabs.forEach((tab, tabIndex) => {
-      tab.id ||= `${tablist.id}-tab-${tabIndex + 1}`;
-      tab.setAttribute("aria-controls", panel.id);
-    });
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    elements.forEach((element) => element.classList.add("is-visible"));
+    return;
   }
 
-  const syncTabStops = () => {
-    tabs.forEach((tab) => {
-      tab.tabIndex = tab.getAttribute("aria-selected") === "true" ? 0 : -1;
-    });
-    const selectedTab = tabs.find((tab) => tab.getAttribute("aria-selected") === "true");
-    if (panel && selectedTab) panel.setAttribute("aria-labelledby", selectedTab.id);
-  };
-
-  tablist.addEventListener("keydown", (event) => {
-    if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
-
-    const currentIndex = Math.max(0, tabs.indexOf(document.activeElement));
-    const previous = event.key === "ArrowLeft" || event.key === "ArrowUp";
-    let nextIndex = previous ? currentIndex - 1 : currentIndex + 1;
-    if (event.key === "Home") nextIndex = 0;
-    if (event.key === "End") nextIndex = tabs.length - 1;
-    nextIndex = (nextIndex + tabs.length) % tabs.length;
-
-    event.preventDefault();
-    tabs[nextIndex].focus();
-    tabs[nextIndex].click();
-  });
-
-  new MutationObserver(syncTabStops).observe(tablist, {
-    subtree: true,
-    attributes: true,
-    attributeFilter: ["aria-selected"]
-  });
-  syncTabStops();
-});
-
-const setupProductDock = () => {
-  const dock = document.querySelector("[data-product-dock]");
-  const sections = [...document.querySelectorAll("[data-product-section]")];
-  if (!dock || sections.length === 0 || !("IntersectionObserver" in window)) return;
-
-  const links = [...dock.querySelectorAll("[data-product-link]")];
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        const id = entry.target.dataset.productSection;
-        links.forEach((link) => link.classList.toggle("is-active", link.dataset.productLink === id));
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
       });
     },
-    { rootMargin: "-28% 0px -58% 0px", threshold: 0 }
+    { threshold: 0.08, rootMargin: "0px 0px -6% 0px" },
   );
 
-  sections.forEach((section) => observer.observe(section));
-};
+  elements.forEach((element) => observer.observe(element));
+}
 
-setupProductDock();
+function initializeHomeSelector() {
+  const selector = document.querySelector("[data-solution-selector]");
+  if (!selector) return;
 
-document.querySelectorAll(".attack-sequence").forEach((sequence) => {
-  const stages = [...sequence.querySelectorAll(".attack-stage")];
-  if (stages.length === 0) return;
-
-  let activeIndex = 0;
-  stages[0].classList.add("is-active");
-
-  if (!reducedMotion.matches) {
-    window.setInterval(() => {
-      const bounds = sequence.getBoundingClientRect();
-      const visible = bounds.top < window.innerHeight && bounds.bottom > 0;
-      if (!visible || document.hidden) return;
-      stages[activeIndex].classList.remove("is-active");
-      activeIndex = (activeIndex + 1) % stages.length;
-      stages[activeIndex].classList.add("is-active");
-    }, 1900);
-  }
-});
-
-const setStatus = (form, message, tone = "neutral") => {
-  const status = form.querySelector("[data-form-status]");
-  if (!status) return;
-  status.textContent = message;
-  status.dataset.tone = tone;
-};
-
-const buildMailtoUrl = (payload) => {
-  const projectType = String(payload.projectType || "Project inquiry").trim();
-  const subject = `Grayston project inquiry: ${projectType}`;
-  const message = [
-    `Name: ${payload.name || ""}`,
-    `Email: ${payload.email || ""}`,
-    `Company: ${payload.company || "Not provided"}`,
-    `Project type: ${payload.projectType || "Not provided"}`,
-    `Timeline: ${payload.timeline || "Not provided"}`,
-    `Budget: ${payload.budget || "Not provided"}`,
-    "",
-    String(payload.message || "")
-  ].join("\n");
-
-  return `mailto:jforster@graystontechnologies.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
-};
-
-const setEmailFallbackStatus = (form, message, payload) => {
-  const status = form.querySelector("[data-form-status]");
-  if (!status) return;
-
-  const link = document.createElement("a");
-  link.href = buildMailtoUrl(payload);
-  link.textContent = "Open a prefilled email instead.";
-
-  status.textContent = `${message} `;
-  status.append(link);
-  status.dataset.tone = "error";
-};
-
-const setupContactBrief = () => {
-  if (!contactForm) return;
-
-  const name = contactForm.elements.namedItem("name");
-  const email = contactForm.elements.namedItem("email");
-  const projectType = contactForm.elements.namedItem("projectType");
-  const timeline = contactForm.elements.namedItem("timeline");
-  const message = contactForm.elements.namedItem("message");
-  const progressText = document.querySelector("[data-brief-progress]");
-  const meter = document.querySelector("[data-brief-meter]");
-  const contactPreview = document.querySelector("[data-brief-contact]");
-  const systemPreview = document.querySelector("[data-brief-system]");
-  const timelinePreview = document.querySelector("[data-brief-timeline]");
-  const outcomePreview = document.querySelector("[data-brief-outcome]");
-  const presets = [...document.querySelectorAll("[data-project-preset]")];
-
-  const updateBrief = () => {
-    const nameValue = name.value.trim();
-    const emailValue = email.value.trim();
-    const typeValue = projectType.value.trim();
-    const messageValue = message.value.trim();
-    const signals = [nameValue.length > 1, email.validity.valid && emailValue.length > 3, typeValue.length > 0, messageValue.length >= 20];
-    const completed = signals.filter(Boolean).length;
-
-    progressText.textContent = `${completed} of 4 signals`;
-    meter.style.width = `${completed * 25}%`;
-    contactPreview.textContent = nameValue || emailValue ? [nameValue, emailValue].filter(Boolean).join(" / ") : "Awaiting name and email";
-    systemPreview.textContent = typeValue || "Not selected";
-    timelinePreview.textContent = timeline.value || "Not selected";
-    outcomePreview.textContent = messageValue ? `${messageValue.slice(0, 72)}${messageValue.length > 72 ? "..." : ""}` : "Awaiting project context";
-    presets.forEach((preset) => {
-      const isActive = preset.dataset.projectPreset === typeValue;
-      preset.classList.toggle("is-active", isActive);
-      preset.setAttribute("aria-pressed", String(isActive));
-    });
+  const options = {
+    launch: {
+      eyebrow: "0-to-1 product",
+      title: "A working product slice in days, with the production path already mapped.",
+      copy: "Grayston owns the interface, architecture, identity, data, integrations, cloud, and release system together. The first slice proves the core workflow before the platform expands.",
+      proof: ["Clickable product surface", "Production architecture", "Release plan + risk register"],
+      pace: "First working slice: typically days 3-10",
+    },
+    agents: {
+      eyebrow: "Agent systems",
+      title: "Autonomous execution with tools, evidence, and human authority built in.",
+      copy: "Specialized agents receive bounded missions, use governed tools, preserve evidence, and stop at explicit approval gates. Evaluation and observability are part of the system, not an afterthought.",
+      proof: ["Tool and policy design", "Evaluation harness", "Human-controlled release gates"],
+      pace: "First bounded workflow: typically within 10 days",
+    },
+    rescue: {
+      eyebrow: "Platform rescue",
+      title: "Stabilize the system, surface the real risk, and regain release momentum.",
+      copy: "Grayston traces the architecture, build path, runtime failures, data boundaries, and deployment state, then works the highest-impact path from evidence to a controlled release.",
+      proof: ["Failure map", "Prioritized recovery plan", "Verified production repair"],
+      pace: "Initial recovery brief: within 48 hours",
+    },
+    secure: {
+      eyebrow: "Security engineering",
+      title: "Find the reachable attack path, close it, and prove it stays closed.",
+      copy: "Threat modeling, identity review, code analysis, cloud posture, dependency paths, validation, remediation, retest, and release decisions are handled as one adversarial engineering loop.",
+      proof: ["Attack-path register", "Validated findings", "Retest evidence + release gate"],
+      pace: "Initial attack-surface map: within 48 hours",
+    },
   };
 
-  contactForm.addEventListener("input", updateBrief);
-  contactForm.addEventListener("change", updateBrief);
-  presets.forEach((preset) => {
-    preset.addEventListener("click", () => {
-      projectType.value = preset.dataset.projectPreset;
-      projectType.dispatchEvent(new Event("change", { bubbles: true }));
-      projectType.focus({ preventScroll: true });
+  const buttons = [...selector.querySelectorAll("[data-solution-key]")];
+  const eyebrow = selector.querySelector("[data-solution-eyebrow]");
+  const title = selector.querySelector("[data-solution-title]");
+  const copy = selector.querySelector("[data-solution-copy]");
+  const proof = selector.querySelector("[data-solution-proof]");
+  const pace = selector.querySelector("[data-solution-pace]");
+
+  const select = (key) => {
+    const data = options[key];
+    if (!data) return;
+    buttons.forEach((button) => {
+      const selected = button.dataset.solutionKey === key;
+      button.setAttribute("aria-selected", String(selected));
+      button.tabIndex = selected ? 0 : -1;
     });
-  });
-  updateBrief();
-};
+    eyebrow.textContent = data.eyebrow;
+    title.textContent = data.title;
+    copy.textContent = data.copy;
+    proof.innerHTML = data.proof.map((item) => `<li>${item}</li>`).join("");
+    pace.textContent = data.pace;
+  };
 
-setupContactBrief();
-
-if (contactForm) {
-  contactForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const form = event.currentTarget;
-    const submitButton = form.querySelector("button[type='submit']");
-    const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
-
-    setStatus(form, "Sending project details...", "neutral");
-    if (submitButton) submitButton.disabled = true;
-
-    try {
-      const response = await fetch(form.action, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      const result = await response.json().catch(() => ({}));
-
-      if (!response.ok || !result.ok) {
-        throw new Error(result.message || "The form could not send right now.");
-      }
-
-      form.reset();
-      form.dispatchEvent(new Event("change", { bubbles: true }));
-      setStatus(form, "Sent. Grayston will follow up from jforster@graystontechnologies.com.", "success");
-    } catch (error) {
-      setEmailFallbackStatus(form, error.message || "The form could not send right now.", payload);
-    } finally {
-      if (submitButton) submitButton.disabled = false;
-    }
+  buttons.forEach((button, index) => {
+    button.addEventListener("click", () => select(button.dataset.solutionKey));
+    button.addEventListener("keydown", (event) => {
+      if (!["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"].includes(event.key)) return;
+      event.preventDefault();
+      const direction = ["ArrowRight", "ArrowDown"].includes(event.key) ? 1 : -1;
+      const next = buttons[(index + direction + buttons.length) % buttons.length];
+      next.focus();
+      select(next.dataset.solutionKey);
+    });
   });
 }
 
-document.addEventListener("click", (event) => {
-  const link = event.target.closest("a[href]");
-  if (!link || event.defaultPrevented || event.button !== 0) return;
-  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  if (link.target === "_blank" || link.hasAttribute("download")) return;
+function initializePlanner() {
+  const planner = document.querySelector("[data-build-planner]");
+  if (!planner) return;
 
-  const href = link.getAttribute("href");
-  if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+  const plans = {
+    product: {
+      label: "Launch a product",
+      result: "Production architecture + working core experience",
+      first: "48 hours",
+      slice: "Days 3-10",
+      path: "Focused weeks",
+      scope: "Product strategy, UX, identity, APIs, data, cloud, observability, and release ownership.",
+      steps: ["Bound the highest-value workflow", "Ship the real vertical slice", "Expand behind tested contracts", "Release with rollback and telemetry"],
+    },
+    agent: {
+      label: "Deploy agents",
+      result: "Bounded mission + evaluated tool-use workflow",
+      first: "48 hours",
+      slice: "Week 1",
+      path: "Focused weeks",
+      scope: "Agent roles, tools, memory, retrieval, approval policy, evaluation, evidence, and operating controls.",
+      steps: ["Define mission and authority", "Connect governed tools", "Evaluate success and failure", "Release behind human control"],
+    },
+    rescue: {
+      label: "Rescue a platform",
+      result: "Failure map + prioritized path back to release",
+      first: "24-48 hours",
+      slice: "First week",
+      path: "By evidence",
+      scope: "Architecture, code, data, deployment, security, observability, and the release blockers that matter most.",
+      steps: ["Reproduce the real failure", "Trace blast radius", "Repair the highest-risk path", "Prove production behavior"],
+    },
+    security: {
+      label: "Harden a system",
+      result: "Attack-surface map + validated review plan",
+      first: "48 hours",
+      slice: "Week 1",
+      path: "Risk-driven",
+      scope: "Threat model, attack paths, identity, code, cloud, dependencies, data, remediation, and retest.",
+      steps: ["Map assets and trust", "Discover reachable weakness", "Validate real impact", "Fix, retest, and gate release"],
+    },
+  };
 
-  const destination = new URL(link.href, window.location.href);
-  if (destination.origin !== window.location.origin) return;
-  if (destination.pathname === window.location.pathname && destination.search === window.location.search && destination.hash) return;
-  if (reducedMotion.matches) return;
+  const buttons = [...planner.querySelectorAll("[data-plan-key]")];
+  const fields = {
+    label: planner.querySelector("[data-plan-label]"),
+    result: planner.querySelector("[data-plan-result]"),
+    first: planner.querySelector("[data-plan-first]"),
+    slice: planner.querySelector("[data-plan-slice]"),
+    path: planner.querySelector("[data-plan-path]"),
+    scope: planner.querySelector("[data-plan-scope]"),
+    steps: planner.querySelector("[data-plan-steps]"),
+    link: planner.querySelector("[data-plan-link]"),
+  };
 
-  event.preventDefault();
-  body.classList.add("is-leaving");
-  window.setTimeout(() => {
-    window.location.href = destination.href;
-  }, 360);
-});
+  const choose = (key) => {
+    const plan = plans[key];
+    if (!plan) return;
+    buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.planKey === key)));
+    Object.entries(fields).forEach(([name, element]) => {
+      if (!element || name === "steps" || name === "link") return;
+      element.textContent = plan[name];
+    });
+    fields.steps.innerHTML = plan.steps.map((step, index) => `<li><span>0${index + 1}</span>${step}</li>`).join("");
+    fields.link.href = `/contact?focus=${encodeURIComponent(key)}#intake`;
+  };
 
-window.addEventListener("pageshow", () => body.classList.remove("is-leaving"));
+  buttons.forEach((button) => button.addEventListener("click", () => choose(button.dataset.planKey)));
+}
+
+function initializeProductStage() {
+  const stage = document.querySelector("[data-product-stage]");
+  if (!stage) return;
+
+  const buttons = [...stage.querySelectorAll("[data-product-name]")];
+  const image = stage.querySelector("[data-stage-image]");
+  const name = stage.querySelector("[data-stage-name]");
+  const tag = stage.querySelector("[data-stage-tag]");
+  const description = stage.querySelector("[data-stage-description]");
+  const link = stage.querySelector("[data-stage-link]");
+
+  const select = (button) => {
+    buttons.forEach((item) => item.setAttribute("aria-selected", String(item === button)));
+    const update = () => {
+      image.src = button.dataset.productImage;
+      image.alt = button.dataset.productAlt;
+      name.textContent = button.dataset.productName;
+      tag.textContent = button.dataset.productTag;
+      description.textContent = button.dataset.productDescription;
+      link.href = button.dataset.productHref;
+      link.textContent = button.dataset.productLink;
+    };
+
+    if (reduceMotion) {
+      update();
+      return;
+    }
+
+    image.classList.add("is-switching");
+    window.setTimeout(() => {
+      update();
+      image.addEventListener("load", () => image.classList.remove("is-switching"), { once: true });
+      window.setTimeout(() => image.classList.remove("is-switching"), 320);
+    }, 120);
+  };
+
+  buttons.forEach((button) => button.addEventListener("click", () => select(button)));
+}
+
+function initializeReviewPacket() {
+  const packet = document.querySelector("[data-review-packet]");
+  if (!packet) return;
+
+  const tabs = [...packet.querySelectorAll("[data-review-tab]")];
+  const panels = [...packet.querySelectorAll("[data-review-panel]")];
+
+  const select = (key, focus = false) => {
+    tabs.forEach((tab) => {
+      const active = tab.dataset.reviewTab === key;
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+      if (active && focus) tab.focus();
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.reviewPanel !== key;
+    });
+  };
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => select(tab.dataset.reviewTab));
+    tab.addEventListener("keydown", (event) => {
+      if (!["ArrowRight", "ArrowLeft"].includes(event.key)) return;
+      event.preventDefault();
+      const direction = event.key === "ArrowRight" ? 1 : -1;
+      const next = tabs[(index + direction + tabs.length) % tabs.length];
+      select(next.dataset.reviewTab, true);
+    });
+  });
+}
+
+function initializeProductNavigation() {
+  const links = [...document.querySelectorAll("[data-product-nav] a")];
+  if (!links.length || !("IntersectionObserver" in window)) return;
+
+  const sections = links.map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        links.forEach((link) => link.classList.toggle("is-active", link.getAttribute("href") === `#${entry.target.id}`));
+      });
+    },
+    { rootMargin: "-30% 0px -58% 0px", threshold: 0 },
+  );
+  sections.forEach((section) => observer.observe(section));
+}
+
+function initializeContactForm() {
+  const form = document.querySelector("[data-contact-form]");
+  if (!form) return;
+
+  const status = form.querySelector("[data-form-status]");
+  const project = form.elements.projectType;
+  const name = form.elements.name;
+  const email = form.elements.email;
+  const timeline = form.elements.timeline;
+  const message = form.elements.message;
+  const submit = form.querySelector("button[type='submit']");
+  const progress = document.querySelector("[data-brief-progress]");
+  const meter = document.querySelector("[data-brief-meter]");
+  const contactOutput = document.querySelector("[data-brief-contact]");
+  const systemOutput = document.querySelector("[data-brief-system]");
+  const timelineOutput = document.querySelector("[data-brief-timeline]");
+  const outcomeOutput = document.querySelector("[data-brief-outcome]");
+
+  const focusMap = {
+    product: "AI-native SaaS or product platform",
+    agent: "Autonomous agents and orchestration",
+    rescue: "Platform rescue",
+    security: "Cybersecurity review and hardening",
+  };
+  const focus = new URLSearchParams(window.location.search).get("focus");
+  if (focusMap[focus]) project.value = focusMap[focus];
+
+  const updateBrief = () => {
+    const signals = [name.value.trim() && email.validity.valid, project.value, timeline.value, message.value.trim().length >= 12];
+    const count = signals.filter(Boolean).length;
+    if (progress) progress.textContent = `${count} of 4 signals`;
+    if (meter) meter.style.transform = `scaleX(${count / 4})`;
+    if (contactOutput) contactOutput.textContent = signals[0] ? `${name.value.trim()} / ${email.value.trim()}` : "Awaiting name and email";
+    if (systemOutput) systemOutput.textContent = project.value || "Not selected";
+    if (timelineOutput) timelineOutput.textContent = timeline.value || "ASAP";
+    if (outcomeOutput) outcomeOutput.textContent = signals[3] ? "Context captured" : "Awaiting project context";
+  };
+
+  form.addEventListener("input", updateBrief);
+  form.addEventListener("change", updateBrief);
+
+  document.querySelectorAll("[data-project-preset]").forEach((button) => {
+    button.addEventListener("click", () => {
+      project.value = button.dataset.projectPreset;
+      document.querySelectorAll("[data-project-preset]").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+      updateBrief();
+      project.focus();
+    });
+  });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    status.textContent = "Sending securely...";
+    status.className = "form-status is-loading";
+    submit.disabled = true;
+
+    try {
+      const payload = Object.fromEntries(new FormData(form).entries());
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.message || "Message could not be sent.");
+      status.textContent = "Received. James will respond directly.";
+      status.className = "form-status is-success";
+      form.reset();
+      document.querySelectorAll("[data-project-preset]").forEach((item) => item.setAttribute("aria-pressed", "false"));
+      updateBrief();
+    } catch (error) {
+      status.textContent = `${error.message} Email jforster@graystontechnologies.com if the issue continues.`;
+      status.className = "form-status is-error";
+    } finally {
+      submit.disabled = false;
+    }
+  });
+
+  updateBrief();
+}
+
+function initializeYear() {
+  document.querySelectorAll("[data-year]").forEach((element) => {
+    element.textContent = String(new Date().getFullYear());
+  });
+}
+
+initializeHeader();
+initializeProgress();
+initializeReveals();
+initializeHomeSelector();
+initializePlanner();
+initializeProductStage();
+initializeReviewPacket();
+initializeProductNavigation();
+initializeContactForm();
+initializeYear();
+
+window.requestAnimationFrame(() => document.body.classList.add("is-ready"));
