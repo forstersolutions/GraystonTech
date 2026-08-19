@@ -1,57 +1,46 @@
 # Grayston Technologies
 
-Static frontend for `graystontechnologies.com`.
+Production website for `graystontechnologies.com`.
 
-## Files
+## Experience
 
-- `index.html` - homepage markup and SEO metadata
-- `privacy.html`, `terms.html`, `security.html` - trust and legal pages
-- `styles.css` - responsive styling, animations, product visuals, and layout
-- `script.js` - mobile navigation, sticky header state, and reveal animations
-- `assets/grayston-hero.png` - generated hero image
-- `assets/grayston-emblem-512.png` - supplied GP emblem, prepared for web use
-- `assets/grayston-logo-full.png` - supplied full lockup with safe canvas padding
-- `assets/grayston-og.png` - social preview image
+- Responsive static frontend across home, services, products, security, about, contact, privacy, terms, and 404 routes
+- Real product interfaces for VerityForge, MyPokerMaps, FeltOS, QrystalDrop, and CUOPeration
+- Scroll-led product storytelling, interactive capability and security consoles, pointer depth, and reduced-motion support
+- Search, social, structured-data, sitemap, robots, manifest, security disclosure, and `llms.txt` metadata
+- Vercel Function contact delivery through Resend
 
-## Preview
-
-Open `index.html` in a browser or run:
+## Local Preview
 
 ```bash
 npm run serve
 ```
 
-## Deploy
+The site is available at `http://localhost:4173`.
 
-This repository is intended for Vercel Git integration. Pushes to the production
-branch should deploy the static site directly from the repo root.
+## Deployment
 
-The domain should resolve to Vercel using the Vercel-provided DNS target values.
-The apex domain redirects to `https://www.graystontechnologies.com`.
+The repository is connected to Vercel. Production deploys from the configured
+Git branch and the apex domain redirects to
+`https://www.graystontechnologies.com`.
 
 ## Contact Form
 
-The contact form posts to `/api/contact` and routes messages to
+The form posts JSON to `/api/contact` and routes inquiries to
 `jforster@graystontechnologies.com`.
 
-Required Vercel environment variable for email delivery:
+Required Vercel environment variable:
 
 ```bash
 RESEND_API_KEY=<resend-api-key>
 ```
 
-Optional environment variables:
+Optional overrides:
 
 ```bash
 CONTACT_TO_EMAIL=jforster@graystontechnologies.com
 CONTACT_FROM_EMAIL="Grayston Technologies <hello@graystontechnologies.com>"
 ```
 
-If `CONTACT_FROM_EMAIL` uses `graystontechnologies.com`, verify that domain in
-Resend and add the required DNS records before sending from it.
-
-## Image Prompt
-
-Generated with the built-in image generation tool:
-
-> Create a cinematic, premium technology studio hero image for Grayston Technologies, a company named after two sons. No text. Dark refined engineering workspace at night with glass, brushed metal, code-like interface reflections, secure cloud architecture diagrams, and two clean intersecting light paths. Photorealistic, high contrast, premium but restrained, no people, no logos, no readable text.
+The sending domain must be verified in Resend before a
+`graystontechnologies.com` sender address can be used.

@@ -1,6 +1,6 @@
 # Grayston Technologies
 
-Grayston Technologies is a veteran-owned software and security studio building AI-native SaaS products, autonomous agent systems, secure platforms, operational software, cloud infrastructure, and integration-heavy systems.
+Grayston Technologies is a veteran-owned product engineering company building native mobile applications, web and desktop software, AI and machine-learning systems, cloud and data platforms, secure operational software, complex integrations, and modernized production systems.
 
 ## Primary URLs
 
@@ -23,14 +23,14 @@ Grayston Technologies is a veteran-owned software and security studio building A
 
 ## Services
 
-- SaaS product build sprints
-- AI operations automation
-- Secure platforms, identity, and data systems
-- Operational intelligence and decision systems
-- Cloud reliability and release engineering
-- API integrations and system automation
-- Agent governance and autonomous workflow platforms
-- Adversarial security engineering, threat modeling, attack-path analysis, finding validation, and remediation
+- Product strategy, UX, architecture, and full-stack delivery
+- Native iOS, native Android, and cross-platform mobile applications
+- Responsive web applications, desktop software, and multi-surface platforms
+- AI, machine learning, retrieval, automation, and governed agent systems
+- Cloud infrastructure, APIs, data systems, identity, and integrations
+- Secure operational software for complex, high-accountability workflows
+- Software modernization, migrations, performance recovery, and platform rescue
+- Adversarial security engineering, threat modeling, attack-path analysis, validated remediation, and retest
 
 ## Contact
 
