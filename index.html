@@ -31,7 +31,9 @@
     <link rel="apple-touch-icon" href="/assets/grayston-emblem-192.png" sizes="192x192" />
     <link rel="preload" href="/assets/grayston-logo-full-640.webp" as="image" type="image/webp" />
     <link rel="preload" href="/assets/product-feltos.webp" as="image" type="image/webp" />
-    <link rel="stylesheet" href="/styles.css?v=20260819d" />
+    <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/styles.css?v=20260819e" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -71,7 +73,7 @@
         ]
       }
     </script>
-    <script src="/script.js?v=20260819d" defer></script>
+    <script src="/script.js?v=20260819f" defer></script>
   </head>
   <body data-page="home">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -119,7 +121,7 @@
             </div>
           </div>
 
-          <div class="hero-product-stage reveal" data-hero-stage>
+          <div class="hero-product-stage reveal" data-hero-stage data-active-product="feltos">
             <div class="depth-frame depth-frame--left" aria-hidden="true" data-depth="-1">
               <img src="/assets/product-qrystaldrop-dashboard.webp" alt="" width="1440" height="800" />
             </div>
@@ -178,7 +180,7 @@
             <p>Choose a capability to see how Grayston turns it into a working system. The disciplines stay connected because the product has to work as one.</p>
           </header>
 
-          <div class="capability-deck reveal" data-capability-deck>
+          <div class="capability-deck reveal" data-capability-deck data-active-capability="product">
             <div class="capability-tabs" role="tablist" aria-label="Engineering capabilities">
               <button type="button" role="tab" aria-selected="true" data-capability-key="product"><span>01</span><strong>Product engineering</strong><small>Web, SaaS, desktop, platforms</small></button>
               <button type="button" role="tab" aria-selected="false" data-capability-key="mobile"><span>02</span><strong>Native mobile</strong><small>iOS, Android, cross-platform</small></button>
@@ -212,7 +214,7 @@
             <p>Scroll through five production-scale systems. Every interface below comes from the actual product, shown with representative or sanitized data.</p>
           </header>
 
-          <div class="work-story" data-work-story>
+          <div class="work-story" data-work-story data-active-work="verityforge">
             <div class="work-visual-wrap">
               <figure class="work-visual" aria-live="polite">
                 <div class="product-window-bar" aria-hidden="true"><span></span><span></span><span></span><b data-work-kicker>01 / Intelligent delivery</b></div>
@@ -221,27 +223,27 @@
               </figure>
             </div>
             <div class="work-chapters">
-              <article class="work-chapter is-active" data-work-chapter data-image="/assets/product-verityforge.webp" data-alt="VerityForge autonomous software delivery control plane" data-kicker="01 / Intelligent delivery" data-name="VerityForge" data-href="/products#verityforge">
+              <article class="work-chapter is-active" data-work-chapter data-work-key="verityforge" data-image="/assets/product-verityforge.webp" data-alt="VerityForge autonomous software delivery control plane" data-kicker="01 / Intelligent delivery" data-name="VerityForge" data-href="/products#verityforge">
                 <img class="work-chapter-image" src="/assets/product-verityforge.webp" alt="VerityForge autonomous software delivery control plane" width="1600" height="1000" loading="lazy" />
                 <p>01 / VERITYFORGE</p><h3>Proof-governed software delivery.</h3><p>Coordinate specialized engineering agents through isolated work, explicit proof contracts, verification, evidence, and owner-controlled release decisions.</p>
                 <ul><li>Agent orchestration</li><li>Verification contracts</li><li>Release governance</li></ul>
               </article>
-              <article class="work-chapter" data-work-chapter data-image="/assets/product-mypokermaps.webp" data-alt="MyPokerMaps discovery platform with map and live poker features" data-kicker="02 / Consumer platform" data-name="MyPokerMaps" data-href="https://www.mypokermaps.com">
+              <article class="work-chapter" data-work-chapter data-work-key="mypokermaps" data-image="/assets/product-mypokermaps.webp" data-alt="MyPokerMaps discovery platform with map and live poker features" data-kicker="02 / Consumer platform" data-name="MyPokerMaps" data-href="https://www.mypokermaps.com">
                 <img class="work-chapter-image" src="/assets/product-mypokermaps.webp" alt="MyPokerMaps discovery platform with map and live poker features" width="1440" height="980" loading="lazy" />
                 <p>02 / MYPOKERMAPS</p><h3>Discovery, live rooms, and community at platform scale.</h3><p>Public discovery, room listings, tournaments, streaming, social features, onboarding, and a connected club operating ecosystem.</p>
                 <ul><li>Consumer web + mobile</li><li>Real-time workflows</li><li>Multi-surface platform</li></ul>
               </article>
-              <article class="work-chapter" data-work-chapter data-image="/assets/product-feltos.webp" data-alt="FeltOS club portal dashboard with sanitized room operations data" data-kicker="03 / Operations platform" data-name="FeltOS" data-href="/products#feltos">
+              <article class="work-chapter" data-work-chapter data-work-key="feltos" data-image="/assets/product-feltos.webp" data-alt="FeltOS club portal dashboard with sanitized room operations data" data-kicker="03 / Operations platform" data-name="FeltOS" data-href="/products#feltos">
                 <img class="work-chapter-image" src="/assets/product-feltos.webp" alt="FeltOS club portal dashboard with sanitized room operations data" width="1440" height="980" loading="lazy" />
                 <p>03 / FELTOS</p><h3>The operating system behind a live poker room.</h3><p>Front desk, check-in, waitlists, tables, tournaments, members, staff, cash cage, analytics, accounting, compliance, and device operations.</p>
                 <ul><li>Role-governed operations</li><li>Live activity</li><li>Financial + compliance controls</li></ul>
               </article>
-              <article class="work-chapter" data-work-chapter data-image="/assets/product-qrystaldrop-dashboard.webp" data-alt="QrystalDrop enterprise secure-room workspace dashboard" data-kicker="04 / Secure collaboration" data-name="QrystalDrop" data-href="https://qrystaldrop.vercel.app">
+              <article class="work-chapter" data-work-chapter data-work-key="qrystaldrop" data-image="/assets/product-qrystaldrop-dashboard.webp" data-alt="QrystalDrop enterprise secure-room workspace dashboard" data-kicker="04 / Secure collaboration" data-name="QrystalDrop" data-href="https://qrystaldrop.vercel.app">
                 <img class="work-chapter-image" src="/assets/product-qrystaldrop-dashboard.webp" alt="QrystalDrop enterprise secure-room workspace dashboard" width="1440" height="800" loading="lazy" />
                 <p>04 / QRYSTALDROP</p><h3>Controlled file custody with proof behind every action.</h3><p>Post-quantum secure rooms, passkeys, federation, provisioning, network controls, recovery review, SIEM delivery, and audit-ready evidence.</p>
                 <ul><li>Post-quantum cryptography</li><li>Enterprise identity</li><li>Evidence + governance</li></ul>
               </article>
-              <article class="work-chapter" data-work-chapter data-image="/assets/product-cuoperation.webp" data-alt="CUOPeration personnel operations dashboard with sanitized mock data" data-kicker="05 / Personnel operations" data-name="CUOPeration" data-href="/products#cuoperation">
+              <article class="work-chapter" data-work-chapter data-work-key="cuoperation" data-image="/assets/product-cuoperation.webp" data-alt="CUOPeration personnel operations dashboard with sanitized mock data" data-kicker="05 / Personnel operations" data-name="CUOPeration" data-href="/products#cuoperation">
                 <img class="work-chapter-image" src="/assets/product-cuoperation.webp" alt="CUOPeration personnel operations dashboard with sanitized mock data" width="1440" height="980" loading="lazy" />
                 <p>05 / CUOPERATION</p><h3>High-accountability personnel operations in one secure surface.</h3><p>Personnel intake, hierarchy, tasking, approvals, private files, drill notes, role administration, notifications, governed export, and audit history.</p>
                 <ul><li>Secure personnel records</li><li>Approval workflows</li><li>Auditable operations</li></ul>
@@ -276,7 +278,7 @@
             <p>Grayston examines how identity, application logic, data, infrastructure, dependencies, and autonomous behavior can fail together, then closes the reachable path and proves the fix.</p>
             <a class="button button-quiet" href="/security">Explore the security practice <span aria-hidden="true">&#8599;</span></a>
           </div>
-          <div class="security-console reveal" data-security-console>
+          <div class="security-console reveal" data-security-console data-active-security-key="identity">
             <div class="security-console-tabs" role="tablist" aria-label="Security review areas">
               <button type="button" role="tab" aria-selected="true" data-security-key="identity">Identity</button>
               <button type="button" role="tab" aria-selected="false" data-security-key="data">Data</button>

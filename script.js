@@ -13,6 +13,9 @@ function setSelected(buttons, activeButton) {
 }
 
 function bindTabs(buttons, onSelect) {
+  const initial = buttons.find((button) => button.getAttribute("aria-selected") === "true") || buttons[0];
+  if (initial) setSelected(buttons, initial);
+
   buttons.forEach((button, index) => {
     button.addEventListener("click", () => onSelect(button));
     button.addEventListener("keydown", (event) => {
@@ -93,11 +96,11 @@ function initializeEntry() {
 
   document.body.classList.add("is-entering");
   window.requestAnimationFrame(() => entry.classList.add("is-ready"));
-  window.setTimeout(() => entry.classList.add("is-opening"), 980);
+  window.setTimeout(() => entry.classList.add("is-opening"), 1980);
   window.setTimeout(() => {
     entry.classList.add("is-complete");
     document.body.classList.remove("is-entering");
-  }, 1690);
+  }, 2690);
 }
 
 function initializeHeader() {
@@ -189,6 +192,7 @@ function initializeHeroProducts() {
   const select = async (button) => {
     const current = ++selection;
     setSelected(buttons, button);
+    stage.dataset.activeProduct = button.dataset.heroProduct;
     await transitionImage(frame, image, button.dataset.image, () => {
       if (current !== selection) return false;
       image.alt = button.dataset.alt;
@@ -306,6 +310,7 @@ function initializeCapabilityDeck() {
     if (!data) return;
     const current = ++selection;
     setSelected(buttons, button);
+    deck.dataset.activeCapability = button.dataset.capabilityKey;
     await transitionImage(media, image, data.image, () => {
       if (current !== selection) return false;
       fields.kicker.textContent = data.kicker;
@@ -341,6 +346,7 @@ function initializeWorkStory() {
     activeChapter = chapter;
     const current = ++selection;
     chapters.forEach((item) => item.classList.toggle("is-active", item === chapter));
+    story.dataset.activeWork = chapter.dataset.workKey;
     await transitionImage(visual, image, chapter.dataset.image, () => {
       if (current !== selection) return false;
       image.alt = chapter.dataset.alt;
@@ -417,6 +423,7 @@ function initializeSecurityConsole() {
     const review = reviews[button.dataset.securityKey];
     if (!review) return;
     setSelected(buttons, button);
+    consoleElement.dataset.activeSecurityKey = button.dataset.securityKey;
     question.textContent = review.question;
     evidence.textContent = review.evidence;
     gate.textContent = review.gate;
@@ -499,6 +506,7 @@ function initializeSecurityProgram() {
     const area = areas[button.dataset.securityArea];
     if (!area) return;
     setSelected(buttons, button);
+    program.dataset.activeSecurityArea = button.dataset.securityArea;
     fields.label.textContent = area.label;
     fields.title.textContent = area.title;
     fields.summary.textContent = area.summary;
