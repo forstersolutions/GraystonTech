@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Products | VerityForge, MyPokerMaps, FeltOS, CUOPeration, and QrystalDrop</title>
+    <title>Products | Grayston Technologies</title>
     <meta name="description" content="Featured Grayston Technologies products including VerityForge, MyPokerMaps, FeltOS, CUOPeration, QrystalDrop, secure portals, agent systems, and operational platforms." />
     <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
     <meta name="author" content="Grayston Technologies" />
@@ -30,13 +30,7 @@
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="icon" href="/assets/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/assets/grayston-emblem-192.png" sizes="192x192" />
-    <link rel="preload" href="/assets/product-mypokermaps.png" as="image" />
-    <link rel="preload" href="/assets/mypokermaps-logo.png" as="image" />
-    <link rel="preload" href="/assets/product-verityforge.png" as="image" />
-    <link rel="preload" href="/assets/product-feltos.png" as="image" />
-    <link rel="preload" href="/assets/product-cuoperation.png" as="image" />
-    <link rel="preload" href="/assets/product-qrystaldrop-dashboard.png" as="image" />
-    <link rel="stylesheet" href="/styles.css?v=20260714a" />
+    <link rel="stylesheet" href="/styles.css?v=20260819a" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -49,7 +43,7 @@
             "description": "Featured Grayston Technologies products including VerityForge, MyPokerMaps, FeltOS, CUOPeration, QrystalDrop, secure portals, agent systems, and operational platforms.",
             "isPartOf": { "@id": "https://www.graystontechnologies.com/#website" },
             "about": { "@id": "https://www.graystontechnologies.com/#organization" },
-            "dateModified": "2026-07-14",
+            "dateModified": "2026-08-19",
             "inLanguage": "en-US"
           },
           {
@@ -136,10 +130,10 @@
   <body data-page="products">
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header" data-header>
-      <a class="brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.png" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
+      <a class="brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.webp" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Menu</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
       <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
-        <a href="/">Home</a><a href="/services">Services</a><a href="/products" aria-current="page">Products</a><a href="/about">About</a><a href="/contact">Contact</a>
+        <a href="/">Home</a><a href="/services">Services</a><a href="/products" aria-current="page">Products</a><a href="/security">Security</a><a href="/about">About</a><a href="/contact">Contact</a>
       </nav>
     </header>
 
@@ -159,7 +153,18 @@
         </div>
       </section>
 
-      <section class="section dark-section product-detail-section" id="verityforge">
+      <nav class="product-dock" aria-label="Product platform index" data-product-dock>
+        <div class="section-shell">
+          <span class="product-dock-label">Platform index</span>
+          <a href="#verityforge" data-product-link="verityforge" class="is-active"><span>01</span>VerityForge</a>
+          <a href="#mypokermaps" data-product-link="mypokermaps"><span>02</span>MyPokerMaps</a>
+          <a href="#feltos" data-product-link="feltos"><span>03</span>FeltOS</a>
+          <a href="#cuoperation" data-product-link="cuoperation"><span>04</span>CUOPeration</a>
+          <a href="#qrystaldrop" data-product-link="qrystaldrop"><span>05</span>QrystalDrop</a>
+        </div>
+      </nav>
+
+      <section class="section dark-section product-detail-section" id="verityforge" data-product-section="verityforge">
         <div class="section-shell product-detail-grid">
           <div class="product-copy-block reveal">
             <span class="product-label">VerityForge</span>
@@ -181,14 +186,14 @@
               <a class="text-link" href="/services">View agent-system services</a>
             </div>
           </div>
-          <figure class="product-screen product-screen-contain reveal">
-            <img src="/assets/product-verityforge.png" alt="VerityForge product visual showing agent router, proof ledger, isolated worktrees, checks, and owner gate" />
+          <figure class="product-screen product-screen-contain live-product-frame reveal" data-tilt>
+            <img src="/assets/product-verityforge.webp" alt="VerityForge product visual showing agent router, proof ledger, isolated worktrees, checks, and owner gate" width="1600" height="1000" loading="lazy" decoding="async" />
             <figcaption>VerityForge autonomous software delivery control plane.</figcaption>
           </figure>
         </div>
       </section>
 
-      <section class="section product-detail-section" id="mypokermaps">
+      <section class="section product-detail-section" id="mypokermaps" data-product-section="mypokermaps">
         <div class="section-shell product-detail-grid">
           <div class="product-copy-block reveal">
             <span class="product-label">MyPokerMaps / StackTrax / FeltOS</span>
@@ -210,17 +215,17 @@
               <a class="text-link" href="/contact">Build a platform like this</a>
             </div>
           </div>
-          <figure class="product-screen product-screen-map reveal">
-            <img src="/assets/product-mypokermaps.png" alt="MyPokerMaps live poker discovery homepage with map search and club discovery UI" />
+          <figure class="product-screen product-screen-map live-product-frame reveal" data-tilt>
+            <img src="/assets/product-mypokermaps.webp" alt="MyPokerMaps live poker discovery homepage with map search and club discovery UI" width="1440" height="980" loading="lazy" decoding="async" />
             <figcaption>Live product capture from MyPokerMaps.</figcaption>
           </figure>
         </div>
       </section>
 
-      <section class="section dark-section product-detail-section" id="feltos">
+      <section class="section dark-section product-detail-section" id="feltos" data-product-section="feltos">
         <div class="section-shell product-detail-grid reverse-grid visual-left-grid">
-          <figure class="product-screen product-screen-screenshot reveal">
-            <img src="/assets/product-feltos.png" alt="FeltOS signed-in MyPokerMaps club portal dashboard with mocked poker room operations data" />
+          <figure class="product-screen product-screen-screenshot live-product-frame reveal" data-tilt>
+            <img src="/assets/product-feltos.webp" alt="FeltOS signed-in MyPokerMaps club portal dashboard with mocked poker room operations data" width="1440" height="980" loading="lazy" decoding="async" />
             <figcaption>Actual FeltOS club portal dashboard rendered with mocked room data.</figcaption>
           </figure>
           <div class="product-copy-block reveal">
@@ -242,7 +247,7 @@
         </div>
       </section>
 
-      <section class="section product-detail-section" id="cuoperation">
+      <section class="section product-detail-section" id="cuoperation" data-product-section="cuoperation">
         <div class="section-shell product-detail-grid visual-right-grid">
           <div class="product-copy-block reveal">
             <span class="product-label">CUOPeration</span>
@@ -260,17 +265,17 @@
               <a class="text-link" href="/services">View service tracks</a>
             </div>
           </div>
-          <figure class="product-screen product-screen-screenshot reveal">
-            <img src="/assets/product-cuoperation.png" alt="CUOPeration signed-in personnel operations dashboard with sanitized mock data" />
+          <figure class="product-screen product-screen-screenshot live-product-frame reveal" data-tilt>
+            <img src="/assets/product-cuoperation.webp" alt="CUOPeration signed-in personnel operations dashboard with sanitized mock data" width="1440" height="980" loading="lazy" decoding="async" />
             <figcaption>Actual CUOPeration admin dashboard rendered with sanitized seeded data.</figcaption>
           </figure>
         </div>
       </section>
 
-      <section class="section product-detail-section" id="qrystaldrop">
+      <section class="section product-detail-section" id="qrystaldrop" data-product-section="qrystaldrop">
         <div class="section-shell product-detail-grid reverse-grid visual-left-grid">
-          <figure class="product-screen product-screen-screenshot reveal">
-            <img src="/assets/product-qrystaldrop-dashboard.png" alt="QrystalDrop authenticated enterprise secure-room dashboard" />
+          <figure class="product-screen product-screen-screenshot live-product-frame reveal" data-tilt>
+            <img src="/assets/product-qrystaldrop-dashboard.webp" alt="QrystalDrop authenticated enterprise secure-room dashboard" width="1440" height="800" loading="lazy" decoding="async" />
             <figcaption>Authenticated QrystalDrop enterprise dashboard rendered from the product app with mock workspace data.</figcaption>
           </figure>
           <div class="product-copy-block reveal">
@@ -308,7 +313,7 @@
             </article>
             <article class="service-card reveal">
               <h3>AI Chatbots and Document Generators</h3>
-              <p>GPT-powered assistants for knowledge-base Q&A, form-fill support, summarization, workflow acceleration, and client document production.</p>
+              <p>GPT-powered assistants for knowledge-base Q&amp;A, form-fill support, summarization, workflow acceleration, and client document production.</p>
             </article>
           </div>
         </div>
@@ -329,7 +334,7 @@
       <div class="section-shell">
         <div class="footer-grid">
           <div class="footer-brand-block">
-            <a class="brand footer-brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.png" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
+            <a class="brand footer-brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.webp" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
             <p>Veteran-owned software and security studio building AI-native products, autonomous agents, secure platforms, and production cloud systems.</p>
           </div>
           <nav class="footer-column" aria-label="Company"><strong>Company</strong><a href="/services">Services</a><a href="/products">Products</a><a href="/about">About</a><a href="/contact">Contact</a></nav>
@@ -339,6 +344,6 @@
         <div class="footer-bottom"><span>&copy; <span data-year></span> Grayston Technologies. All rights reserved.</span><a href="https://www.graystontechnologies.com">www.graystontechnologies.com</a></div>
       </div>
     </footer>
-    <script src="script.js"></script>
+    <script src="/script.js?v=20260819a"></script>
   </body>
 </html>

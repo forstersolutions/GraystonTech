@@ -30,7 +30,7 @@
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="icon" href="/assets/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/assets/grayston-emblem-192.png" sizes="192x192" />
-    <link rel="stylesheet" href="/styles.css?v=20260714a" />
+    <link rel="stylesheet" href="/styles.css?v=20260819a" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -43,7 +43,7 @@
             "description": "Threat modeling, adversarial review, attack-path analysis, secure delivery controls, finding validation, remediation, and responsible disclosure for Grayston Technologies software projects.",
             "isPartOf": { "@id": "https://www.graystontechnologies.com/#website" },
             "about": { "@id": "https://www.graystontechnologies.com/#organization" },
-            "dateModified": "2026-07-14",
+            "dateModified": "2026-08-19",
             "inLanguage": "en-US"
           },
           {
@@ -61,9 +61,9 @@
   <body data-page="security">
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header" data-header>
-      <a class="brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.png" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
+      <a class="brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.webp" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Menu</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
-      <nav class="site-nav" id="site-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/services">Services</a><a href="/products">Products</a><a href="/about">About</a><a href="/contact">Contact</a></nav>
+      <nav class="site-nav" id="site-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/services">Services</a><a href="/products">Products</a><a href="/security" aria-current="page">Security</a><a href="/about">About</a><a href="/contact">Contact</a></nav>
     </header>
 
     <main id="main">
@@ -78,6 +78,49 @@
           <div class="page-hero-panel reveal">
             <span class="panel-label">Report an issue</span>
             <p>Security concerns for this website can be sent to <a class="inline-link" href="mailto:jforster@graystontechnologies.com">jforster@graystontechnologies.com</a>. Do not include passwords, tokens, or sensitive third-party data.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section defense-section" data-defense-console>
+        <div class="section-shell">
+          <div class="section-heading reveal">
+            <p class="section-kicker">Defense telemetry</p>
+            <h2>Follow the attack path all the way to closure.</h2>
+            <p>Every stage produces a decision, evidence, and a stronger release boundary. Select a stage to inspect the operating standard.</p>
+          </div>
+          <div class="defense-console reveal">
+            <div class="defense-tabs" role="tablist" aria-label="Security operating stages">
+              <button type="button" role="tab" aria-selected="true" data-defense-stage="model" data-defense-code="STAGE 01 / MODEL" data-defense-title="Map what an attacker would value." data-defense-copy="Identify assets, identities, data, trust boundaries, dependencies, attacker goals, and business impact before searching for isolated defects." data-defense-evidence="Threat model + abuse-case map"><span>01</span><strong>Model</strong><small>Assets and boundaries</small></button>
+              <button type="button" role="tab" aria-selected="false" data-defense-stage="discover" data-defense-code="STAGE 02 / DISCOVER" data-defense-title="Search across the whole reachable surface." data-defense-copy="Interrogate architecture, source, dependencies, configuration, secrets posture, integrations, autonomous behavior, and high-risk changes." data-defense-evidence="Evidence-backed candidate findings"><span>02</span><strong>Discover</strong><small>Weakness and exposure</small></button>
+              <button type="button" role="tab" aria-selected="false" data-defense-stage="trace" data-defense-code="STAGE 03 / TRACE" data-defense-title="Connect weaknesses into real attack paths." data-defense-copy="Trace how identity, APIs, cloud permissions, data movement, agents, and vendors can combine into reachable business impact." data-defense-evidence="Attack-path graph + impact chain"><span>03</span><strong>Trace</strong><small>Reachability and impact</small></button>
+              <button type="button" role="tab" aria-selected="false" data-defense-stage="validate" data-defense-code="STAGE 04 / VALIDATE" data-defense-title="Separate exploitable risk from scanner noise." data-defense-copy="Confirm the preconditions, reachable behavior, affected assets, severity, and evidence without destructive testing or inflated claims." data-defense-evidence="Validated finding + severity rationale"><span>04</span><strong>Validate</strong><small>Proof and severity</small></button>
+              <button type="button" role="tab" aria-selected="false" data-defense-stage="close" data-defense-code="STAGE 05 / CLOSE" data-defense-title="Fix the cause and lock the path closed." data-defense-copy="Remediate the underlying control failure, retest the path, add regression coverage, and preserve the evidence required for release." data-defense-evidence="Remediation + regression gate"><span>05</span><strong>Close</strong><small>Fix and prevent</small></button>
+            </div>
+
+            <div class="defense-display" data-tilt>
+              <div class="defense-display-head">
+                <span data-defense-code>STAGE 01 / MODEL</span>
+                <span class="system-status"><i aria-hidden="true"></i> Controlled review</span>
+              </div>
+              <div class="defense-map" aria-hidden="true">
+                <span class="defense-boundary boundary-external">External</span>
+                <span class="defense-boundary boundary-identity">Identity</span>
+                <span class="defense-boundary boundary-service">Services</span>
+                <span class="defense-boundary boundary-data">Data</span>
+                <span class="defense-trace trace-a"></span>
+                <span class="defense-trace trace-b"></span>
+                <span class="defense-trace trace-c"></span>
+                <span class="defense-target"><img src="/assets/grayston-emblem-192.webp" alt="" /></span>
+              </div>
+              <div class="defense-readout">
+                <div>
+                  <h3 data-defense-title>Map what an attacker would value.</h3>
+                  <p data-defense-copy>Identify assets, identities, data, trust boundaries, dependencies, attacker goals, and business impact before searching for isolated defects.</p>
+                </div>
+                <div class="defense-evidence"><span>Evidence output</span><strong data-defense-evidence>Threat model + abuse-case map</strong></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -132,12 +175,12 @@
             <p>Grayston treats security as an operating cycle: understand what matters, look for reachable attack paths, validate actual risk, close the weakness, and prove the fix stays closed.</p>
           </div>
           <div class="cyber-operations-grid">
-            <div class="attack-sequence" aria-label="Adversarial security engineering sequence">
-              <article class="attack-stage reveal"><span>01</span><strong>Threat model</strong><p>Assets, identities, trust boundaries, attacker goals, and business impact.</p></article>
-              <article class="attack-stage reveal"><span>02</span><strong>Find weakness</strong><p>Architecture, code, dependencies, configuration, secrets, and change review.</p></article>
-              <article class="attack-stage reveal"><span>03</span><strong>Trace the path</strong><p>Connect weaknesses across identity, APIs, cloud, data, agents, and vendors.</p></article>
-              <article class="attack-stage reveal"><span>04</span><strong>Validate impact</strong><p>Confirm reachable risk, reject noise, and document evidence and severity.</p></article>
-              <article class="attack-stage reveal"><span>05</span><strong>Remediate</strong><p>Fix the root cause, retest, add regression protection, and gate release.</p></article>
+            <div class="attack-sequence" role="list" aria-label="Adversarial security engineering sequence">
+              <article class="attack-stage reveal" role="listitem"><span>01</span><strong>Threat model</strong><p>Assets, identities, trust boundaries, attacker goals, and business impact.</p></article>
+              <article class="attack-stage reveal" role="listitem"><span>02</span><strong>Find weakness</strong><p>Architecture, code, dependencies, configuration, secrets, and change review.</p></article>
+              <article class="attack-stage reveal" role="listitem"><span>03</span><strong>Trace the path</strong><p>Connect weaknesses across identity, APIs, cloud, data, agents, and vendors.</p></article>
+              <article class="attack-stage reveal" role="listitem"><span>04</span><strong>Validate impact</strong><p>Confirm reachable risk, reject noise, and document evidence and severity.</p></article>
+              <article class="attack-stage reveal" role="listitem"><span>05</span><strong>Remediate</strong><p>Fix the root cause, retest, add regression protection, and gate release.</p></article>
             </div>
             <aside class="cyber-brief reveal">
               <span class="panel-label">Depth where it matters</span>
@@ -174,7 +217,7 @@
       <div class="section-shell">
         <div class="footer-grid">
           <div class="footer-brand-block">
-            <a class="brand footer-brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.png" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
+            <a class="brand footer-brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.webp" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
             <p>Veteran-owned software and security studio building AI-native products, autonomous agents, secure platforms, and production cloud systems.</p>
           </div>
           <nav class="footer-column" aria-label="Company"><strong>Company</strong><a href="/services">Services</a><a href="/products">Products</a><a href="/about">About</a><a href="/contact">Contact</a></nav>
@@ -184,6 +227,6 @@
         <div class="footer-bottom"><span>&copy; <span data-year></span> Grayston Technologies. All rights reserved.</span><a href="https://www.graystontechnologies.com">www.graystontechnologies.com</a></div>
       </div>
     </footer>
-    <script src="/script.js"></script>
+    <script src="/script.js?v=20260819a"></script>
   </body>
 </html>

@@ -32,9 +32,9 @@
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="icon" href="/assets/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/assets/grayston-emblem-192.png" sizes="192x192" />
-    <link rel="preload" href="/assets/grayston-hero.png" as="image" fetchpriority="high" />
-    <link rel="preload" href="/assets/grayston-logo-full.png" as="image" />
-    <link rel="stylesheet" href="/styles.css?v=20260714a" />
+    <link rel="preload" href="/assets/grayston-hero.webp" as="image" type="image/webp" fetchpriority="high" />
+    <link rel="preload" href="/assets/grayston-logo-full.webp" as="image" type="image/webp" />
+    <link rel="stylesheet" href="/styles.css?v=20260819a" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -105,7 +105,7 @@
               "width": 1200,
               "height": 630
             },
-            "dateModified": "2026-07-14",
+            "dateModified": "2026-08-19",
             "inLanguage": "en-US"
           }
         ]
@@ -117,7 +117,7 @@
 
     <header class="site-header" data-header>
       <a class="brand" href="/" aria-label="Grayston Technologies home">
-        <span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.png" alt="" /></span>
+        <span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.webp" alt="" /></span>
         <span class="brand-lockup" aria-hidden="true">
           <span class="brand-name">Grayston</span>
           <span class="brand-subline"><em>Technologies</em></span>
@@ -135,6 +135,7 @@
         <a href="/" aria-current="page">Home</a>
         <a href="/services">Services</a>
         <a href="/products">Products</a>
+        <a href="/security">Security</a>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>
       </nav>
@@ -142,7 +143,7 @@
 
     <main id="main">
       <section class="hero home-hero" aria-labelledby="hero-title">
-        <img class="hero-media" src="assets/grayston-hero.png" alt="" aria-hidden="true" />
+        <img class="hero-media" src="assets/grayston-hero.webp" alt="" aria-hidden="true" width="1672" height="941" fetchpriority="high" />
         <div class="hero-shade" aria-hidden="true"></div>
         <div class="launch-field" aria-hidden="true">
           <span class="launch-line launch-cyan"></span>
@@ -152,17 +153,17 @@
 
         <div class="hero-inner">
           <div class="hero-copy-block">
-            <div class="hero-brand-lockup" aria-hidden="true"><img src="/assets/grayston-logo-full.png" alt="" /></div>
+            <div class="hero-brand-lockup" aria-hidden="true"><img src="/assets/grayston-logo-full.webp" alt="" width="2220" height="620" /></div>
             <p class="eyebrow">Veteran-owned software + security</p>
             <h1 id="hero-title">
               <span>What others pitch.</span>
               <span>We put in production.</span>
             </h1>
             <p class="hero-copy">
-              Grayston designs and ships production SaaS, autonomous agent systems, secure collaboration platforms,
-              and cloud software with human oversight, adversarial security review, and proof at every release.
+              Grayston ships production SaaS, autonomous agents, secure platforms, and cloud software with human
+              oversight, adversarial review, and proof at every release.
             </p>
-            <div class="hero-actions" aria-label="Primary actions">
+            <div class="hero-actions" role="group" aria-label="Primary actions">
               <a class="button button-primary" href="/contact">
                 Start a Project
                 <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
@@ -173,19 +174,41 @@
             </div>
           </div>
 
-          <aside class="hero-panel" aria-label="Grayston delivery snapshot">
-            <span class="panel-label">Build record</span>
-            <div class="metric-row">
-              <strong>5</strong>
-              <span>featured product platforms built</span>
+          <aside class="mission-console" data-mission-console aria-label="Interactive Grayston delivery model">
+            <div class="mission-console-head">
+              <div>
+                <span class="panel-label">Grayston command model</span>
+                <strong data-mission-title>Production system</strong>
+              </div>
+              <span class="system-status"><i aria-hidden="true"></i> Online</span>
             </div>
-            <div class="metric-row">
-              <strong>10+</strong>
-              <span>API and operating domains built</span>
+
+            <div class="mission-tabs" role="tablist" aria-label="Delivery mode">
+              <button type="button" role="tab" aria-selected="true" data-mission-mode="build">Build</button>
+              <button type="button" role="tab" aria-selected="false" data-mission-mode="automate">Automate</button>
+              <button type="button" role="tab" aria-selected="false" data-mission-mode="defend">Defend</button>
             </div>
-            <div class="metric-row">
-              <strong>0-to-1</strong>
-              <span>product delivery from concept to production</span>
+
+            <div class="mission-viewport">
+              <div class="mission-network" aria-hidden="true">
+                <span class="mission-path path-one"></span>
+                <span class="mission-path path-two"></span>
+                <span class="mission-path path-three"></span>
+                <span class="mission-node node-intent"><i></i><b>Intent</b><small>Bounded</small></span>
+                <span class="mission-node node-core is-active"><i></i><b data-mission-core>Architecture</b><small data-mission-core-state>Mapped</small></span>
+                <span class="mission-node node-proof"><i></i><b>Proof</b><small>Required</small></span>
+                <span class="mission-node node-release"><i></i><b>Production</b><small>Controlled</small></span>
+              </div>
+              <div class="mission-readout">
+                <span data-mission-code>BUILD / 01</span>
+                <p data-mission-copy>Product experience, identity, APIs, data, cloud, and release engineering move as one system.</p>
+              </div>
+            </div>
+
+            <div class="mission-evidence" role="list" aria-label="Delivery controls">
+              <span role="listitem"><i></i> Scope bounded</span>
+              <span role="listitem"><i></i> Evidence captured</span>
+              <span role="listitem"><i></i> Human release gate</span>
             </div>
           </aside>
         </div>
@@ -195,8 +218,8 @@
         <div class="section-shell">
           <p class="section-kicker" id="trusted-title">Trusted by and built across</p>
         </div>
-        <div class="marquee" aria-label="Organizations and products connected to the Grayston body of work">
-          <div class="marquee-track">
+        <div class="marquee" role="group" aria-label="Organizations and products connected to the Grayston body of work">
+          <div class="marquee-track" aria-hidden="true">
             <span>MyPokerMaps: StackTrax + FeltOS</span>
             <span>QrystalDrop</span>
             <span>VerityForge</span>
@@ -265,56 +288,34 @@
             <h2>Built products are the proof.</h2>
             <p>Grayston is not theory-only consulting. The studio has shipped real product surfaces with cloud, data, auth, workflow, and production support.</p>
           </div>
-          <div class="product-preview-grid">
-            <article class="product-preview product-preview-featured reveal">
-              <img class="product-card-image" src="/assets/product-verityforge.png" alt="VerityForge autonomous software delivery control plane product visual" />
-              <div class="product-card-body">
-                <span class="product-label">Flagship platform</span>
-                <h3>VerityForge</h3>
-                <p>Autonomous software delivery control plane for coding agents, proof contracts, isolated worktrees, verification checks, evidence capture, and owner-gated release decisions.</p>
-                <div class="link-row">
-                  <a class="text-link" href="/products#verityforge">Explore VerityForge</a>
-                  <a class="text-link" href="/contact">Build a control plane</a>
-                </div>
+          <div class="product-stage reveal" data-product-stage>
+            <div class="product-stage-nav" role="tablist" aria-label="Featured product platforms">
+              <button type="button" role="tab" aria-selected="true" data-product-name="VerityForge" data-product-tag="Autonomous delivery control plane" data-product-description="Govern specialized software agents through bounded missions, isolated worktrees, proof contracts, verification evidence, and owner-controlled release gates." data-product-image="/assets/product-verityforge.webp" data-product-alt="VerityForge autonomous software delivery control plane" data-product-href="/products#verityforge" data-product-link="Explore VerityForge"><span>01</span><strong>VerityForge</strong><small>Agent control plane</small></button>
+              <button type="button" role="tab" aria-selected="false" data-product-name="MyPokerMaps" data-product-tag="Live poker discovery" data-product-description="Connect players to rooms, tournaments, live availability, operator profiles, and the broader StackTrax and FeltOS operating ecosystem." data-product-image="/assets/product-mypokermaps.webp" data-product-alt="MyPokerMaps live poker room discovery experience" data-product-href="/products#mypokermaps" data-product-link="Explore MyPokerMaps"><span>02</span><strong>MyPokerMaps</strong><small>Player discovery</small></button>
+              <button type="button" role="tab" aria-selected="false" data-product-name="FeltOS" data-product-tag="Poker room operating system" data-product-description="Run floor state, waitlists, tables, tournaments, member identity, staff, cash operations, tablets, displays, and public controls from one club portal." data-product-image="/assets/product-feltos.webp" data-product-alt="FeltOS signed-in poker room operations dashboard" data-product-href="/products#feltos" data-product-link="Explore FeltOS"><span>03</span><strong>FeltOS</strong><small>Operator command</small></button>
+              <button type="button" role="tab" aria-selected="false" data-product-name="CUOPeration" data-product-tag="Secure personnel operations" data-product-description="Coordinate personnel intake, approvals, hierarchy, tasking, private files, notifications, role controls, exports, and auditable administrative workflows." data-product-image="/assets/product-cuoperation.webp" data-product-alt="CUOPeration personnel operations admin dashboard" data-product-href="/products#cuoperation" data-product-link="Explore CUOPeration"><span>04</span><strong>CUOPeration</strong><small>Personnel command</small></button>
+              <button type="button" role="tab" aria-selected="false" data-product-name="QrystalDrop" data-product-tag="Post-quantum secure rooms" data-product-description="Govern sensitive file custody through enterprise workspaces, recovery policy, identity controls, signed evidence, room inventory, and security operations." data-product-image="/assets/product-qrystaldrop-dashboard.webp" data-product-alt="QrystalDrop enterprise secure-room dashboard" data-product-href="/products#qrystaldrop" data-product-link="Explore QrystalDrop"><span>05</span><strong>QrystalDrop</strong><small>Secure custody</small></button>
+            </div>
+
+            <div class="product-stage-view" data-tilt>
+              <div class="stage-chrome">
+                <span><i></i><i></i><i></i></span>
+                <strong data-stage-tag>Autonomous delivery control plane</strong>
+                <small>Live product system</small>
               </div>
-            </article>
-            <article class="product-preview reveal">
-              <img class="product-card-image product-card-image-map" src="/assets/product-mypokermaps.png" alt="MyPokerMaps live poker room discovery interface" />
-              <div class="product-card-body">
-                <span class="product-label">Poker operations</span>
-                <h3>MyPokerMaps / StackTrax</h3>
-                <p>Live poker room discovery connected to FeltOS, the signed-in club portal for floor operations, waitlists, tables, tournaments, members, staff, cash cage, tablets, displays, and public-web controls.</p>
-                <div class="link-row">
-                  <a class="text-link" href="/products#mypokermaps">Case Study</a>
-                  <a class="text-link" href="/products#feltos">FeltOS Layer</a>
-                  <a class="text-link external-link" href="https://www.mypokermaps.com" target="_blank" rel="noreferrer">Visit MyPokerMaps</a>
-                </div>
+              <div class="stage-media">
+                <img data-stage-image src="/assets/product-verityforge.webp" alt="VerityForge autonomous software delivery control plane" width="1600" height="1000" loading="lazy" decoding="async" />
+                <span class="stage-scan" aria-hidden="true"></span>
               </div>
-            </article>
-            <article class="product-preview reveal">
-              <img class="product-card-image product-card-image-interface" src="/assets/product-cuoperation.png" alt="CUOPeration signed-in personnel operations dashboard with sanitized mock data" />
-              <div class="product-card-body">
-                <span class="product-label amber-label">Personnel operations</span>
-                <h3>CUOPeration</h3>
-                <p>Secure personnel operations platform for intake, approvals, hierarchy, tasking, private files, notifications, drill notes, roles, export, and audit in a modern admin console.</p>
-                <div class="link-row">
-                  <a class="text-link" href="/products#cuoperation">Case Study</a>
-                  <a class="text-link" href="/contact">Build personnel ops</a>
+              <div class="stage-copy">
+                <div>
+                  <span class="product-label">Selected platform</span>
+                  <h3 data-stage-name>VerityForge</h3>
+                  <p data-stage-description>Govern specialized software agents through bounded missions, isolated worktrees, proof contracts, verification evidence, and owner-controlled release gates.</p>
                 </div>
+                <a class="button button-primary" data-stage-link href="/products#verityforge">Explore VerityForge</a>
               </div>
-            </article>
-            <article class="product-preview product-preview-wide reveal">
-              <img class="product-card-image product-card-image-interface" src="/assets/product-qrystaldrop-dashboard.png" alt="QrystalDrop authenticated enterprise secure-room dashboard" />
-              <div class="product-card-body">
-                <span class="product-label green-label">Secure rooms</span>
-                <h3>QrystalDrop</h3>
-                <p>Enterprise secure-room dashboard for post-quantum custody, workspace posture, room inventory, governed recovery, identity controls, signed audit evidence, and SIEM-ready operations.</p>
-                <div class="link-row">
-                  <a class="text-link" href="/products#qrystaldrop">Case Study</a>
-                  <a class="text-link external-link" href="https://qrystaldrop.vercel.app" target="_blank" rel="noreferrer">Visit QrystalDrop</a>
-                </div>
-              </div>
-            </article>
+            </div>
           </div>
         </div>
       </section>
@@ -347,6 +348,7 @@
               <p>Logs, releases, feedback, support, and iteration keep the system useful after launch.</p>
             </article>
           </div>
+          <div class="process-signal" aria-hidden="true"><span></span></div>
         </div>
       </section>
 
@@ -372,7 +374,7 @@
         <div class="footer-grid">
           <div class="footer-brand-block">
             <a class="brand footer-brand" href="/" aria-label="Grayston Technologies home">
-              <span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.png" alt="" /></span>
+              <span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.webp" alt="" /></span>
               <span class="brand-lockup" aria-hidden="true">
                 <span class="brand-name">Grayston</span>
                 <span class="brand-subline"><em>Technologies</em></span>
@@ -391,6 +393,8 @@
             <strong>Products</strong>
             <a href="/products#verityforge">VerityForge</a>
             <a href="/products#mypokermaps">MyPokerMaps</a>
+            <a href="/products#feltos">FeltOS</a>
+            <a href="/products#cuoperation">CUOPeration</a>
             <a href="/products#qrystaldrop">QrystalDrop</a>
             <a href="https://www.mypokermaps.com" target="_blank" rel="noreferrer">Visit MyPokerMaps</a>
             <a href="https://qrystaldrop.vercel.app" target="_blank" rel="noreferrer">Visit QrystalDrop</a>
@@ -410,6 +414,6 @@
       </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="/script.js?v=20260819a"></script>
   </body>
 </html>

@@ -30,7 +30,7 @@
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="icon" href="/assets/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/assets/grayston-emblem-192.png" sizes="192x192" />
-    <link rel="stylesheet" href="/styles.css?v=20260714a" />
+    <link rel="stylesheet" href="/styles.css?v=20260819a" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -43,7 +43,7 @@
             "description": "Contact Grayston Technologies for AI-native product engineering, autonomous agent systems, secure platforms, cloud delivery, integrations, and cybersecurity review.",
             "isPartOf": { "@id": "https://www.graystontechnologies.com/#website" },
             "about": { "@id": "https://www.graystontechnologies.com/#organization" },
-            "dateModified": "2026-07-14",
+            "dateModified": "2026-08-19",
             "inLanguage": "en-US"
           },
           {
@@ -69,9 +69,9 @@
   <body data-page="contact">
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header" data-header>
-      <a class="brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.png" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
+      <a class="brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.webp" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Menu</span><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
-      <nav class="site-nav" id="site-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/services">Services</a><a href="/products">Products</a><a href="/about">About</a><a href="/contact" aria-current="page">Contact</a></nav>
+      <nav class="site-nav" id="site-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/services">Services</a><a href="/products">Products</a><a href="/security">Security</a><a href="/about">About</a><a href="/contact" aria-current="page">Contact</a></nav>
     </header>
 
     <main id="main">
@@ -103,10 +103,33 @@
               <span>Founder-led scoping</span>
               <span>Production-first builds</span>
             </div>
+            <div class="intake-presets" role="group" aria-label="Project focus shortcuts">
+              <strong>Project focus</strong>
+              <div>
+                <button type="button" data-project-preset="AI-native SaaS or product platform">Product</button>
+                <button type="button" data-project-preset="Autonomous agents and orchestration">Agents</button>
+                <button type="button" data-project-preset="Cybersecurity review and hardening">Security</button>
+                <button type="button" data-project-preset="Platform rescue">Rescue</button>
+              </div>
+            </div>
+            <div class="intake-brief" aria-live="polite">
+              <div class="intake-meter-head"><span>Project brief</span><strong data-brief-progress>0 of 4 signals</strong></div>
+              <span class="intake-meter"><i data-brief-meter></i></span>
+              <dl>
+                <div><dt>Contact</dt><dd data-brief-contact>Awaiting name and email</dd></div>
+                <div><dt>System</dt><dd data-brief-system>Not selected</dd></div>
+                <div><dt>Timing</dt><dd data-brief-timeline>ASAP</dd></div>
+                <div><dt>Outcome</dt><dd data-brief-outcome>Awaiting project context</dd></div>
+              </dl>
+            </div>
           </aside>
 
           <form class="contact-form reveal" data-contact-form action="/api/contact" method="post">
             <input type="text" name="website" tabindex="-1" autocomplete="off" class="honeypot" aria-hidden="true" />
+            <div class="contact-form-head">
+              <div><span>Secure project intake</span><strong>Scope the mission</strong></div>
+              <span class="system-status"><i aria-hidden="true"></i> Direct to founder</span>
+            </div>
             <div class="form-grid">
               <label>
                 <span>Name</span>
@@ -176,7 +199,7 @@
       <div class="section-shell">
         <div class="footer-grid">
           <div class="footer-brand-block">
-            <a class="brand footer-brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.png" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
+            <a class="brand footer-brand" href="/" aria-label="Grayston Technologies home"><span class="brand-mark" aria-hidden="true"><img src="/assets/grayston-emblem-512.webp" alt="" /></span><span class="brand-lockup" aria-hidden="true"><span class="brand-name">Grayston</span><span class="brand-subline"><em>Technologies</em></span></span></a>
             <p>Veteran-owned software and security studio building AI-native products, autonomous agents, secure platforms, and production cloud systems.</p>
           </div>
           <nav class="footer-column" aria-label="Company"><strong>Company</strong><a href="/services">Services</a><a href="/products">Products</a><a href="/about">About</a><a href="/contact">Contact</a></nav>
@@ -186,6 +209,6 @@
         <div class="footer-bottom"><span>&copy; <span data-year></span> Grayston Technologies. All rights reserved.</span><a href="https://www.graystontechnologies.com">www.graystontechnologies.com</a></div>
       </div>
     </footer>
-    <script src="script.js"></script>
+    <script src="/script.js?v=20260819a"></script>
   </body>
 </html>
