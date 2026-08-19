@@ -247,18 +247,34 @@ function initializeProductStage() {
     view.setAttribute("aria-busy", "true");
     const preload = new Image();
     preload.decoding = "async";
-    preload.onload = () => {
+    preload.onload = async () => {
+      try {
+        await preload.decode();
+      } catch {
+        // The load event already confirmed usable image data.
+      }
       if (selectionId !== requestId) return;
       if (reduceMotion) {
         update();
+        try {
+          await image.decode();
+        } catch {
+          // Keep the loaded fallback if decode() is unavailable.
+        }
         view.removeAttribute("aria-busy");
         return;
       }
 
       image.classList.add("is-switching");
-      window.setTimeout(() => {
+      window.setTimeout(async () => {
         if (selectionId !== requestId) return;
         update();
+        try {
+          await image.decode();
+        } catch {
+          // The image load handler remains the browser fallback.
+        }
+        if (selectionId !== requestId) return;
         window.requestAnimationFrame(() => {
           image.classList.remove("is-switching");
           view.removeAttribute("aria-busy");
