@@ -5255,12 +5255,6 @@ p {
 .service-stack li strong { display: block; }
 .service-stack li small { margin-bottom: 7px; color: #687377; font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 8px; text-transform: uppercase; }
 .service-stack li strong { color: #d9dfe0; font-size: 12px; line-height: 1.45; }
-.service-stack__pulse { position: absolute; top: 74px; bottom: 30px; left: 44px; width: 1px; background: #30383b; }
-.service-stack__pulse i { position: absolute; top: -14%; left: 0; width: 1px; height: 24%; background: var(--service-accent); box-shadow: 0 0 16px rgba(var(--service-accent-rgb), 0.9); animation: servicePulse 4s linear infinite; }
-
-@keyframes servicePulse {
-  to { transform: translateY(480%); }
-}
 
 .engineering-system {
   background: #111516;
@@ -5389,7 +5383,6 @@ p {
   .service-navigator__copy h3 { font-size: 32px; }
   .service-stack { padding: 22px; }
   .service-stack li { padding: 15px; }
-  .service-stack__pulse { left: 38px; }
   .engineering-system__layout { gap: 46px; }
   .engineering-system__ledger article { grid-template-columns: 1fr; gap: 10px; }
   .engineering-system__ledger h3 { font-size: 20px; }
@@ -5397,7 +5390,6 @@ p {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .service-stack__pulse i { animation: none !important; top: 38%; }
   .service-signal li,
   .service-stack li,
   .engagement-v2__grid article { transition: none !important; transform: none !important; }
@@ -6528,11 +6520,6 @@ body.is-intake-transitioning {
 .motion-pro .contact-hero-v2__direct,
 .motion-pro .security-hero-status {
   will-change: clip-path, opacity;
-}
-
-.motion-pro .service-stack__pulse i {
-  animation: none;
-  transform-origin: top center;
 }
 
 .motion-pro .service-stack li,

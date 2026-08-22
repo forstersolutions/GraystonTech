@@ -377,10 +377,6 @@
       overwrite: true,
     });
 
-    if (module.classList.contains("service-navigator")) {
-      const pulse = module.querySelector(".service-stack__pulse i");
-      if (pulse) gsap.fromTo(pulse, { scaleY: 0, yPercent: -110 }, { scaleY: 1, yPercent: 430, duration: 1.05, ease: "power2.inOut" });
-    }
     if (module.classList.contains("work-archive")) animateArchiveHandoff(module);
   }
 
