@@ -1,0 +1,3 @@
+GSAP 3.13.0 is distributed under GreenSock's standard no-charge license.
+License terms: https://gsap.com/standard-license/
+Copyright (c) 2008-2025, GreenSock. All rights reserved.

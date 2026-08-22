@@ -6,7 +6,7 @@ Production website for `graystontechnologies.com`.
 
 - Responsive static frontend across home, services, products, security, about, contact, privacy, terms, and 404 routes
 - Real product interfaces for VerityForge, MyPokerMaps, FeltOS, QrystalDrop, and CUOPeration
-- Scroll-led product storytelling, interactive capability and security consoles, pointer depth, and reduced-motion support
+- GSAP and ScrollTrigger choreography, Lenis desktop scroll, semantic route handoffs, interactive capability and security consoles, and reduced-motion support
 - Search, social, structured-data, sitemap, robots, manifest, security disclosure, and `llms.txt` metadata
 - Vercel Function contact delivery through Resend
 
@@ -17,6 +17,10 @@ npm run serve
 ```
 
 The site is available at `http://localhost:4173`.
+
+GSAP and Lenis runtime files are self-hosted in `assets/vendor` so production
+does not depend on a third-party CDN. Their license notices are stored beside
+the vendored files.
 
 ## Deployment
 
