@@ -35,6 +35,7 @@ function bindTabs(buttons, onSelect) {
   const activate = (button) => {
     onSelect(button);
     if (panel) panel.setAttribute("aria-labelledby", button.id);
+    scope?.dispatchEvent(new CustomEvent("grayston:module-change", { detail: { button } }));
   };
 
   buttons.forEach((button, index) => {
@@ -81,6 +82,8 @@ async function transitionImage(container, image, source, commit) {
     return;
   }
 
+  container.classList.remove("is-settling");
+  void container.offsetWidth;
   container.classList.add("is-switching");
   container.setAttribute("aria-busy", "true");
   try {
@@ -93,6 +96,7 @@ async function transitionImage(container, image, source, commit) {
     } catch {
       // Decoding support varies; the preloaded source is still usable.
     }
+    container.classList.add("is-settling");
   } catch {
     return;
   } finally {
@@ -100,6 +104,7 @@ async function transitionImage(container, image, source, commit) {
       container.classList.remove("is-switching");
       container.removeAttribute("aria-busy");
     });
+    window.setTimeout(() => container.classList.remove("is-settling"), 760);
   }
 }
 
@@ -191,6 +196,29 @@ function initializeProgress() {
 function initializeReveals() {
   const elements = [...document.querySelectorAll(".reveal")];
   if (!elements.length) return;
+
+  const groups = new Map();
+  elements.forEach((element, index) => {
+    const parent = element.parentElement;
+    const siblings = groups.get(parent) || [];
+    const siblingIndex = siblings.length;
+    siblings.push(element);
+    groups.set(parent, siblings);
+
+    if (!element.dataset.revealStyle) {
+      const className = element.className;
+      if (element.matches("header, [class*='heading']") || element.querySelector(":scope > h1, :scope > h2")) {
+        element.dataset.revealStyle = "heading";
+      } else if (element.matches("article, form, [class*='panel'], [class*='ledger'], [class*='console'], [class*='archive']")) {
+        element.dataset.revealStyle = "panel";
+      } else {
+        element.dataset.revealStyle = index % 2 ? "right" : "left";
+      }
+      if (typeof className === "string" && /hero|identity|signal/.test(className)) element.dataset.revealStyle = "hero";
+    }
+    element.style.setProperty("--reveal-delay", `${Math.min(siblingIndex * 90, 270)}ms`);
+  });
+
   if (reduceMotion || !("IntersectionObserver" in window)) {
     elements.forEach((element) => element.classList.add("is-visible"));
     return;
@@ -201,6 +229,7 @@ function initializeReveals() {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add("is-visible");
+        entry.target.closest(".motion-section")?.classList.add("has-revealed");
         observer.unobserve(entry.target);
       });
     },
@@ -665,10 +694,19 @@ function initializeBuildline() {
 
   const route = () => {
     const compact = width < 700;
-    const startX = compact ? width * 0.58 : width * 0.5;
-    const spread = compact ? width * 0.37 : width * 0.43;
-    const top = compact ? height * 0.16 : height * 0.16;
-    const usable = compact ? height * 0.42 : height * 0.5;
+    if (compact) {
+      return [
+        { x: width * 0.94, y: height * 0.1 },
+        { x: width * 0.86, y: height * 0.15 },
+        { x: width * 0.95, y: height * 0.2 },
+        { x: width * 0.87, y: height * 0.25 },
+        { x: width * 0.97, y: height * 0.3 },
+      ];
+    }
+    const startX = width * 0.5;
+    const spread = width * 0.43;
+    const top = height * 0.16;
+    const usable = height * 0.5;
     const aligned = width > 900 && stageColumnX > 0 && stageRows.length === 4 && stageRows.every(Boolean);
     if (aligned) {
       const firstNodeX = stageColumnX - 26;
@@ -1229,6 +1267,264 @@ function initializeWorkArchive() {
   });
 }
 
+function initializeMotionEnvironment() {
+  root.classList.add("motion-enabled");
+
+  const pageTransition = document.createElement("div");
+  pageTransition.className = "page-transition";
+  pageTransition.setAttribute("aria-hidden", "true");
+  pageTransition.innerHTML = `
+    <span class="page-transition__plane page-transition__plane--top"></span>
+    <span class="page-transition__plane page-transition__plane--bottom"></span>
+    <span class="page-transition__signal"><i></i><b></b><i></i></span>
+  `;
+  document.body.append(pageTransition);
+
+  const hero = document.querySelector(".home-hero, .service-hero-v2, .work-hero-v2, .company-hero-v2, .contact-hero-v2, .page-hero--security");
+  if (hero) {
+    hero.classList.add("motion-hero");
+    const field = document.createElement("div");
+    field.className = "motion-field";
+    field.setAttribute("aria-hidden", "true");
+    field.innerHTML = "<i></i><i></i><i></i><i></i>";
+    hero.prepend(field);
+  }
+
+  const sections = [...document.querySelectorAll("main > section")];
+  sections.forEach((section, index) => {
+    section.classList.add("motion-section");
+    section.style.setProperty("--motion-section-index", String(index));
+    if (index > 0 && !section.classList.contains("cta-section")) {
+      const rail = document.createElement("span");
+      rail.className = "motion-section__rail";
+      rail.setAttribute("aria-hidden", "true");
+      rail.innerHTML = "<i></i>";
+      section.append(rail);
+    }
+  });
+
+  const parallaxTargets = [
+    [".service-hero-v2__copy, .work-hero-v2__copy, .company-hero-v2__copy, .contact-hero-v2__copy, .page-hero-copy", -14],
+    [".service-signal, .work-hero-v2__index, .company-identity-panel, .contact-hero-v2__direct, .security-hero-status", 18],
+    [".cta-layout", 10],
+  ];
+  const parallax = [];
+  parallaxTargets.forEach(([selector, speed]) => {
+    document.querySelectorAll(selector).forEach((element) => {
+      element.classList.add("motion-parallax");
+      element.dataset.motionSpeed = String(speed);
+      parallax.push(element);
+    });
+  });
+
+  const activateHero = () => window.requestAnimationFrame(() => document.body.classList.add("is-hero-live"));
+  const entry = document.querySelector("[data-entry]");
+  if (entry && !entry.classList.contains("is-complete") && !reduceMotion) {
+    document.addEventListener("grayston:entry-complete", activateHero, { once: true });
+  } else {
+    window.setTimeout(activateHero, 70);
+  }
+
+  let scrollFrame = 0;
+  const updateScrollMotion = () => {
+    scrollFrame = 0;
+    const viewportHeight = Math.max(window.innerHeight, 1);
+    const scrollDistance = Math.max(document.documentElement.scrollHeight - viewportHeight, 1);
+    const pageProgress = Math.min(Math.max(window.scrollY / scrollDistance, 0), 1);
+    root.style.setProperty("--motion-page-progress", pageProgress.toFixed(4));
+
+    sections.forEach((section) => {
+      const bounds = section.getBoundingClientRect();
+      const progress = Math.min(Math.max((viewportHeight - bounds.top) / (viewportHeight + bounds.height), 0), 1);
+      section.style.setProperty("--motion-section-progress", progress.toFixed(4));
+      section.classList.toggle("is-motion-active", bounds.top < viewportHeight * 0.62 && bounds.bottom > viewportHeight * 0.28);
+    });
+
+    if (!reduceMotion) {
+      parallax.forEach((element) => {
+        const bounds = element.getBoundingClientRect();
+        const offset = (bounds.top + bounds.height * 0.5 - viewportHeight * 0.5) / viewportHeight;
+        const speed = Number(element.dataset.motionSpeed || 0);
+        const shift = Math.min(Math.max(offset * speed, -24), 24);
+        element.style.setProperty("--motion-shift", `${shift.toFixed(2)}px`);
+      });
+    }
+  };
+  const scheduleScrollMotion = () => {
+    if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updateScrollMotion);
+  };
+  updateScrollMotion();
+  window.addEventListener("scroll", scheduleScrollMotion, { passive: true });
+  window.addEventListener("resize", scheduleScrollMotion, { passive: true });
+
+  window.addEventListener("pageshow", () => document.body.classList.remove("is-page-leaving"));
+  document.addEventListener("click", (event) => {
+    if (reduceMotion || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target.closest("a[href]");
+    if (!link || link.hasAttribute("download") || link.target && link.target !== "_self") return;
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+    const destination = new URL(link.href, window.location.href);
+    if (destination.origin !== window.location.origin) return;
+    const currentDocument = `${window.location.pathname}${window.location.search}`;
+    const nextDocument = `${destination.pathname}${destination.search}`;
+    if (currentDocument === nextDocument && destination.hash) return;
+    if (destination.href === window.location.href) return;
+
+    event.preventDefault();
+    document.body.classList.add("is-page-leaving");
+    window.setTimeout(() => window.location.assign(destination.href), 520);
+  });
+}
+
+function initializeMagneticControls() {
+  if (!finePointer || reduceMotion) return;
+
+  const controls = [...document.querySelectorAll(".button, .text-link, .nav-cta, .work-beyond__prompts a, .contact-hero-v2__direct a")];
+  controls.forEach((control) => {
+    control.classList.add("motion-magnetic");
+    const reset = () => {
+      control.style.setProperty("--magnet-x", "0px");
+      control.style.setProperty("--magnet-y", "0px");
+    };
+    control.addEventListener("pointermove", (event) => {
+      const bounds = control.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+      control.style.setProperty("--magnet-x", `${(x * 10).toFixed(2)}px`);
+      control.style.setProperty("--magnet-y", `${(y * 7).toFixed(2)}px`);
+    });
+    control.addEventListener("pointerleave", reset);
+    control.addEventListener("blur", reset);
+  });
+
+  document.querySelectorAll(".company-identity-panel, .service-signal, .work-hero-v2__index, .contact-hero-v2__direct, .work-archive__visual, .evidence-item").forEach((surface) => {
+    surface.setAttribute("data-tilt-surface", "");
+  });
+}
+
+function initializeMotionSequences() {
+  if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+  const configurations = [
+    [".service-signal ol", "li", 1520],
+    [".work-hero-v2__index ol", "li", 1660],
+    [".pathfinder-sequence", "article", 1760],
+    [".engineering-system__ledger", "article", 1840],
+    [".company-model__steps", "article", 1720],
+    [".adversarial-loop", "li", 1580],
+  ];
+
+  configurations.forEach(([containerSelector, itemSelector, duration], groupIndex) => {
+    document.querySelectorAll(containerSelector).forEach((container) => {
+      const items = [...container.querySelectorAll(`:scope > ${itemSelector}`)];
+      if (items.length < 2) return;
+      container.classList.add("motion-sequence");
+      let activeIndex = 0;
+      let timer = 0;
+      let paused = false;
+
+      const show = (index) => {
+        activeIndex = (index + items.length) % items.length;
+        items.forEach((item, itemIndex) => item.classList.toggle("is-motion-current", itemIndex === activeIndex));
+        container.style.setProperty("--sequence-progress", String(activeIndex / Math.max(items.length - 1, 1)));
+      };
+      const start = () => {
+        if (timer) return;
+        show(activeIndex);
+        timer = window.setInterval(() => {
+          if (!paused && !document.hidden) show(activeIndex + 1);
+        }, Number(duration) + groupIndex * 70);
+      };
+      const stop = () => {
+        window.clearInterval(timer);
+        timer = 0;
+      };
+
+      items.forEach((item, index) => {
+        item.addEventListener("pointerenter", () => {
+          paused = true;
+          show(index);
+        });
+        item.addEventListener("focusin", () => {
+          paused = true;
+          show(index);
+        });
+      });
+      container.addEventListener("pointerleave", () => { paused = false; });
+      container.addEventListener("focusout", (event) => {
+        if (!container.contains(event.relatedTarget)) paused = false;
+      });
+
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) start();
+        else stop();
+      }, { threshold: 0.18, rootMargin: "8% 0px 8% 0px" });
+      observer.observe(container);
+    });
+  });
+}
+
+function initializeModuleMotion() {
+  const modules = document.querySelectorAll(".project-pathfinder, .service-navigator, .work-archive, .security-program, .security-console");
+  modules.forEach((module) => {
+    module.addEventListener("grayston:module-change", () => {
+      module.classList.remove("is-content-changing");
+      void module.offsetWidth;
+      module.classList.add("is-content-changing");
+      window.setTimeout(() => module.classList.remove("is-content-changing"), 720);
+    });
+  });
+}
+
+function initializeContactSignal() {
+  const form = document.querySelector("[data-contact-form]");
+  if (!form) return;
+
+  const signal = document.createElement("div");
+  signal.className = "intake-signal";
+  signal.setAttribute("aria-hidden", "true");
+  signal.innerHTML = "<span><i></i><i></i><i></i><i></i></span>";
+  form.prepend(signal);
+
+  const required = [...form.querySelectorAll("[required]")];
+  const steps = [...document.querySelectorAll(".contact-next li")];
+  const update = () => {
+    const completed = required.filter((field) => field.value.trim().length > 0 && field.checkValidity()).length;
+    const ratio = required.length ? completed / required.length : 0;
+    form.style.setProperty("--intake-progress", ratio.toFixed(3));
+    signal.querySelectorAll("i").forEach((node, index, nodes) => {
+      node.classList.toggle("is-complete", ratio >= (index + 1) / nodes.length);
+    });
+    const activeStep = ratio >= 1 ? 2 : ratio >= 0.5 ? 1 : 0;
+    steps.forEach((step, index) => step.classList.toggle("is-motion-current", index === activeStep));
+    form.classList.toggle("is-brief-ready", ratio >= 1);
+  };
+
+  form.querySelectorAll("input, select, textarea").forEach((field) => {
+    const label = field.closest("label");
+    const updateField = () => label?.classList.toggle("has-value", field.value.trim().length > 0);
+    field.addEventListener("focus", () => label?.classList.add("is-focused"));
+    field.addEventListener("blur", () => label?.classList.remove("is-focused"));
+    field.addEventListener("input", () => {
+      updateField();
+      update();
+    });
+    field.addEventListener("change", () => {
+      updateField();
+      update();
+    });
+    updateField();
+  });
+  form.addEventListener("grayston:form-success", () => {
+    form.style.setProperty("--intake-progress", "1");
+    form.classList.add("is-brief-sent");
+    signal.querySelectorAll("i").forEach((node) => node.classList.add("is-complete"));
+  });
+  update();
+}
+
 function initializeFaqs() {
   const details = [...document.querySelectorAll(".faq-list details")];
   details.forEach((item) => {
@@ -1289,6 +1585,7 @@ function initializeContactForm() {
       status.textContent = "Received. James will respond directly.";
       status.className = "form-status is-success";
       form.reset();
+      form.dispatchEvent(new CustomEvent("grayston:form-success"));
     } catch (error) {
       const message = error.name === "AbortError" ? "The request timed out." : error.message;
       status.textContent = `${message} Email jforster@graystontechnologies.com if the issue continues.`;
@@ -1307,6 +1604,7 @@ function initializeYear() {
 }
 
 initializeEntry();
+initializeMotionEnvironment();
 initializeHeader();
 initializeProgress();
 initializeReveals();
@@ -1316,6 +1614,7 @@ initializeWorkStory();
 initializePaceTrack();
 initializeSecurityConsole();
 initializeSecurityProgram();
+initializeMagneticControls();
 initializePointerDepth();
 initializeProductNavigation();
 initializeBuildline();
@@ -1323,6 +1622,9 @@ initializeProjectPathfinder();
 initializeArtifactLedger();
 initializeServiceNavigator();
 initializeWorkArchive();
+initializeMotionSequences();
+initializeModuleMotion();
+initializeContactSignal();
 initializeFaqs();
 initializeContactForm();
 initializeYear();
