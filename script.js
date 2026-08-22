@@ -106,35 +106,34 @@ async function transitionImage(container, image, source, commit) {
 function initializeEntry() {
   const entry = document.querySelector("[data-entry]");
   document.body.classList.add("is-ready");
-  if (!entry) return;
-
-  const navigationEntry = performance.getEntriesByType("navigation")[0];
-  const restored = navigationEntry && navigationEntry.type === "back_forward";
-  let alreadyPlayed = false;
-  try {
-    alreadyPlayed = window.sessionStorage.getItem("grayston-entry-played") === "true";
-  } catch {
-    // Storage can be unavailable in restricted browsing modes.
-  }
-
-  if (reduceMotion || restored || alreadyPlayed) {
-    entry.classList.add("is-complete");
+  if (!entry) {
+    root.classList.remove("entry-pending");
     return;
   }
 
-  try {
-    window.sessionStorage.setItem("grayston-entry-played", "true");
-  } catch {
-    // The sequence still works without persistence.
+  const navigationEntry = performance.getEntriesByType("navigation")[0];
+  const restored = navigationEntry && navigationEntry.type === "back_forward";
+
+  const complete = () => {
+    entry.classList.add("is-complete");
+    document.body.classList.remove("is-entering", "is-entry-opening");
+    root.classList.remove("entry-pending");
+    document.dispatchEvent(new CustomEvent("grayston:entry-complete"));
+  };
+
+  if (reduceMotion || restored) {
+    complete();
+    return;
   }
 
   document.body.classList.add("is-entering");
   window.requestAnimationFrame(() => entry.classList.add("is-ready"));
-  window.setTimeout(() => entry.classList.add("is-opening"), 2580);
   window.setTimeout(() => {
-    entry.classList.add("is-complete");
-    document.body.classList.remove("is-entering");
-  }, 3260);
+    entry.classList.add("is-opening");
+    document.body.classList.add("is-entry-opening");
+    document.dispatchEvent(new CustomEvent("grayston:entry-opening"));
+  }, 2580);
+  window.setTimeout(complete, 3440);
 }
 
 function initializeHeader() {
@@ -626,16 +625,23 @@ function initializeBuildline() {
   if (!context) return;
 
   const liveSteps = [...hero.querySelectorAll(".buildline-live li")];
+  const livePanel = hero.querySelector(".buildline-live");
+  const colors = ["#39d8ff", "#ffb32c", "#48e0ae", "#7da6ff"];
+  const stageDuration = 1650;
   let width = 0;
   let height = 0;
   let pixelRatio = 1;
+  let stageRows = [];
   let pointerX = 0;
   let pointerY = 0;
   let targetX = 0;
   let targetY = 0;
   let frame = 0;
-  let activeStep = 0;
-  let lastStepChange = 0;
+  let running = false;
+  let elapsed = 0;
+  let previousTime = 0;
+  let activeStep = -1;
+  let segmentProgress = 0;
 
   const resize = () => {
     const bounds = hero.getBoundingClientRect();
@@ -647,33 +653,35 @@ function initializeBuildline() {
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    stageRows = liveSteps.map((step) => {
+      const stepBounds = step.getBoundingClientRect();
+      return stepBounds.height > 0 ? stepBounds.top - bounds.top + stepBounds.height / 2 : 0;
+    });
   };
 
   const route = () => {
     const compact = width < 700;
-    const startX = compact ? width * 0.58 : width * 0.51;
-    const spread = compact ? width * 0.36 : width * 0.38;
-    const top = compact ? height * 0.17 : height * 0.18;
-    const usable = compact ? height * 0.43 : height * 0.48;
+    const startX = compact ? width * 0.58 : width * 0.5;
+    const spread = compact ? width * 0.37 : width * 0.43;
+    const top = compact ? height * 0.16 : height * 0.16;
+    const usable = compact ? height * 0.42 : height * 0.5;
+    const aligned = width > 900 && stageRows.length === 4 && stageRows.every(Boolean);
+    if (aligned) {
+      return [
+        { x: startX, y: Math.min(height * 0.62, stageRows[0] + height * 0.16) },
+        { x: startX + spread * 0.28, y: stageRows[0] },
+        { x: startX + spread * 0.55, y: stageRows[1] },
+        { x: startX + spread * 0.77, y: stageRows[2] },
+        { x: startX + spread, y: stageRows[3] },
+      ];
+    }
     return [
       { x: startX, y: top + usable * 0.72 },
       { x: startX + spread * 0.28, y: top + usable * 0.4 },
-      { x: startX + spread * 0.58, y: top + usable * 0.58 },
-      { x: startX + spread * 0.82, y: top + usable * 0.2 },
+      { x: startX + spread * 0.56, y: top + usable * 0.58 },
+      { x: startX + spread * 0.78, y: top + usable * 0.18 },
       { x: startX + spread, y: top + usable * 0.34 },
     ];
-  };
-
-  const drawSegment = (from, to, color, alpha = 1) => {
-    context.beginPath();
-    context.moveTo(from.x + pointerX, from.y + pointerY);
-    const midpoint = (from.x + to.x) / 2;
-    context.bezierCurveTo(midpoint + pointerX, from.y + pointerY, midpoint + pointerX, to.y + pointerY, to.x + pointerX, to.y + pointerY);
-    context.strokeStyle = color;
-    context.globalAlpha = alpha;
-    context.lineWidth = 1;
-    context.stroke();
-    context.globalAlpha = 1;
   };
 
   const pointOnSegment = (from, to, progress) => {
@@ -685,19 +693,50 @@ function initializeBuildline() {
     };
   };
 
-  const render = (time = 0) => {
+  const traceSegment = (from, to, progress = 1) => {
+    const steps = Math.max(2, Math.ceil(28 * progress));
+    context.beginPath();
+    context.moveTo(from.x, from.y);
+    for (let index = 1; index <= steps; index += 1) {
+      const point = pointOnSegment(from, to, (index / steps) * progress);
+      context.lineTo(point.x, point.y);
+    }
+  };
+
+  const drawSegment = (from, to, color, alpha = 1, progress = 1, lineWidth = 1) => {
+    traceSegment(from, to, progress);
+    context.strokeStyle = color;
+    context.globalAlpha = alpha;
+    context.lineWidth = lineWidth;
+    context.stroke();
+    context.globalAlpha = 1;
+  };
+
+  const setActiveStep = (nextStep) => {
+    if (nextStep === activeStep) return;
+    activeStep = nextStep;
+    hero.dataset.buildlineStep = String(nextStep + 1);
+    if (livePanel) livePanel.dataset.activeStep = String(nextStep + 1);
+    liveSteps.forEach((step, index) => {
+      step.classList.toggle("is-active", index === nextStep);
+      step.classList.toggle("is-complete", index < nextStep);
+      if (index === nextStep) step.setAttribute("aria-current", "step");
+      else step.removeAttribute("aria-current");
+    });
+  };
+
+  const drawScene = () => {
     context.clearRect(0, 0, width, height);
     pointerX += (targetX - pointerX) * 0.045;
     pointerY += (targetY - pointerY) * 0.045;
 
     const points = route();
-    const colors = ["#39d8ff", "#ffb32c", "#48e0ae", "#7da6ff"];
 
     context.globalAlpha = 0.16;
     for (let x = Math.round(width * 0.46); x < width; x += 72) {
       context.beginPath();
-      context.moveTo(x, 0);
-      context.lineTo(x, height);
+      context.moveTo(x + pointerX * 0.35, 0);
+      context.lineTo(x + pointerX * 0.35, height);
       context.strokeStyle = "#425055";
       context.lineWidth = 1;
       context.stroke();
@@ -712,45 +751,100 @@ function initializeBuildline() {
     }
     context.globalAlpha = 1;
 
-    points.slice(0, -1).forEach((point, index) => drawSegment(point, points[index + 1], colors[index], 0.5));
+    points.slice(0, -1).forEach((point, index) => {
+      drawSegment(point, points[index + 1], "#617076", 0.26);
+      if (index < activeStep) drawSegment(point, points[index + 1], colors[index], 0.58, 1, 1.25);
+    });
+
+    const currentFrom = points[activeStep] || points[0];
+    const currentTo = points[activeStep + 1] || points[1];
+    const currentColor = colors[activeStep] || colors[0];
+    drawSegment(currentFrom, currentTo, currentColor, 0.96, segmentProgress, 1.7);
 
     points.forEach((point, index) => {
-      const x = point.x + pointerX;
-      const y = point.y + pointerY;
-      context.fillStyle = index === activeStep ? colors[Math.min(index, colors.length - 1)] : "#778287";
-      context.fillRect(x - 4, y - 4, 8, 8);
-      context.strokeStyle = index === activeStep ? colors[Math.min(index, colors.length - 1)] : "#344045";
-      context.strokeRect(x - 11, y - 11, 22, 22);
+      const stageIndex = index - 1;
+      const isActive = stageIndex === activeStep;
+      const isComplete = stageIndex >= 0 && stageIndex < activeStep;
+      const color = stageIndex >= 0 ? colors[stageIndex] : "#778287";
+
+      context.save();
+      if (isActive) {
+        context.shadowColor = color;
+        context.shadowBlur = 20;
+      }
+      context.fillStyle = isActive || isComplete ? color : "#778287";
+      const nodeSize = isActive ? 9 : isComplete ? 7 : 6;
+      context.fillRect(point.x - nodeSize / 2, point.y - nodeSize / 2, nodeSize, nodeSize);
+      context.strokeStyle = isActive ? color : isComplete ? "#637176" : "#344045";
+      const frameSize = isActive ? 25 : 20;
+      context.strokeRect(point.x - frameSize / 2, point.y - frameSize / 2, frameSize, frameSize);
+      context.restore();
+
     });
 
     if (!reduceMotion) {
-      const segmentIndex = Math.floor((time / 1200) % (points.length - 1));
-      const segmentProgress = (time % 1200) / 1200;
-      const pulse = pointOnSegment(points[segmentIndex], points[segmentIndex + 1], segmentProgress);
-      context.save();
-      context.shadowColor = colors[segmentIndex];
-      context.shadowBlur = 18;
-      context.fillStyle = colors[segmentIndex];
-      context.fillRect(pulse.x + pointerX - 3, pulse.y + pointerY - 3, 6, 6);
-      context.restore();
-
-      if (time - lastStepChange > 1200) {
-        activeStep = (activeStep + 1) % liveSteps.length;
-        liveSteps.forEach((step, index) => step.classList.toggle("is-active", index === activeStep));
-        lastStepChange = time;
-      }
-      frame = window.requestAnimationFrame(render);
+      [0.16, 0.09, 0].forEach((trail, index) => {
+        const progress = Math.max(0, segmentProgress - trail);
+        const pulse = pointOnSegment(currentFrom, currentTo, progress);
+        context.save();
+        context.globalAlpha = [0.18, 0.42, 1][index];
+        context.shadowColor = currentColor;
+        context.shadowBlur = index === 2 ? 20 : 8;
+        context.fillStyle = currentColor;
+        const size = [3, 4, 7][index];
+        context.fillRect(pulse.x - size / 2, pulse.y - size / 2, size, size);
+        context.restore();
+      });
     }
   };
 
+  const render = (time) => {
+    frame = 0;
+    if (!running) return;
+    if (previousTime === 0) previousTime = time;
+    else elapsed += Math.min(time - previousTime, 48);
+    previousTime = time;
+
+    const phase = (elapsed % (stageDuration * liveSteps.length)) / stageDuration;
+    const nextStep = Math.floor(phase);
+    const localProgress = phase - nextStep;
+    const travelProgress = Math.min(localProgress / 0.78, 1);
+    segmentProgress = travelProgress * travelProgress * (3 - 2 * travelProgress);
+    setActiveStep(nextStep);
+    drawScene();
+    frame = window.requestAnimationFrame(render);
+  };
+
+  const start = () => {
+    if (running || reduceMotion) return;
+    running = true;
+    elapsed = 0;
+    previousTime = 0;
+    segmentProgress = 0;
+    setActiveStep(0);
+    frame = window.requestAnimationFrame(render);
+  };
+
   resize();
-  render();
-  window.addEventListener("resize", resize, { passive: true });
+  setActiveStep(0);
+  segmentProgress = reduceMotion ? 1 : 0;
+  drawScene();
+  window.addEventListener("resize", () => {
+    resize();
+    drawScene();
+  }, { passive: true });
+
+  if (document.body.classList.contains("is-entering")) {
+    document.addEventListener("grayston:entry-opening", start, { once: true });
+  } else {
+    start();
+  }
+
   if (finePointer) {
     hero.addEventListener("pointermove", (event) => {
       const bounds = hero.getBoundingClientRect();
-      targetX = ((event.clientX - bounds.left) / bounds.width - 0.5) * 14;
-      targetY = ((event.clientY - bounds.top) / bounds.height - 0.5) * 10;
+      targetX = ((event.clientX - bounds.left) / bounds.width - 0.5) * 8;
+      targetY = ((event.clientY - bounds.top) / bounds.height - 0.5) * 6;
     });
     hero.addEventListener("pointerleave", () => {
       targetX = 0;
@@ -763,7 +857,8 @@ function initializeBuildline() {
     if (document.hidden && frame) {
       window.cancelAnimationFrame(frame);
       frame = 0;
-    } else if (!document.hidden && !frame) {
+      previousTime = 0;
+    } else if (!document.hidden && running && !frame) {
       frame = window.requestAnimationFrame(render);
     }
   });
