@@ -28,9 +28,8 @@
     <link rel="apple-touch-icon" href="/assets/grayston-emblem-192.png" sizes="192x192" />
     <link rel="preload" href="/assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <script src="/route-guard.js?v=20260822h"></script>
     <link rel="stylesheet" href="/assets/vendor/lenis.css?v=1.3.25" />
-    <link rel="stylesheet" href="/styles.css?v=20260822h" />
+    <link rel="stylesheet" href="/styles.css?v=20260822i" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -49,8 +48,8 @@
     <script src="/assets/vendor/ScrollTrigger.min.js?v=3.13.0" defer></script>
     <script src="/assets/vendor/SplitText.min.js?v=3.13.0" defer></script>
     <script src="/assets/vendor/lenis.min.js?v=1.3.25" defer></script>
-    <script src="/motion.js?v=20260822h" defer></script>
-    <script src="/script.js?v=20260822h" defer></script>
+    <script src="/motion.js?v=20260822i" defer></script>
+    <script src="/script.js?v=20260822i" defer></script>
   </head>
   <body data-page="contact">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -64,6 +63,30 @@
     </header>
 
     <main id="main">
+      <section class="contact-confirmation" data-contact-confirmation hidden aria-labelledby="confirmation-title">
+        <div class="page-grid" aria-hidden="true"></div>
+        <img class="contact-confirmation__emblem" src="/assets/grayston-emblem-192.webp" alt="" width="192" height="192" aria-hidden="true" />
+        <div class="section-shell contact-confirmation__layout">
+          <div class="contact-confirmation__copy">
+            <p class="eyebrow"><span></span> Project intake confirmed</p>
+            <h1 id="confirmation-title" tabindex="-1">Brief received. <strong>Direct response next.</strong></h1>
+            <p>Your message is in the Grayston intake queue. James reviews every brief directly and typically responds within one business day with initial questions, current availability, and the most useful next step.</p>
+            <div class="contact-confirmation__actions">
+              <a class="button button-primary" href="/">Return home <span aria-hidden="true">&#8599;</span></a>
+              <a class="button button-quiet" href="mailto:jforster@graystontechnologies.com?subject=Additional%20project%20context">Add context by email <span aria-hidden="true">&#8599;</span></a>
+            </div>
+          </div>
+          <div class="contact-confirmation__route" aria-label="What happens next">
+            <div class="contact-confirmation__status"><span></span><strong>RESPONSE ROUTE ACTIVE</strong><small>DIRECT TECHNICAL OWNERSHIP</small></div>
+            <ol>
+              <li><span>01</span><div><strong>Review</strong><p>Pressure, users, constraints, fit, and the critical unknowns are assessed.</p></div></li>
+              <li><span>02</span><div><strong>Direction</strong><p>You receive useful technical questions, availability, and a concrete recommendation.</p></div></li>
+              <li><span>03</span><div><strong>Next step</strong><p>A focused conversation or first proof is scoped around the decision that matters most.</p></div></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
       <section class="contact-hero-v2" aria-labelledby="page-title">
         <div class="page-grid" aria-hidden="true"></div>
         <div class="section-shell contact-hero-v2__layout">

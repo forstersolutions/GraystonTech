@@ -135,14 +135,7 @@ function initializeEntry() {
     return;
   }
 
-  document.body.classList.add("is-entering");
-  window.requestAnimationFrame(() => entry.classList.add("is-ready"));
-  window.setTimeout(() => {
-    entry.classList.add("is-opening");
-    document.body.classList.add("is-entry-opening");
-    document.dispatchEvent(new CustomEvent("grayston:entry-opening"));
-  }, 2580);
-  window.setTimeout(complete, 3440);
+  complete();
 }
 
 function initializeHeader() {
@@ -640,8 +633,6 @@ function initializeBuildline() {
   let width = 0;
   let height = 0;
   let pixelRatio = 1;
-  let stageRows = [];
-  let stageColumnX = 0;
   let pointerX = 0;
   let pointerY = 0;
   let targetX = 0;
@@ -663,47 +654,18 @@ function initializeBuildline() {
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-    stageRows = liveSteps.map((step) => {
-      const stepBounds = step.getBoundingClientRect();
-      return stepBounds.height > 0 ? stepBounds.top - bounds.top + stepBounds.height / 2 : 0;
-    });
-    const firstStageMarker = liveSteps[0]?.querySelector(":scope > span");
-    const markerBounds = firstStageMarker?.getBoundingClientRect();
-    stageColumnX = markerBounds && markerBounds.width > 0 ? markerBounds.left - bounds.left + markerBounds.width / 2 : 0;
   };
 
   const route = () => {
     const compact = width < 700;
-    if (compact) {
-      return [
-        { x: width * 0.94, y: height * 0.1 },
-        { x: width * 0.86, y: height * 0.15 },
-        { x: width * 0.95, y: height * 0.2 },
-        { x: width * 0.87, y: height * 0.25 },
-        { x: width * 0.97, y: height * 0.3 },
-      ];
-    }
-    const startX = width * 0.5;
-    const spread = width * 0.43;
-    const top = height * 0.16;
-    const usable = height * 0.5;
-    const aligned = width > 900 && stageColumnX > 0 && stageRows.length === 4 && stageRows.every(Boolean);
-    if (aligned) {
-      const firstNodeX = stageColumnX - 26;
-      return [
-        { x: Math.max(width * 0.55, firstNodeX - width * 0.09), y: Math.min(height * 0.62, stageRows[0] + height * 0.16) },
-        { x: firstNodeX, y: stageRows[0] },
-        { x: stageColumnX + width * 0.085, y: stageRows[1] },
-        { x: stageColumnX + width * 0.18, y: stageRows[2] },
-        { x: Math.min(width - 48, stageColumnX + width * 0.25), y: stageRows[3] },
-      ];
-    }
+    const corridorY = compact ? Math.max(90, height * 0.105) : Math.max(104, height * 0.12);
+    const drift = compact ? 5 : 9;
     return [
-      { x: startX, y: top + usable * 0.72 },
-      { x: startX + spread * 0.28, y: top + usable * 0.4 },
-      { x: startX + spread * 0.56, y: top + usable * 0.58 },
-      { x: startX + spread * 0.78, y: top + usable * 0.18 },
-      { x: startX + spread, y: top + usable * 0.34 },
+      { x: width * 0.04, y: corridorY },
+      { x: width * 0.27, y: corridorY },
+      { x: width * 0.5, y: corridorY + drift },
+      { x: width * 0.73, y: corridorY - drift * 0.5 },
+      { x: width * 0.96, y: corridorY },
     ];
   };
 
@@ -1307,7 +1269,18 @@ function initializeContactForm() {
       status.textContent = "Received. James will respond directly.";
       status.className = "form-status is-success";
       form.reset();
-      form.dispatchEvent(new CustomEvent("grayston:form-success"));
+      form.dispatchEvent(new CustomEvent("grayston:form-success", { detail: { projectType: payload.projectType } }));
+      if (window.GraystonMotion?.runIntakeConfirmation) {
+        window.GraystonMotion.runIntakeConfirmation();
+      } else {
+        const confirmation = document.querySelector("[data-contact-confirmation]");
+        if (confirmation) {
+          confirmation.hidden = false;
+          document.body.classList.add("is-intake-confirmed");
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          confirmation.querySelector("h1")?.focus({ preventScroll: true });
+        }
+      }
     } catch (error) {
       const message = error.name === "AbortError" ? "The request timed out." : error.message;
       status.textContent = `${message} Email jforster@graystontechnologies.com if the issue continues.`;

@@ -4,8 +4,8 @@
   "private": true,
   "description": "Grayston Technologies static website.",
   "scripts": {
-    "build": "node --check route-guard.js && node --check motion.js && node --check script.js && node --check api/contact.js",
-    "check": "node --check route-guard.js && node --check motion.js && node --check script.js && node --check api/contact.js",
+    "build": "node --check motion.js && node --check script.js && node --check api/contact.js",
+    "check": "node --check motion.js && node --check script.js && node --check api/contact.js",
     "serve": "python3 -m http.server 4173"
   },
   "dependencies": {

@@ -6,20 +6,8 @@
   const gsap = window.gsap;
   const ScrollTrigger = window.ScrollTrigger;
   const SplitText = window.SplitText;
-  const HANDOFF_KEY = "grayston:system-handoff";
-  const routeContexts = {
-    "/": { label: "Operating system", code: "SYSTEM / HOME" },
-    "/services": { label: "Capability architecture", code: "SYSTEM / SERVICES" },
-    "/products": { label: "Evidence archive", code: "SYSTEM / WORK" },
-    "/security": { label: "Attack-path closure", code: "SYSTEM / SECURITY" },
-    "/about": { label: "Direct ownership", code: "SYSTEM / COMPANY" },
-    "/contact": { label: "Technical intake", code: "SYSTEM / CONTACT" },
-    "/privacy": { label: "Privacy controls", code: "TRUST / PRIVACY" },
-    "/terms": { label: "Operating terms", code: "TRUST / TERMS" },
-  };
   const stageColors = ["#39d8ff", "#ffb32c", "#48e0ae", "#7da6ff"];
   let lenis = null;
-  let routeArrival = null;
 
   root.classList.add("motion-runtime");
 
@@ -28,48 +16,8 @@
     if (SplitText) gsap.registerPlugin(SplitText);
   }
 
-  function normalizePath(pathname) {
-    if (!pathname || pathname === "/index.html") return "/";
-    return pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
-  }
-
-  function routeContext(pathname) {
-    const normalized = normalizePath(pathname);
-    return routeContexts[normalized] || { label: "Grayston system", code: "SYSTEM / GRAYSTON" };
-  }
-
-  function readHandoff() {
-    try {
-      const payload = JSON.parse(window.sessionStorage.getItem(HANDOFF_KEY) || "null");
-      if (!payload || Date.now() - payload.time > 8000) {
-        window.sessionStorage.removeItem(HANDOFF_KEY);
-        return null;
-      }
-      return payload;
-    } catch {
-      return null;
-    }
-  }
-
-  function writeHandoff(payload) {
-    try {
-      window.sessionStorage.setItem(HANDOFF_KEY, JSON.stringify(payload));
-    } catch {
-      // Navigation still works when storage is unavailable.
-    }
-  }
-
-  function clearHandoff() {
-    try {
-      window.sessionStorage.removeItem(HANDOFF_KEY);
-    } catch {
-      // No cleanup is required when storage is unavailable.
-    }
-  }
-
   function runEntry(entry, complete) {
-    const incoming = readHandoff();
-    if (!gsap || reducedMotion || incoming) {
+    if (!gsap || reducedMotion) {
       complete();
       return;
     }
@@ -127,142 +75,86 @@
       .set(entry, { autoAlpha: 0 });
   }
 
-  window.GraystonMotion = { runEntry };
-
-  function createHandoffOverlay() {
+  function createIntakeTransition() {
     const overlay = document.createElement("div");
-    overlay.className = "motion-handoff";
+    overlay.className = "intake-completion-transition";
     overlay.setAttribute("aria-hidden", "true");
     overlay.innerHTML = `
-      <div class="motion-handoff__bands">
-        <div class="motion-handoff__band"><span>01</span><div><strong>PRESSURE</strong><small>Understand what must change</small></div></div>
-        <div class="motion-handoff__band"><span>02</span><div><strong>SYSTEM</strong><small>Connect every critical layer</small></div></div>
-        <div class="motion-handoff__band"><span>03</span><div><strong>PROOF</strong><small>Exercise the real path</small></div></div>
-        <div class="motion-handoff__band"><span>04</span><div><strong>PRODUCTION</strong><small>Release with control</small></div></div>
+      <div class="intake-completion-transition__bands">
+        <div class="intake-completion-transition__band"><span>01</span><div><strong>BRIEF</strong><small>Received securely</small></div></div>
+        <div class="intake-completion-transition__band"><span>02</span><div><strong>REVIEW</strong><small>Direct technical ownership</small></div></div>
+        <div class="intake-completion-transition__band"><span>03</span><div><strong>RESPONSE</strong><small>Useful direction first</small></div></div>
+        <div class="intake-completion-transition__band"><span>04</span><div><strong>NEXT STEP</strong><small>Focused and concrete</small></div></div>
       </div>
-      <div class="motion-handoff__context">
-        <span data-handoff-code>SYSTEM / GRAYSTON</span>
-        <strong data-handoff-label>Grayston system</strong>
-        <small>DIRECT TECHNICAL OWNERSHIP</small>
+      <div class="intake-completion-transition__context">
+        <span>INTAKE / CONFIRMED</span>
+        <strong>The brief is in.</strong>
+        <small>RESPONSE ROUTE ESTABLISHED</small>
       </div>
-      <div class="motion-handoff__progress"><i></i><i></i><i></i><i></i></div>
     `;
     document.body.append(overlay);
     return overlay;
   }
 
-  function setHandoffContext(overlay, destination) {
-    const context = routeContext(destination.pathname);
-    overlay.querySelector("[data-handoff-code]").textContent = context.code;
-    overlay.querySelector("[data-handoff-label]").textContent = context.label;
+  function showContactConfirmation() {
+    const confirmation = document.querySelector("[data-contact-confirmation]");
+    if (!confirmation) return null;
+    confirmation.hidden = false;
+    document.body.classList.add("is-intake-confirmed");
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    return confirmation;
   }
 
-  function showOutgoingHandoff(overlay, destination) {
-    const bands = [...overlay.querySelectorAll(".motion-handoff__band")];
-    const stageCopy = bands.map((band) => band.querySelector("div"));
-    const context = overlay.querySelector(".motion-handoff__context");
-    const progress = overlay.querySelector(".motion-handoff__progress");
-    setHandoffContext(overlay, destination);
-    overlay.classList.add("is-active", "is-departing");
+  function runIntakeConfirmation() {
+    const confirmation = document.querySelector("[data-contact-confirmation]");
+    if (!confirmation || document.body.classList.contains("is-intake-transitioning") || document.body.classList.contains("is-intake-confirmed")) return;
+    if (!gsap || reducedMotion) {
+      showContactConfirmation();
+      confirmation.querySelector("h1")?.focus({ preventScroll: true });
+      return;
+    }
 
-    gsap.killTweensOf([bands, stageCopy, context, progress]);
+    const overlay = document.querySelector(".intake-completion-transition") || createIntakeTransition();
+    const bands = [...overlay.querySelectorAll(".intake-completion-transition__band")];
+    const stageCopy = bands.map((band) => band.querySelector("div"));
+    const context = overlay.querySelector(".intake-completion-transition__context");
+    const startedAt = window.performance.now();
+    document.body.classList.add("is-intake-transitioning");
+    document.body.dataset.intakeTransition = "running";
+    lenis?.stop();
+    overlay.classList.add("is-active");
+
+    gsap.killTweensOf([overlay, bands, stageCopy, context]);
     gsap.set(overlay, { autoAlpha: 1 });
-    gsap.set(bands, { xPercent: (index) => index % 2 ? 101 : -101 });
-    gsap.set(stageCopy, { autoAlpha: 0, x: (index) => index % 2 ? 34 : -34 });
+    gsap.set(bands, { xPercent: -101 });
+    gsap.set(stageCopy, { autoAlpha: 0, x: -28 });
     gsap.set(context, { autoAlpha: 0, y: 18 });
-    gsap.set(progress, { scaleX: 0, transformOrigin: "left center" });
-
-    const timeline = gsap.timeline({ defaults: { ease: "power4.inOut" } });
-    timeline
-      .to(bands, { xPercent: 0, duration: 0.56, stagger: 0.045 }, 0)
-      .to(stageCopy, { autoAlpha: 1, x: 0, duration: 0.36, stagger: 0.055, ease: "power3.out" }, 0.2)
-      .to(progress, { scaleX: 1, duration: 0.68, ease: "none" }, 0.08)
-      .to(context, { autoAlpha: 1, y: 0, duration: 0.34, ease: "power3.out" }, 0.35)
-      .add(() => window.location.assign(destination.href), 0.78);
-  }
-
-  function revealIncomingHandoff(overlay, payload) {
-    const bands = [...overlay.querySelectorAll(".motion-handoff__band")];
-    const stageCopy = bands.map((band) => band.querySelector("div"));
-    const context = overlay.querySelector(".motion-handoff__context");
-    const progress = overlay.querySelector(".motion-handoff__progress");
-    const destination = new URL(window.location.href);
-    setHandoffContext(overlay, destination);
-    overlay.classList.add("is-active", "is-arriving");
-    root.classList.remove("route-arriving");
-    gsap.set(overlay, { autoAlpha: 1 });
-    gsap.set(bands, { xPercent: 0 });
-    gsap.set(stageCopy, { autoAlpha: 1, x: 0 });
-    gsap.set(context, { autoAlpha: 1, y: 0 });
-    gsap.set(progress, { scaleX: 1, transformOrigin: "left center" });
 
     const timeline = gsap.timeline({
       defaults: { ease: "power4.inOut" },
       onComplete: () => {
-        overlay.classList.remove("is-active", "is-arriving");
+        overlay.classList.remove("is-active");
         gsap.set(overlay, { autoAlpha: 0 });
-        clearHandoff();
-        root.classList.add("route-revealed");
-        document.dispatchEvent(new CustomEvent("grayston:route-revealed", { detail: payload }));
+        document.body.classList.remove("is-intake-transitioning");
+        document.body.dataset.intakeTransition = "complete";
+        document.body.dataset.intakeTransitionDuration = String(Math.round(window.performance.now() - startedAt));
+        lenis?.start();
+        confirmation.querySelector("h1")?.focus({ preventScroll: true });
+        document.dispatchEvent(new CustomEvent("grayston:intake-confirmed"));
       },
     });
     timeline
-      .to(context, { autoAlpha: 0, y: -16, duration: 0.28, ease: "power2.in" }, 0.16)
-      .to(stageCopy, { autoAlpha: 0, x: (index) => index % 2 ? -24 : 24, duration: 0.26, stagger: 0.035, ease: "power2.in" }, 0.2)
-      .to(progress, { scaleX: 0, transformOrigin: "right center", duration: 0.5, ease: "power2.in" }, 0.18)
-      .to(bands, { xPercent: (index) => index % 2 ? -101 : 101, duration: 0.68, stagger: 0.045 }, 0.34);
+      .to(bands, { xPercent: 0, duration: 0.52, stagger: 0.12 }, 0)
+      .to(stageCopy, { autoAlpha: 1, x: 0, duration: 0.34, stagger: 0.1, ease: "power3.out" }, 0.2)
+      .to(context, { autoAlpha: 1, y: 0, duration: 0.36, ease: "power3.out" }, 0.58)
+      .add(() => showContactConfirmation(), 1.38)
+      .to(context, { autoAlpha: 0, y: -14, duration: 0.24, ease: "power2.in" }, 1.48)
+      .to(stageCopy, { autoAlpha: 0, x: 24, duration: 0.24, stagger: { each: 0.05, from: "end" }, ease: "power2.in" }, 1.5)
+      .to(bands, { xPercent: 101, duration: 0.62, stagger: { each: 0.13, from: "end" } }, 1.72)
+      .to(overlay, { autoAlpha: 0, duration: 0.22 }, 2.78);
   }
 
-  function setupRouteHandoffs() {
-    const overlay = createHandoffOverlay();
-    routeArrival = readHandoff();
-    if (routeArrival && !routeArrival.native && !reducedMotion && gsap) {
-      revealIncomingHandoff(overlay, routeArrival);
-    } else {
-      root.classList.remove("route-arriving");
-      if (routeArrival?.native) {
-        clearHandoff();
-        window.requestAnimationFrame(() => document.dispatchEvent(new CustomEvent("grayston:route-revealed", { detail: routeArrival })));
-      } else if (routeArrival && reducedMotion) {
-        clearHandoff();
-      }
-    }
-
-    window.addEventListener("pageshow", () => {
-      overlay.classList.remove("is-active", "is-departing");
-      gsap?.set(overlay, { autoAlpha: 0 });
-    });
-
-    document.addEventListener("click", (event) => {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      const link = event.target.closest("a[href]");
-      if (!link || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
-      const href = link.getAttribute("href");
-      if (!href || href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("javascript:")) return;
-
-      const destination = new URL(link.href, window.location.href);
-      if (destination.origin !== window.location.origin) return;
-      const sameDocument = normalizePath(destination.pathname) === normalizePath(window.location.pathname)
-        && destination.search === window.location.search;
-      if (sameDocument && destination.hash) return;
-      if (destination.href === window.location.href) return;
-
-      const payload = {
-        from: normalizePath(window.location.pathname),
-        to: normalizePath(destination.pathname),
-        time: Date.now(),
-        native: false,
-      };
-      if (reducedMotion) return;
-      writeHandoff(payload);
-
-      if (payload.native || !gsap) return;
-      event.preventDefault();
-      document.body.classList.add("is-route-departing");
-      lenis?.stop();
-      showOutgoingHandoff(overlay, destination);
-    }, { capture: true });
-  }
+  window.GraystonMotion = { runEntry, runIntakeConfirmation };
 
   function setupLenis() {
     if (!desktopMotion || reducedMotion || !window.Lenis || !gsap || !ScrollTrigger) return;
@@ -366,8 +258,6 @@
 
     if (root.classList.contains("entry-pending")) {
       document.addEventListener("grayston:entry-complete", play, { once: true });
-    } else if (routeArrival && !routeArrival.native && !root.classList.contains("route-revealed")) {
-      document.addEventListener("grayston:route-revealed", play, { once: true });
     } else {
       window.requestAnimationFrame(play);
     }
@@ -440,16 +330,6 @@
     if (!container || reducedMotion || !gsap || !ScrollTrigger) return;
     const items = [...container.querySelectorAll(itemSelector)];
     if (items.length < 2) return;
-    const flow = document.createElement("span");
-    flow.className = `motion-flow ${options.flowClass || ""}`.trim();
-    flow.setAttribute("aria-hidden", "true");
-    flow.innerHTML = "<i></i>";
-    container.append(flow);
-    const axis = options.axis === "x" ? "x" : "y";
-    gsap.set(flow.querySelector("i"), axis === "x"
-      ? { scaleX: 0, transformOrigin: "left center" }
-      : { scaleY: 0, transformOrigin: "top center" });
-    items.forEach((item) => item.classList.add("motion-flow__item"));
     setCurrentByProgress(items, 0);
 
     ScrollTrigger.create({
@@ -458,7 +338,6 @@
       end: options.end || "bottom 34%",
       scrub: options.scrub || 0.6,
       onUpdate: (self) => {
-        gsap.set(flow.querySelector("i"), axis === "x" ? { scaleX: self.progress } : { scaleY: self.progress });
         container.style.setProperty("--flow-progress", self.progress.toFixed(4));
         setCurrentByProgress(items, self.progress);
       },
@@ -466,10 +345,10 @@
   }
 
   function setupScrollNarratives() {
-    setupFlowNarrative(".pathfinder-sequence", ":scope > article", { flowClass: "motion-flow--dark", start: "top 80%", end: "bottom 34%" });
-    setupFlowNarrative(".engineering-system__ledger", ":scope > article", { flowClass: "motion-flow--ledger", start: "top 72%", end: "bottom 42%" });
-    setupFlowNarrative(".adversarial-loop", ":scope > li", { flowClass: "motion-flow--attack", start: "top 76%", end: "bottom 38%" });
-    setupFlowNarrative(".company-model__steps", ":scope > article", { flowClass: "motion-flow--ownership", axis: "x", start: "top 78%", end: "bottom 45%" });
+    setupFlowNarrative(".pathfinder-sequence", ":scope > article", { start: "top 80%", end: "bottom 34%" });
+    setupFlowNarrative(".engineering-system__ledger", ":scope > article", { start: "top 72%", end: "bottom 42%" });
+    setupFlowNarrative(".adversarial-loop", ":scope > li", { start: "top 76%", end: "bottom 38%" });
+    setupFlowNarrative(".company-model__steps", ":scope > article", { start: "top 78%", end: "bottom 45%" });
   }
 
   function animateModule(module) {
@@ -614,13 +493,9 @@
   }
 
   function init() {
-    if (!gsap || !ScrollTrigger) {
-      root.classList.remove("route-arriving");
-      return;
-    }
+    if (!gsap || !ScrollTrigger) return;
     root.classList.add("motion-pro");
     setupLenis();
-    setupRouteHandoffs();
     const initializeHero = () => setupHeroMotion();
     if (document.fonts?.ready) document.fonts.ready.then(initializeHero);
     else initializeHero();
