@@ -1,6 +1,7 @@
 const root = document.documentElement;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+let tabSetIndex = 0;
 
 root.classList.add("js");
 
@@ -13,11 +14,31 @@ function setSelected(buttons, activeButton) {
 }
 
 function bindTabs(buttons, onSelect) {
+  const setId = ++tabSetIndex;
+  const tablist = buttons[0]?.closest("[role='tablist']");
+  const scope = tablist?.parentElement;
+  const panel = scope ? [...scope.children].find((child) => child.getAttribute("role") === "tabpanel") : null;
+  if (panel) {
+    if (!panel.id) panel.id = `grayston-tabpanel-${setId}`;
+    buttons.forEach((button, index) => {
+      if (!button.id) button.id = `grayston-tab-${setId}-${index + 1}`;
+      button.setAttribute("aria-controls", panel.id);
+    });
+  }
+
   const initial = buttons.find((button) => button.getAttribute("aria-selected") === "true") || buttons[0];
-  if (initial) setSelected(buttons, initial);
+  if (initial) {
+    setSelected(buttons, initial);
+    if (panel) panel.setAttribute("aria-labelledby", initial.id);
+  }
+
+  const activate = (button) => {
+    onSelect(button);
+    if (panel) panel.setAttribute("aria-labelledby", button.id);
+  };
 
   buttons.forEach((button, index) => {
-    button.addEventListener("click", () => onSelect(button));
+    button.addEventListener("click", () => activate(button));
     button.addEventListener("keydown", (event) => {
       const keys = ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp", "Home", "End"];
       if (!keys.includes(event.key)) return;
@@ -31,7 +52,7 @@ function bindTabs(buttons, onSelect) {
 
       const next = buttons[nextIndex];
       next.focus();
-      onSelect(next);
+      activate(next);
     });
   });
 }
@@ -89,18 +110,31 @@ function initializeEntry() {
 
   const navigationEntry = performance.getEntriesByType("navigation")[0];
   const restored = navigationEntry && navigationEntry.type === "back_forward";
-  if (reduceMotion || restored) {
+  let alreadyPlayed = false;
+  try {
+    alreadyPlayed = window.sessionStorage.getItem("grayston-entry-played") === "true";
+  } catch {
+    // Storage can be unavailable in restricted browsing modes.
+  }
+
+  if (reduceMotion || restored || alreadyPlayed) {
     entry.classList.add("is-complete");
     return;
   }
 
+  try {
+    window.sessionStorage.setItem("grayston-entry-played", "true");
+  } catch {
+    // The sequence still works without persistence.
+  }
+
   document.body.classList.add("is-entering");
   window.requestAnimationFrame(() => entry.classList.add("is-ready"));
-  window.setTimeout(() => entry.classList.add("is-opening"), 1980);
+  window.setTimeout(() => entry.classList.add("is-opening"), 2580);
   window.setTimeout(() => {
     entry.classList.add("is-complete");
     document.body.classList.remove("is-entering");
-  }, 2690);
+  }, 3260);
 }
 
 function initializeHeader() {
@@ -583,6 +617,518 @@ function initializeProductNavigation() {
   sections.forEach((section) => observer.observe(section));
 }
 
+function initializeBuildline() {
+  const canvas = document.querySelector("[data-buildline-canvas]");
+  const hero = document.querySelector("[data-buildline-hero]");
+  if (!canvas || !hero) return;
+
+  const context = canvas.getContext("2d", { alpha: true });
+  if (!context) return;
+
+  const liveSteps = [...hero.querySelectorAll(".buildline-live li")];
+  let width = 0;
+  let height = 0;
+  let pixelRatio = 1;
+  let pointerX = 0;
+  let pointerY = 0;
+  let targetX = 0;
+  let targetY = 0;
+  let frame = 0;
+  let activeStep = 0;
+  let lastStepChange = 0;
+
+  const resize = () => {
+    const bounds = hero.getBoundingClientRect();
+    width = Math.max(1, Math.round(bounds.width));
+    height = Math.max(1, Math.round(bounds.height));
+    pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(width * pixelRatio);
+    canvas.height = Math.round(height * pixelRatio);
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  };
+
+  const route = () => {
+    const compact = width < 700;
+    const startX = compact ? width * 0.58 : width * 0.51;
+    const spread = compact ? width * 0.36 : width * 0.38;
+    const top = compact ? height * 0.17 : height * 0.18;
+    const usable = compact ? height * 0.43 : height * 0.48;
+    return [
+      { x: startX, y: top + usable * 0.72 },
+      { x: startX + spread * 0.28, y: top + usable * 0.4 },
+      { x: startX + spread * 0.58, y: top + usable * 0.58 },
+      { x: startX + spread * 0.82, y: top + usable * 0.2 },
+      { x: startX + spread, y: top + usable * 0.34 },
+    ];
+  };
+
+  const drawSegment = (from, to, color, alpha = 1) => {
+    context.beginPath();
+    context.moveTo(from.x + pointerX, from.y + pointerY);
+    const midpoint = (from.x + to.x) / 2;
+    context.bezierCurveTo(midpoint + pointerX, from.y + pointerY, midpoint + pointerX, to.y + pointerY, to.x + pointerX, to.y + pointerY);
+    context.strokeStyle = color;
+    context.globalAlpha = alpha;
+    context.lineWidth = 1;
+    context.stroke();
+    context.globalAlpha = 1;
+  };
+
+  const pointOnSegment = (from, to, progress) => {
+    const midpoint = (from.x + to.x) / 2;
+    const inverse = 1 - progress;
+    return {
+      x: inverse ** 3 * from.x + 3 * inverse ** 2 * progress * midpoint + 3 * inverse * progress ** 2 * midpoint + progress ** 3 * to.x,
+      y: inverse ** 3 * from.y + 3 * inverse ** 2 * progress * from.y + 3 * inverse * progress ** 2 * to.y + progress ** 3 * to.y,
+    };
+  };
+
+  const render = (time = 0) => {
+    context.clearRect(0, 0, width, height);
+    pointerX += (targetX - pointerX) * 0.045;
+    pointerY += (targetY - pointerY) * 0.045;
+
+    const points = route();
+    const colors = ["#39d8ff", "#ffb32c", "#48e0ae", "#7da6ff"];
+
+    context.globalAlpha = 0.16;
+    for (let x = Math.round(width * 0.46); x < width; x += 72) {
+      context.beginPath();
+      context.moveTo(x, 0);
+      context.lineTo(x, height);
+      context.strokeStyle = "#425055";
+      context.lineWidth = 1;
+      context.stroke();
+    }
+    for (let y = 110; y < height * 0.76; y += 72) {
+      context.beginPath();
+      context.moveTo(width * 0.46, y);
+      context.lineTo(width, y);
+      context.strokeStyle = "#425055";
+      context.lineWidth = 1;
+      context.stroke();
+    }
+    context.globalAlpha = 1;
+
+    points.slice(0, -1).forEach((point, index) => drawSegment(point, points[index + 1], colors[index], 0.5));
+
+    points.forEach((point, index) => {
+      const x = point.x + pointerX;
+      const y = point.y + pointerY;
+      context.fillStyle = index === activeStep ? colors[Math.min(index, colors.length - 1)] : "#778287";
+      context.fillRect(x - 4, y - 4, 8, 8);
+      context.strokeStyle = index === activeStep ? colors[Math.min(index, colors.length - 1)] : "#344045";
+      context.strokeRect(x - 11, y - 11, 22, 22);
+    });
+
+    if (!reduceMotion) {
+      const segmentIndex = Math.floor((time / 1200) % (points.length - 1));
+      const segmentProgress = (time % 1200) / 1200;
+      const pulse = pointOnSegment(points[segmentIndex], points[segmentIndex + 1], segmentProgress);
+      context.save();
+      context.shadowColor = colors[segmentIndex];
+      context.shadowBlur = 18;
+      context.fillStyle = colors[segmentIndex];
+      context.fillRect(pulse.x + pointerX - 3, pulse.y + pointerY - 3, 6, 6);
+      context.restore();
+
+      if (time - lastStepChange > 1200) {
+        activeStep = (activeStep + 1) % liveSteps.length;
+        liveSteps.forEach((step, index) => step.classList.toggle("is-active", index === activeStep));
+        lastStepChange = time;
+      }
+      frame = window.requestAnimationFrame(render);
+    }
+  };
+
+  resize();
+  render();
+  window.addEventListener("resize", resize, { passive: true });
+  if (finePointer) {
+    hero.addEventListener("pointermove", (event) => {
+      const bounds = hero.getBoundingClientRect();
+      targetX = ((event.clientX - bounds.left) / bounds.width - 0.5) * 14;
+      targetY = ((event.clientY - bounds.top) / bounds.height - 0.5) * 10;
+    });
+    hero.addEventListener("pointerleave", () => {
+      targetX = 0;
+      targetY = 0;
+    });
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (reduceMotion) return;
+    if (document.hidden && frame) {
+      window.cancelAnimationFrame(frame);
+      frame = 0;
+    } else if (!document.hidden && !frame) {
+      frame = window.requestAnimationFrame(render);
+    }
+  });
+}
+
+function initializeProjectPathfinder() {
+  const pathfinder = document.querySelector("[data-project-pathfinder]");
+  if (!pathfinder) return;
+
+  const paths = {
+    launch: {
+      kicker: "NEW PRODUCT / FIRST PROOF",
+      title: "Turn the idea into a product-shaped decision.",
+      summary: "Resolve the users, value, architecture, critical unknowns, and highest-leverage workflow before the roadmap becomes expensive.",
+      deliverables: ["Technical direction + risk map", "Production-shaped vertical slice", "Release sequence + operating boundary"],
+      times: ["0-48 hours", "Days", "Focused weeks"],
+      stages: ["Technical direction", "Working vertical slice", "Controlled release"],
+      details: ["Users, architecture, risk, and the first build sequence become concrete.", "Interface, data, identity, business logic, and deployment connect for real.", "Scope expands behind tested contracts, security review, observability, and rollback."],
+      label: "Discuss a new build",
+      href: "/contact?focus=product#intake",
+    },
+    automate: {
+      kicker: "AI + AUTOMATION / GOVERNED WORK",
+      title: "Put intelligence inside a workflow people can trust.",
+      summary: "Start with the decision and operating boundary, then connect models, tools, retrieval, memory, evaluation, and human authority around measurable work.",
+      deliverables: ["Workflow + authority map", "Evaluated intelligent workflow", "Observability + approval controls"],
+      times: ["0-48 hours", "Days", "Focused weeks"],
+      stages: ["Workflow contract", "Evaluated proof", "Governed operation"],
+      details: ["Define the task, trusted data, tool authority, failure modes, and success measures.", "Exercise real inputs through a bounded workflow with visible evaluation evidence.", "Add approvals, monitoring, recovery, cost controls, and production operating policy."],
+      label: "Discuss intelligent systems",
+      href: "/contact?focus=intelligence#intake",
+    },
+    rescue: {
+      kicker: "PLATFORM RESCUE / CONTROLLED RECOVERY",
+      title: "Recover the real system before rewriting it.",
+      summary: "Reproduce what is failing, map the actual architecture and release path, then stabilize the highest-risk boundary before modernization expands.",
+      deliverables: ["Failure reproduction + system map", "Stabilized release path", "Incremental modernization sequence"],
+      times: ["0-48 hours", "Days", "Focused weeks"],
+      stages: ["Reproduce + map", "Stabilize the path", "Modernize in control"],
+      details: ["Confirm the behavior, dependencies, production state, security exposure, and blast radius.", "Close the highest-risk failure and restore a testable, observable delivery route.", "Replace fragile boundaries in controlled increments without losing operating continuity."],
+      label: "Discuss a platform recovery",
+      href: "/contact?focus=rescue#intake",
+    },
+    secure: {
+      kicker: "SECURITY / REACHABLE RISK",
+      title: "Follow the attack path all the way to closure.",
+      summary: "Model what matters, find reachable weakness across application, identity, data, cloud, and autonomous behavior, then fix the root cause and prove it stays closed.",
+      deliverables: ["Threat + attack-path model", "Validated findings with evidence", "Remediation + regression proof"],
+      times: ["0-48 hours", "Focused review", "Closure"],
+      stages: ["Model the target", "Validate impact", "Remediate + retest"],
+      details: ["Identify assets, identities, trust boundaries, attacker goals, and business impact.", "Trace reachable behavior, reject noise, preserve evidence, and rank by real severity.", "Fix the root cause, retest the chain, add regression protection, and gate release."],
+      label: "Scope a security review",
+      href: "/contact?focus=security#intake",
+    },
+  };
+
+  const buttons = [...pathfinder.querySelectorAll("[data-path-key]")];
+  const fields = {
+    kicker: pathfinder.querySelector("[data-path-kicker]"),
+    title: pathfinder.querySelector("[data-path-title]"),
+    summary: pathfinder.querySelector("[data-path-summary]"),
+    deliverables: pathfinder.querySelector("[data-path-deliverables]"),
+    link: pathfinder.querySelector("[data-path-link]"),
+  };
+
+  const select = (button) => {
+    const key = button.dataset.pathKey;
+    const path = paths[key];
+    if (!path) return;
+    setSelected(buttons, button);
+    pathfinder.dataset.activePath = key;
+    fields.kicker.textContent = path.kicker;
+    fields.title.textContent = path.title;
+    fields.summary.textContent = path.summary;
+    fields.deliverables.replaceChildren(...path.deliverables.map((item) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = item;
+      return listItem;
+    }));
+    fields.link.firstChild.textContent = `${path.label} `;
+    fields.link.href = path.href;
+    path.times.forEach((time, index) => {
+      pathfinder.querySelector(`[data-path-time="${index}"]`).textContent = time;
+      pathfinder.querySelector(`[data-path-stage="${index}"]`).textContent = path.stages[index];
+      pathfinder.querySelector(`[data-path-detail="${index}"]`).textContent = path.details[index];
+    });
+  };
+
+  bindTabs(buttons, select);
+}
+
+function initializeArtifactLedger() {
+  const details = [...document.querySelectorAll(".artifact-ledger details")];
+  details.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      details.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+}
+
+function initializeServiceNavigator() {
+  const navigator = document.querySelector("[data-service-navigator]");
+  if (!navigator) return;
+
+  const services = {
+    product: {
+      kicker: "NEW PRODUCT / END-TO-END DELIVERY",
+      title: "Turn the idea into a complete production system.",
+      summary: "Product direction, interface, architecture, identity, data, integrations, administration, analytics, release, and support are designed as one operating product.",
+      deliverables: ["Product model and experience architecture", "Working web or desktop application", "Production platform and operating handoff"],
+      status: "PRODUCT / READY",
+      labels: ["Direction", "Experience", "System", "Release"],
+      layers: ["Users, value, scope, architecture", "Responsive interface and product UX", "Identity, data, APIs, integrations", "Tests, telemetry, deployment, support"],
+      label: "Discuss a product build",
+      href: "/contact?focus=product#intake",
+    },
+    mobile: {
+      kicker: "NATIVE MOBILE / DEVICE-READY DELIVERY",
+      title: "Ship a mobile product that belongs on the device.",
+      summary: "iOS, Android, and cross-platform delivery covers interaction quality, offline behavior, secure storage, device capabilities, subscriptions, notifications, analytics, signing, and store release.",
+      deliverables: ["Mobile product and platform architecture", "Device-ready iOS and Android experience", "TestFlight, Play, telemetry, and release path"],
+      status: "MOBILE / DEVICE READY",
+      labels: ["Product", "Device", "Platform", "Release"],
+      layers: ["User journeys, ergonomics, platform choice", "Native capabilities, offline state, secure storage", "APIs, identity, sync, notifications, billing", "Signing, store review, crash data, device QA"],
+      label: "Discuss a mobile build",
+      href: "/contact?focus=mobile#intake",
+    },
+    intelligence: {
+      kicker: "INTELLIGENT SYSTEMS / GOVERNED EXECUTION",
+      title: "Put intelligence inside work that matters.",
+      summary: "Agents, retrieval, machine learning, document intelligence, tools, memory, evaluation, policy, and human authority are engineered around a measurable operational outcome.",
+      deliverables: ["Workflow, authority, and data contract", "Evaluated intelligent workflow", "Approval, observability, and recovery controls"],
+      status: "INTELLIGENCE / EVALUATED",
+      labels: ["Outcome", "Context", "Execution", "Control"],
+      layers: ["Task definition, success measures, failure costs", "Trusted data, retrieval, memory, model routing", "Tools, agents, automation, structured outputs", "Evaluation, approvals, policy, telemetry, recovery"],
+      label: "Discuss an intelligent system",
+      href: "/contact?focus=intelligence#intake",
+    },
+    platform: {
+      kicker: "CLOUD + DATA / PRODUCTION FOUNDATION",
+      title: "Build the foundation the product can depend on.",
+      summary: "Cloud infrastructure, services, APIs, identity, data models, event flows, integrations, observability, migrations, and recovery are designed around the real operating model.",
+      deliverables: ["Platform architecture and service contracts", "Production APIs, data, identity, and integrations", "Automated delivery, telemetry, and recovery path"],
+      status: "PLATFORM / OPERABLE",
+      labels: ["Boundary", "Services", "Data", "Operations"],
+      layers: ["Tenancy, identity, trust, integration contracts", "APIs, events, queues, background workloads", "Models, migrations, pipelines, audit history", "CI/CD, environments, logs, rollback, runbooks"],
+      label: "Discuss a platform build",
+      href: "/contact?focus=platform#intake",
+    },
+    recovery: {
+      kicker: "MODERNIZATION / CONTROLLED RECOVERY",
+      title: "Restore momentum without losing the real system.",
+      summary: "Grayston reproduces the failure, maps the actual architecture and production state, stabilizes the highest-risk path, and modernizes in controlled increments.",
+      deliverables: ["Failure reproduction and system map", "Stabilized, observable release path", "Risk-ranked modernization sequence"],
+      status: "RECOVERY / CONTROL RESTORED",
+      labels: ["Reproduce", "Map", "Stabilize", "Modernize"],
+      layers: ["Confirm behavior, impact, and operating conditions", "Dependencies, data, infrastructure, release reality", "Close highest-risk failure and restore telemetry", "Replace fragile boundaries behind proven contracts"],
+      label: "Discuss a platform recovery",
+      href: "/contact?focus=rescue#intake",
+    },
+    security: {
+      kicker: "CYBERSECURITY / REACHABLE RISK",
+      title: "Find the attack path, close it, and prove closure.",
+      summary: "Threat modeling, architecture and source review, identity, APIs, cloud, data, dependencies, autonomous behavior, validation, remediation, and retest operate as one security loop.",
+      deliverables: ["Threat and attack-path model", "Evidence-backed validated findings", "Remediation and regression proof"],
+      status: "SECURITY / EVIDENCE READY",
+      labels: ["Model", "Discover", "Validate", "Close"],
+      layers: ["Assets, identities, trust boundaries, abuse cases", "Architecture, source, cloud, data, dependencies", "Reachability, exploit chain, impact, evidence", "Root-cause fix, retest, regression protection"],
+      label: "Scope a security review",
+      href: "/contact?focus=security#intake",
+    },
+  };
+
+  const buttons = [...navigator.querySelectorAll("[data-service-key]")];
+  const fields = {
+    kicker: navigator.querySelector("[data-service-kicker]"),
+    title: navigator.querySelector("[data-service-title]"),
+    summary: navigator.querySelector("[data-service-summary]"),
+    deliverables: navigator.querySelector("[data-service-deliverables]"),
+    status: navigator.querySelector("[data-service-status]"),
+    link: navigator.querySelector("[data-service-link]"),
+  };
+
+  const select = (button) => {
+    const key = button.dataset.serviceKey;
+    const service = services[key];
+    if (!service) return;
+    setSelected(buttons, button);
+    navigator.dataset.activeService = key;
+    fields.kicker.textContent = service.kicker;
+    fields.title.textContent = service.title;
+    fields.summary.textContent = service.summary;
+    fields.status.textContent = service.status;
+    fields.deliverables.replaceChildren(...service.deliverables.map((item) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = item;
+      return listItem;
+    }));
+    fields.link.firstChild.textContent = `${service.label} `;
+    fields.link.href = service.href;
+    service.layers.forEach((layer, index) => {
+      navigator.querySelector(`[data-service-layer-label="${index}"]`).textContent = service.labels[index];
+      navigator.querySelector(`[data-service-layer="${index}"]`).textContent = layer;
+    });
+  };
+
+  bindTabs(buttons, select);
+}
+
+function initializeWorkArchive() {
+  const archive = document.querySelector("[data-work-archive]");
+  if (!archive) return;
+
+  const work = {
+    verityforge: {
+      kicker: "INTELLIGENT DELIVERY / PROOF-GOVERNED EXECUTION",
+      title: "VerityForge",
+      tagline: "Coordinate autonomous software work without surrendering release control.",
+      summary: "Specialized engineering agents operate through bounded missions, isolated work, explicit proof contracts, executable verification, evidence capture, and owner-controlled release decisions.",
+      ownership: "Product model, orchestration architecture, agent runtime, verification contracts, evidence, interface, and release governance.",
+      depth: "Tool policy, isolated worktrees, agent routing, proof ledger, verification gates, audit history, and supervised production decisions.",
+      tags: ["Agent orchestration", "Verification contracts", "Release governance"],
+      source: "/assets/product-verityforge.webp",
+      alt: "VerityForge interface showing agent routing, proof evidence, verification checks, and release gates",
+      window: "VERITYFORGE / CONTROL PLANE",
+      caption: "ACTUAL INTERFACE / REPRESENTATIVE OPERATING DATA",
+      counter: "01 / 05",
+      href: "/contact?focus=intelligence#intake",
+      label: "Discuss a related build",
+      external: false,
+    },
+    mypokermaps: {
+      kicker: "CONSUMER + CLUB ECOSYSTEM / MULTI-SURFACE PLATFORM",
+      title: "MyPokerMaps",
+      tagline: "Connect public discovery, live poker, community, and club operations.",
+      summary: "A consumer platform for finding rooms, live games, tournaments, streams, and community activity, connected to onboarding, administration, mobile experiences, and live club data.",
+      ownership: "Product experience, responsive web, mobile surfaces, identity, listings, maps, live data, social workflows, administration, and platform integration.",
+      depth: "Location-aware discovery, player accounts, live games, streaming, notifications, club onboarding, role-based administration, analytics, and connected operations.",
+      tags: ["Consumer web + mobile", "Real-time workflows", "Platform ecosystem"],
+      source: "/assets/product-mypokermaps.webp",
+      alt: "MyPokerMaps platform showing room discovery, location search, maps, and live poker features",
+      window: "MYPOKERMAPS / PUBLIC PLATFORM",
+      caption: "ACTUAL PRODUCT INTERFACE / PUBLIC EXPERIENCE",
+      counter: "02 / 05",
+      href: "https://www.mypokermaps.com",
+      label: "Visit MyPokerMaps",
+      external: true,
+    },
+    feltos: {
+      kicker: "CLUB OPERATING SYSTEM / LIVE OPERATIONAL CONTROL",
+      title: "FeltOS",
+      tagline: "Put the entire live poker-room operation in one governed surface.",
+      summary: "The signed-in club portal coordinates front desk, check-in, waitlists, tables, tournaments, members, staff, cash cage, analytics, accounting, compliance, devices, and support.",
+      ownership: "Operational UX, tenant and role architecture, live activity, administrative workflows, financial controls, analytics, compliance, and device operations.",
+      depth: "Role-governed floor operations, member and staff records, money movement, activity history, exports, public controls, support, and operational telemetry.",
+      tags: ["Live operations", "Role-governed workflows", "Financial + compliance controls"],
+      source: "/assets/product-feltos.webp",
+      alt: "FeltOS club portal showing dashboard metrics, live activity, front-desk controls, and operational navigation",
+      window: "FELTOS / CLUB PORTAL",
+      caption: "ACTUAL INTERFACE / SANITIZED CLUB DATA",
+      counter: "03 / 05",
+      href: "/contact?focus=product#intake",
+      label: "Discuss an operations platform",
+      external: false,
+    },
+    qrystaldrop: {
+      kicker: "SECURE COLLABORATION / CONTROLLED FILE CUSTODY",
+      title: "QrystalDrop",
+      tagline: "Protect sensitive collaboration with cryptographic and enterprise control.",
+      summary: "Secure rooms combine browser-side encryption and participant-bound wrapping with passkeys, federation, provisioning, network policy, recovery review, SIEM delivery, and audit-ready evidence.",
+      ownership: "Security architecture, cryptographic workflow, enterprise identity, secure-room UX, policy controls, recovery governance, audit delivery, and operating posture.",
+      depth: "Post-quantum key establishment, device-bound access, MFA, OIDC, directory provisioning, sessions, network controls, signed SIEM delivery, and proof exports.",
+      tags: ["Post-quantum cryptography", "Enterprise identity", "Evidence + governance"],
+      source: "/assets/product-qrystaldrop-dashboard.webp",
+      alt: "QrystalDrop enterprise workspace showing secure rooms, launch posture, storage, and recent activity",
+      window: "QRYSTALDROP / WORKSPACE OVERVIEW",
+      caption: "ACTUAL PRODUCT INTERFACE / REPRESENTATIVE DATA",
+      counter: "04 / 05",
+      href: "https://qrystaldrop.vercel.app",
+      label: "Visit QrystalDrop",
+      external: true,
+    },
+    cuoperation: {
+      kicker: "PERSONNEL OPERATIONS / HIGH-ACCOUNTABILITY WORKFLOWS",
+      title: "CUOPeration",
+      tagline: "Make personnel status, approvals, records, and ownership visible.",
+      summary: "A secure operating surface for personnel intake, hierarchy, tasking, approvals, private files, drill notes, roles, notifications, governed export, and audit history.",
+      ownership: "Workflow discovery, operational UX, identity and role model, secure records, approvals, notifications, export governance, administration, and auditability.",
+      depth: "Personnel profiles, organizational hierarchy, private uploads, readiness workflows, task ownership, role administration, controlled exports, and immutable operating history.",
+      tags: ["Secure personnel records", "Approval workflows", "Auditable operations"],
+      source: "/assets/product-cuoperation.webp",
+      alt: "CUOPeration administrator interface with sanitized personnel and operations data",
+      window: "CUOPERATION / ADMIN VIEW",
+      caption: "ACTUAL INTERFACE / FICTIONAL SANITIZED DATA",
+      counter: "05 / 05",
+      href: "/contact?focus=product#intake",
+      label: "Discuss a secure operations system",
+      external: false,
+    },
+  };
+
+  const buttons = [...archive.querySelectorAll("[data-archive-key]")];
+  const visual = archive.querySelector("[data-archive-visual]");
+  const image = archive.querySelector("[data-archive-image]");
+  const fields = {
+    kicker: archive.querySelector("[data-archive-kicker]"),
+    title: archive.querySelector("[data-archive-title]"),
+    tagline: archive.querySelector("[data-archive-tagline]"),
+    summary: archive.querySelector("[data-archive-summary]"),
+    ownership: archive.querySelector("[data-archive-ownership]"),
+    depth: archive.querySelector("[data-archive-depth]"),
+    tags: archive.querySelector("[data-archive-tags]"),
+    window: archive.querySelector("[data-archive-window]"),
+    caption: archive.querySelector("[data-archive-caption]"),
+    counter: archive.querySelector("[data-archive-counter]"),
+    link: archive.querySelector("[data-archive-link]"),
+  };
+
+  const select = (button, updateHash = true) => {
+    const key = button.dataset.archiveKey;
+    const item = work[key];
+    if (!item) return;
+    setSelected(buttons, button);
+    archive.dataset.activeWork = key;
+    fields.kicker.textContent = item.kicker;
+    fields.title.textContent = item.title;
+    fields.tagline.textContent = item.tagline;
+    fields.summary.textContent = item.summary;
+    fields.ownership.textContent = item.ownership;
+    fields.depth.textContent = item.depth;
+    fields.window.textContent = item.window;
+    fields.caption.textContent = item.caption;
+    fields.counter.textContent = item.counter;
+    fields.tags.replaceChildren(...item.tags.map((tag) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = tag;
+      return listItem;
+    }));
+    fields.link.firstChild.textContent = `${item.label} `;
+    fields.link.href = item.href;
+    if (item.external) {
+      fields.link.target = "_blank";
+      fields.link.rel = "noopener";
+    } else {
+      fields.link.removeAttribute("target");
+      fields.link.removeAttribute("rel");
+    }
+    image.alt = item.alt;
+    transitionImage(visual, image, item.source, () => true);
+    if (updateHash && window.history.replaceState) window.history.replaceState(null, "", `#${key}`);
+  };
+
+  bindTabs(buttons, (button) => select(button));
+  const initialKey = window.location.hash.slice(1);
+  const initial = buttons.find((button) => button.dataset.archiveKey === initialKey) || buttons[0];
+  select(initial, false);
+  window.addEventListener("hashchange", () => {
+    const matching = buttons.find((button) => button.dataset.archiveKey === window.location.hash.slice(1));
+    if (matching) select(matching, false);
+  });
+}
+
 function initializeFaqs() {
   const details = [...document.querySelectorAll(".faq-list details")];
   details.forEach((item) => {
@@ -672,6 +1218,11 @@ initializeSecurityConsole();
 initializeSecurityProgram();
 initializePointerDepth();
 initializeProductNavigation();
+initializeBuildline();
+initializeProjectPathfinder();
+initializeArtifactLedger();
+initializeServiceNavigator();
+initializeWorkArchive();
 initializeFaqs();
 initializeContactForm();
 initializeYear();
