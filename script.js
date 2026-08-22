@@ -632,6 +632,7 @@ function initializeBuildline() {
   let height = 0;
   let pixelRatio = 1;
   let stageRows = [];
+  let stageColumnX = 0;
   let pointerX = 0;
   let pointerY = 0;
   let targetX = 0;
@@ -657,6 +658,9 @@ function initializeBuildline() {
       const stepBounds = step.getBoundingClientRect();
       return stepBounds.height > 0 ? stepBounds.top - bounds.top + stepBounds.height / 2 : 0;
     });
+    const firstStageMarker = liveSteps[0]?.querySelector(":scope > span");
+    const markerBounds = firstStageMarker?.getBoundingClientRect();
+    stageColumnX = markerBounds && markerBounds.width > 0 ? markerBounds.left - bounds.left + markerBounds.width / 2 : 0;
   };
 
   const route = () => {
@@ -665,14 +669,15 @@ function initializeBuildline() {
     const spread = compact ? width * 0.37 : width * 0.43;
     const top = compact ? height * 0.16 : height * 0.16;
     const usable = compact ? height * 0.42 : height * 0.5;
-    const aligned = width > 900 && stageRows.length === 4 && stageRows.every(Boolean);
+    const aligned = width > 900 && stageColumnX > 0 && stageRows.length === 4 && stageRows.every(Boolean);
     if (aligned) {
+      const firstNodeX = stageColumnX - 26;
       return [
-        { x: startX, y: Math.min(height * 0.62, stageRows[0] + height * 0.16) },
-        { x: startX + spread * 0.28, y: stageRows[0] },
-        { x: startX + spread * 0.55, y: stageRows[1] },
-        { x: startX + spread * 0.77, y: stageRows[2] },
-        { x: startX + spread, y: stageRows[3] },
+        { x: Math.max(width * 0.55, firstNodeX - width * 0.09), y: Math.min(height * 0.62, stageRows[0] + height * 0.16) },
+        { x: firstNodeX, y: stageRows[0] },
+        { x: stageColumnX + width * 0.085, y: stageRows[1] },
+        { x: stageColumnX + width * 0.18, y: stageRows[2] },
+        { x: Math.min(width - 48, stageColumnX + width * 0.25), y: stageRows[3] },
       ];
     }
     return [
